@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fredian Farm — Bibit Kentang Unggul</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js"></script>
+<style>
+:root{
+  --green-deep:#1F3D22;
+  --green-primary:#2E7D32;
+  --green-bright:#3F9A45;
+  --green-soft:#EAF2E6;
+  --brown-earth:#8D6E63;
+  --brown-soft:#F1E9E4;
+  --yellow-potato:#F9A825;
+  --yellow-soft:#FDECC8;
+  --cream:#FAF7F0;
+  --text:#2B2B26;
+  --text-soft:#69675E;
+  --line:#E4DDCE;
+  --radius:14px;
+  --shadow:0 10px 30px -14px rgba(31,61,34,.25);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--text);
+  font-family:'Manrope',sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  letter-spacing:-.01em;
+  margin:0 0 .4em;
+  color:var(--green-deep);
+}
+p{margin:0 0 1em;color:var(--text-soft);}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;display:block;}
+.container{max-width:1180px;margin:0 auto;padding:0 24px;}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--green-primary);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:10px;
+}
+.eyebrow::before{content:"";width:18px;height:1px;background:var(--yellow-potato);display:inline-block;}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 26px;border-radius:100px;border:1px solid transparent;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:14.5px;
+  cursor:pointer;transition:.2s ease;white-space:nowrap;
+}
+.btn-primary{background:var(--green-primary);color:#fff;}
+.btn-primary:hover{background:var(--green-deep);transform:translateY(-1px);}
+.btn-accent{background:var(--yellow-potato);color:var(--green-deep);}
+.btn-accent:hover{background:#e6960f;transform:translateY(-1px);}
+.btn-ghost{background:transparent;border-color:var(--line);color:var(--text);}
+.btn-ghost:hover{border-color:var(--green-primary);color:var(--green-primary);}
+.btn-sm{padding:9px 18px;font-size:13px;}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(250,247,240,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:1180px;margin:0 auto;}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:var(--green-deep);cursor:pointer;}
+.logo-mark{width:34px;height:34px;flex:none;}
+.nav-links{display:flex;gap:26px;list-style:none;margin:0;padding:0;align-items:center;}
+.nav-links a{font-size:14.5px;font-weight:600;color:var(--text-soft);cursor:pointer;padding:4px 0;border-bottom:2px solid transparent;transition:.15s;}
+.nav-links a:hover,.nav-links a.active{color:var(--green-primary);border-color:var(--yellow-potato);}
+.nav-cta{display:flex;align-items:center;gap:14px;}
+.burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;}
+.burger span{width:22px;height:2px;background:var(--green-deep);}
+@media(max-width:960px){
+  .nav-links{position:fixed;top:64px;left:0;right:0;background:var(--cream);flex-direction:column;align-items:flex-start;padding:20px 24px 26px;border-bottom:1px solid var(--line);gap:16px;display:none;}
+  .nav-links.open{display:flex;}
+  .burger{display:flex;}
+  .nav-cta .btn-primary{display:none;}
+}
+
+/* section rhythm */
+section{padding:88px 0;}
+.section-tight{padding:64px 0;}
+.tinted{background:var(--green-soft);}
+.dark{background:var(--green-deep);color:#EDF3EB;}
+.dark h1,.dark h2,.dark h3,.dark h4{color:#fff;}
+.dark p{color:#C7D6C4;}
+.section-head{max-width:640px;margin-bottom:44px;}
+.section-head.center{margin-left:auto;margin-right:auto;text-align:center;}
+
+/* soil divider */
+.soil-divider{width:100%;height:46px;display:block;}
+
+/* grid utilities */
+.grid{display:grid;gap:24px;}
+.grid-2{grid-template-columns:repeat(2,1fr);}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+@media(max-width:900px){.grid-3{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.grid-2{grid-template-columns:1fr;}}
+/* grid-4 (e.g. Legalitas) stays at 2 columns all the way down instead of collapsing to 1 */
+@media(max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr);}}
+
+/* marketplace-style fixed 2-column grids for product/article/gallery cards on mobile */
+.grid-products,.grid-articles{grid-template-columns:repeat(3,1fr);}
+@media(max-width:760px){
+  .grid-products,.grid-articles{grid-template-columns:repeat(2,1fr);gap:14px;}
+}
+@media(max-width:480px){
+  .grid-products .prod-body{padding:13px 13px 15px;}
+  .grid-products .prod-body h4{font-size:14.5px;margin-bottom:2px;}
+  .grid-products .prod-meta{gap:6px;margin:6px 0 10px;}
+  .grid-products .chip{font-size:10px;padding:3px 7px;}
+  .grid-products .prod-foot{flex-direction:column;gap:8px;align-items:stretch;}
+  .grid-products .prod-foot .btn{width:100%;}
+  .grid-products .gal-item .gal-label{font-size:11.5px;padding:9px 10px;}
+  .grid-articles .article-body{padding:14px;}
+  .grid-articles .article-body h4{font-size:14px;}
+  .grid-articles .badge-kat{font-size:9.5px;padding:3px 8px;}
+}
+
+/* horizontal scroll-snap sliders for mobile (Kenapa Kami, Testimoni) */
+.value-scroller{grid-template-columns:repeat(4,1fr);}
+.testi-scroller{grid-template-columns:repeat(3,1fr);}
+@media(max-width:900px){.value-scroller{grid-template-columns:repeat(2,1fr);}}
+.scroll-hint{display:none;font-size:12px;font-weight:700;color:var(--text-soft);margin-bottom:14px;}
+@media(max-width:760px){
+  .value-scroller,.testi-scroller{
+    display:flex;
+    grid-template-columns:none;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    gap:14px;
+    padding-bottom:6px;
+    margin:0 -24px;
+    padding-left:24px;
+    padding-right:24px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .value-scroller::-webkit-scrollbar,.testi-scroller::-webkit-scrollbar{display:none;}
+  .value-scroller > *{flex:0 0 72%;scroll-snap-align:start;}
+  .testi-scroller > *{flex:0 0 84%;scroll-snap-align:start;}
+  .scroll-hint{display:block;}
+}
+
+/* hero */
+.hero{background:var(--green-deep);color:#fff;position:relative;overflow:hidden;padding:100px 0 0;}
+.hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;position:relative;z-index:2;}
+.hero h1{font-size:clamp(34px,5vw,56px);color:#fff;line-height:1.05;}
+.hero h1 em{font-style:italic;color:var(--yellow-potato);}
+.hero p.lead{color:#CFE0CB;font-size:17.5px;max-width:480px;}
+.hero-stats{display:flex;gap:28px;margin-top:32px;flex-wrap:wrap;}
+.hero-stat b{display:block;font-family:'Fraunces',serif;font-size:26px;color:var(--yellow-potato);}
+.hero-stat span{font-size:12.5px;color:#B9CBB5;text-transform:uppercase;letter-spacing:.06em;}
+.hero-actions{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;}
+.hero-art{position:relative;height:380px;}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr;}.hero-art{height:220px;}}
+
+/* value cards */
+.value-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
+.value-card .icon{width:40px;height:40px;color:var(--green-primary);margin-bottom:14px;}
+.value-card h4{font-size:17px;margin-bottom:6px;}
+.value-card p{font-size:14.5px;margin:0;}
+
+/* product card */
+.prod-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:.2s;display:flex;flex-direction:column;}
+.prod-card:hover{transform:translateY(-4px);}
+.prod-media{aspect-ratio:4/3;position:relative;display:flex;align-items:center;justify-content:center;}
+.prod-media svg{width:56%;height:56%;}
+.prod-body{padding:20px 20px 22px;flex:1;display:flex;flex-direction:column;}
+.prod-tag{position:absolute;top:12px;left:12px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;padding:5px 10px;border-radius:100px;background:rgba(255,255,255,.9);}
+.stok-tersedia{color:var(--green-primary);}
+.stok-terbatas{color:#B5751A;}
+.stok-preorder{color:#8D6E63;}
+.prod-body h4{font-size:18px;margin-bottom:4px;}
+.prod-meta{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 14px;}
+.chip{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;background:var(--brown-soft);color:var(--brown-earth);padding:4px 9px;border-radius:6px;}
+.prod-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;}
+
+/* filter bar */
+.filter-bar{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:34px;padding:18px 20px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);}
+.filter-bar select,.filter-bar input{
+  font-family:'Manrope',sans-serif;font-size:14px;padding:10px 14px;border-radius:9px;border:1px solid var(--line);background:var(--cream);color:var(--text);
+}
+.filter-bar label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-soft);display:block;margin-bottom:5px;}
+.filter-group{display:flex;flex-direction:column;}
+.filter-group.grow{flex:1;min-width:180px;}
+
+/* article card */
+.article-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:.2s;}
+.article-card:hover{transform:translateY(-4px);}
+.article-media{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;}
+.article-media svg{width:40%;}
+.article-body{padding:20px;}
+.badge-kat{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.04em;padding:4px 10px;border-radius:100px;background:var(--yellow-soft);color:#8A5A00;margin-bottom:10px;text-transform:uppercase;}
+.article-body h4{font-size:16.5px;margin-bottom:6px;}
+.article-meta{font-size:12.5px;color:var(--text-soft);margin-top:10px;}
+
+/* testimonial */
+.test-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);}
+.stars{color:var(--yellow-potato);font-size:14px;margin-bottom:10px;letter-spacing:2px;}
+.test-quote{font-style:italic;color:var(--text);font-size:15px;}
+.test-person{display:flex;align-items:center;gap:12px;margin-top:16px;}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--green-soft);color:var(--green-primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Fraunces',serif;}
+.test-person b{display:block;font-size:14px;}
+.test-person span{font-size:12.5px;color:var(--text-soft);}
+
+/* faq accordion */
+.faq-item{border-bottom:1px solid var(--line);}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:20px 4px;cursor:pointer;font-weight:700;font-size:15.5px;}
+.faq-q .plus{transition:.2s;color:var(--green-primary);font-size:20px;}
+.faq-a{max-height:0;overflow:hidden;transition:.25s ease;font-size:14.5px;}
+.faq-a-inner{padding:0 4px 20px;color:var(--text-soft);}
+
+/* step flow */
+.flow{display:flex;gap:0;overflow-x:auto;padding-bottom:10px;}
+.flow-step{flex:1;min-width:170px;text-align:center;position:relative;padding:0 14px;}
+.flow-step .num{width:46px;height:46px;border-radius:50%;background:var(--green-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;margin:0 auto 14px;position:relative;z-index:2;}
+.flow-step::after{content:"";position:absolute;top:23px;left:calc(50% + 30px);right:calc(-50% + 30px);height:2px;background:var(--line);z-index:1;}
+.flow-step:last-child::after{display:none;}
+.flow-step h4{font-size:14.5px;margin-bottom:4px;}
+.flow-step p{font-size:13px;margin:0;}
+@media(max-width:760px){
+  .flow{scroll-snap-type:x mandatory;margin:0 -24px;padding-left:24px;padding-right:24px;scrollbar-width:none;}
+  .flow::-webkit-scrollbar{display:none;}
+  .flow-step{flex:0 0 68%;min-width:0;scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 18px;box-shadow:var(--shadow);}
+  .flow-step::after{display:none;}
+}
+
+/* gallery */
+.gal-item{border-radius:var(--radius);overflow:hidden;aspect-ratio:1/1;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.gal-item .gal-label{position:absolute;bottom:0;left:0;right:0;padding:12px 14px;background:linear-gradient(0deg,rgba(0,0,0,.55),transparent);color:#fff;font-size:13px;font-weight:700;}
+
+/* footer */
+footer{background:var(--green-deep);color:#C7D6C4;padding:64px 0 24px;}
+footer h4{color:#fff;font-size:15px;margin-bottom:16px;font-family:'Manrope',sans-serif;font-weight:700;}
+footer a{font-size:14px;color:#C7D6C4;display:block;margin-bottom:9px;cursor:pointer;}
+footer a:hover{color:var(--yellow-potato);}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:32px;}
+@media(max-width:800px){.foot-grid{grid-template-columns:1fr 1fr;}}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.12);margin-top:44px;padding-top:22px;font-size:12.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;color:#9EB39A;}
+.social-row{display:flex;gap:10px;margin-top:6px;}
+.social-row a{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;margin:0;}
+
+/* wa float */
+.wa-float{position:fixed;bottom:22px;right:22px;z-index:60;background:#25D366;color:#fff;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -8px rgba(0,0,0,.4);}
+.wa-float svg{width:28px;height:28px;}
+
+/* breadcrumb */
+.breadcrumb{font-size:13px;color:var(--text-soft);margin-bottom:20px;display:flex;gap:6px;align-items:center;}
+.breadcrumb a{color:var(--green-primary);cursor:pointer;font-weight:600;}
+
+/* detail spec table */
+.spec-table{width:100%;border-collapse:collapse;font-size:14.5px;}
+.spec-table td{padding:11px 6px;border-bottom:1px solid var(--line);}
+.spec-table td:first-child{color:var(--text-soft);width:44%;}
+.spec-table td:last-child{font-weight:700;}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--green-deep);color:#fff;padding:14px 24px;border-radius:100px;font-size:14px;font-weight:600;z-index:80;box-shadow:var(--shadow);}
+
+.tag-check{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;}
+.tag-check svg{width:18px;height:18px;color:var(--green-primary);flex:none;margin-top:2px;}
+.tag-check p{margin:0;font-size:14.5px;color:var(--text);}
+
+.honey{position:absolute;left:-9999px;opacity:0;}
+.form-field label{font-size:13px;font-weight:700;color:var(--text-soft);display:block;margin-bottom:6px;}
+.form-field input,.form-field textarea,.form-field select{width:100%;padding:12px 14px;border-radius:9px;border:1px solid var(--line);font-family:'Manrope',sans-serif;font-size:14.5px;background:#fff;}
+.form-field{margin-bottom:18px;}
+
+.rfq-banner{background:var(--yellow-soft);border:1px solid var(--yellow-potato);border-radius:var(--radius);padding:22px 26px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;}
+
+.lokasi-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+@media(max-width:760px){.lokasi-grid{grid-template-columns:1fr;gap:24px;}}
+
+/* maps: hide embedded iframe on mobile, show a lightweight fallback card instead */
+.map-fallback{display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;border-radius:var(--radius);text-align:center;padding:20px;}
+@media(max-width:760px){
+  .map-embed{display:none;}
+  .map-fallback{display:flex;}
+}
+</style>
+</head>
+<body x-data="site()" x-init="init()">
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="logo" @click="go('home')">
+      <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+        <ellipse cx="20" cy="23" rx="13" ry="11" fill="#F9A825"/>
+        <ellipse cx="15" cy="19" rx="3" ry="2" fill="#1F3D22" opacity=".3"/>
+        <ellipse cx="24" cy="27" rx="2.4" ry="1.8" fill="#1F3D22" opacity=".3"/>
+        <path d="M20 12c-2-4-7-5-9-3 3 1 4 4 5 6" stroke="#2E7D32" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        <path d="M21 12c2-4 7-5 9-3-3 1-4 4-5 6" stroke="#3F9A45" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+      </svg>
+      Fredian Farm
+    </div>
+    <ul class="nav-links" :class="{open:menuOpen}">
+      <template x-for="item in navItems" :key="item.id">
+        <li><a @click="go(item.id); menuOpen=false" :class="{active: page===item.id || (item.id==='produk' && page==='produk-detail') || (item.id==='blog' && page==='blog-detail')}" x-text="item.label"></a></li>
+      </template>
+    </ul>
+    <div class="nav-cta">
+      <a class="btn btn-primary btn-sm" href="https://wa.me/6281234567890" target="_blank" rel="noopener">Chat Admin</a>
+      <button class="burger" @click="menuOpen=!menuOpen"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HOME ===== -->
+<div x-show="page==='home'" x-cloak>
+  <section class="hero">
+    <div class="container hero-inner">
+      <div>
+        <div class="eyebrow" style="color:#B9D9AF">Sejak Kebun Pertama di Dataran Tinggi Dieng</div>
+        <h1>Bibit kentang yang tumbuh jadi <em>panen kepercayaan</em>.</h1>
+        <p class="lead">Fredian Farm memproduksi bibit kentang kultur jaringan dan turunannya — G-0, G-0 MZ, Granola L, G-0 Plus — untuk petani, kelompok tani, dan distributor di seluruh Indonesia.</p>
+        <div class="hero-actions">
+          <a class="btn btn-accent" @click="go('produk')">Lihat Katalog Bibit</a>
+          <a class="btn btn-ghost" style="border-color:rgba(255,255,255,.3);color:#fff" @click="go('cara-pesan')">Cara Pemesanan</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><b>12+</b><span>Tahun Beroperasi</span></div>
+          <div class="hero-stat"><b>4</b><span>Kelas Bibit Unggul</span></div>
+          <div class="hero-stat"><b>27,9rb</b><span>Pengikut TikTok</span></div>
+        </div>
+      </div>
+      <div class="hero-art">
+        <svg viewBox="0 0 400 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+          <ellipse cx="200" cy="340" rx="170" ry="24" fill="#173318"/>
+          <g>
+            <ellipse cx="150" cy="230" rx="70" ry="56" fill="#F9A825"/>
+            <ellipse cx="120" cy="210" rx="10" ry="7" fill="#1F3D22" opacity=".25"/>
+            <ellipse cx="175" cy="250" rx="8" ry="6" fill="#1F3D22" opacity=".25"/>
+            <ellipse cx="255" cy="255" rx="55" ry="46" fill="#e6960f"/>
+            <ellipse cx="240" cy="240" rx="7" ry="5" fill="#1F3D22" opacity=".25"/>
+          </g>
+          <path d="M170 174c-10-30-45-42-70-30 20 8 28 30 32 46" stroke="#3F9A45" stroke-width="6" stroke-linecap="round" fill="none"/>
+          <path d="M180 174c8-32 44-46 70-34-21 8-30 32-33 48" stroke="#5CB962" stroke-width="6" stroke-linecap="round" fill="none"/>
+          <path d="M176 90 C176 140 176 160 176 174" stroke="#3F9A45" stroke-width="6" stroke-linecap="round"/>
+          <ellipse cx="176" cy="80" rx="14" ry="9" fill="#5CB962"/>
+        </svg>
+      </div>
+    </div>
+    <svg class="soil-divider" viewBox="0 0 1200 46" preserveAspectRatio="none"><path d="M0 20 C 200 46 400 0 600 20 C 800 40 1000 4 1200 20 L1200 46 L0 46 Z" fill="#FAF7F0"/></svg>
+  </section>
+
+  <!-- Kenapa Kami -->
+  <section>
+    <div class="container">
+      <div class="section-head center">
+        <div class="eyebrow" style="justify-content:center">Kenapa Fredian Farm</div>
+        <h2>Bibit yang lolos sortir tiga kali sebelum sampai ke kebun Anda</h2>
+      </div>
+      <div class="scroll-hint">Geser untuk lihat semua →</div>
+      <div class="grid value-scroller">
+        <div class="value-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <h4>Bersertifikat</h4>
+          <p>Setiap batch memiliki sertifikat mutu bibit dan bebas penyakit dari dinas terkait.</p>
+        </div>
+        <div class="value-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+          <h4>Grading Ketat</h4>
+          <p>Disortir berdasarkan ukuran dan berat agar seragam saat ditanam serentak.</p>
+        </div>
+        <div class="value-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18M8 13l3 3 6-7"/></svg>
+          <h4>Konsultasi Tanam</h4>
+          <p>Tim kami membantu rekomendasi varietas sesuai ketinggian dan musim tanam lokasi Anda.</p>
+        </div>
+        <div class="value-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7l9-4 9 4-9 4-9-4zM3 7v10l9 4 9-4V7"/></svg>
+          <h4>Pengiriman Aman</h4>
+          <p>Dikemas dengan ventilasi khusus agar bibit tetap segar sampai tujuan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Produk Unggulan -->
+  <section class="tinted">
+    <div class="container">
+      <div class="section-head" style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:36px">
+        <div>
+          <div class="eyebrow">Katalog</div>
+          <h2 style="margin-bottom:0">Produk unggulan bulan ini</h2>
+        </div>
+        <a class="btn btn-ghost btn-sm" @click="go('produk')">Lihat Semua Produk →</a>
+      </div>
+      <div class="grid grid-products">
+        <template x-for="p in products.slice(0,3)" :key="p.id">
+          <div class="prod-card" @click="openProduct(p)">
+            <div class="prod-media" :style="'background:'+p.bg">
+              <span class="prod-tag" :class="stokClass(p.stok)" x-text="p.stok"></span>
+              <div x-html="p.svg"></div>
+            </div>
+            <div class="prod-body">
+              <h4 x-text="p.nama"></h4>
+              <p style="font-size:13.5px" x-text="p.ringkas"></p>
+              <div class="prod-meta">
+                <span class="chip" x-text="p.ketinggian"></span>
+                <span class="chip" x-text="p.kemasan"></span>
+              </div>
+              <div class="prod-foot">
+                <span class="btn btn-ghost btn-sm">Detail</span>
+                <a class="btn btn-primary btn-sm" href="https://wa.me/6281234567890" target="_blank" @click.stop>Tanya Harga</a>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cara Pesan mini -->
+  <section>
+    <div class="container">
+      <div class="section-head center">
+        <div class="eyebrow" style="justify-content:center">Alur Sederhana</div>
+        <h2>Dari pilih bibit sampai bibit diterima</h2>
+      </div>
+      <div class="scroll-hint">Geser untuk lihat tahapan berikutnya →</div>
+      <div class="flow">
+        <template x-for="(s,i) in flowSteps" :key="i">
+          <div class="flow-step">
+            <div class="num" x-text="i+1"></div>
+            <h4 x-text="s.title"></h4>
+            <p x-text="s.desc"></p>
+          </div>
+        </template>
+      </div>
+      <div style="text-align:center;margin-top:30px">
+        <a class="btn btn-primary" @click="go('cara-pesan')">Pelajari Selengkapnya</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Artikel Terbaru -->
+  <section class="tinted">
+    <div class="container">
+      <div class="section-head" style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:36px">
+        <div>
+          <div class="eyebrow">Blog</div>
+          <h2 style="margin-bottom:0">Artikel budidaya terbaru</h2>
+        </div>
+        <a class="btn btn-ghost btn-sm" @click="go('blog')">Semua Artikel →</a>
+      </div>
+      <div class="grid grid-articles">
+        <template x-for="a in articles.slice(0,3)" :key="a.id">
+          <div class="article-card" @click="openArticle(a)">
+            <div class="article-media" :style="'background:'+a.bg" x-html="a.svg"></div>
+            <div class="article-body">
+              <span class="badge-kat" x-text="a.kategori"></span>
+              <h4 x-text="a.judul"></h4>
+              <p style="font-size:13.5px" x-text="a.ringkas"></p>
+              <div class="article-meta" x-text="a.tanggal + ' · ' + a.waktuBaca"></div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimoni -->
+  <section>
+    <div class="container">
+      <div class="section-head center">
+        <div class="eyebrow" style="justify-content:center">Testimoni</div>
+        <h2>Kata petani mitra kami</h2>
+      </div>
+      <div class="scroll-hint">Geser untuk baca lainnya →</div>
+      <div class="grid testi-scroller">
+        <template x-for="t in testimonials.slice(0,3)" :key="t.id">
+          <div class="test-card">
+            <div class="stars">★★★★★</div>
+            <p class="test-quote" x-text="'“'+t.quote+'”'"></p>
+            <div class="test-person">
+              <div class="avatar" x-text="t.inisial"></div>
+              <div><b x-text="t.nama"></b><span x-text="t.daerah"></span></div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partner -->
+  <section class="section-tight tinted">
+    <div class="container">
+      <p style="text-align:center;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--text-soft);margin-bottom:26px">Dipercaya oleh</p>
+      <div style="display:flex;justify-content:center;gap:44px;flex-wrap:wrap;opacity:.75;font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--brown-earth)">
+        <span>Dinas Pertanian Jabar</span><span>Koperasi Tani Makmur</span><span>Gapoktan Sukamaju</span><span>Toko Tani Sejahtera</span><span>UPTD Benih Hortikultura</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ikuti Kami -->
+  <section>
+    <div class="container">
+      <div class="section-head center">
+        <div class="eyebrow" style="justify-content:center">Konten Edukasi</div>
+        <h2>Ikuti keseharian kebun & tips budidaya kami</h2>
+      </div>
+      <div class="grid grid-2">
+        <div class="value-card" style="border-color:#000;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:44px;height:44px;border-radius:12px;background:#000;display:flex;align-items:center;justify-content:center;flex:none">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M16.6 5.8a4.6 4.6 0 01-3.3-1.4v9.9a4.9 4.9 0 11-4.9-4.9c.3 0 .5 0 .8.1v2.5a2.4 2.4 0 102 2.4V2h2.5a4.6 4.6 0 003.3 3.9v2.5a7 7 0 01-.4-2.6z"/></svg>
+            </div>
+            <div>
+              <h4 style="margin-bottom:0">TikTok @fredianfarm</h4>
+              <span style="font-size:13px;color:var(--text-soft);font-weight:700">27,9rb Pengikut · Channel Utama</span>
+            </div>
+          </div>
+          <p style="font-size:14.5px;margin:0">"Pertanian modern, berbagi ilmu, pengalaman & cerita seputar kultur jaringan, budidaya & pembibitan kentang."</p>
+          <p style="font-size:13px;margin:0;color:var(--text-soft)">Nomor pemesanan dan Toko Online (TikTok Shop) tersedia langsung di bio profil kami.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn btn-primary btn-sm" href="https://www.tiktok.com/@fredianfarm" target="_blank" rel="noopener">Ikuti di TikTok</a>
+            <a class="btn btn-ghost btn-sm" href="https://www.tiktok.com/@fredianfarm/shop" target="_blank" rel="noopener">Buka Toko Online</a>
+          </div>
+        </div>
+        <div class="value-card" style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(45deg,#F9A825,#e6960f,#8D6E63);display:flex;align-items:center;justify-content:center;flex:none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+            </div>
+            <div>
+              <h4 style="margin-bottom:0">Instagram @fredianfarm</h4>
+              <span style="font-size:13px;color:var(--text-soft);font-weight:700">3.240 Pengikut</span>
+            </div>
+          </div>
+          <p style="font-size:14.5px;margin:0">Dokumentasi foto kebun, testimoni mitra, dan pengumuman ketersediaan bibit terbaru.</p>
+          <div>
+            <a class="btn btn-ghost btn-sm" href="https://www.instagram.com/fredianfarm" target="_blank" rel="noopener">Ikuti di Instagram</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lokasi + CTA -->
+  <section class="dark">
+    <div class="container lokasi-grid" style="align-items:center">
+      <div>
+        <div class="eyebrow" style="color:#B9D9AF">Kunjungi Kebun Kami</div>
+        <h2>Kebun & gudang sortir di Dieng, Jawa Tengah</h2>
+        <p>Terbuka untuk kunjungan kelompok tani dan dinas pertanian. Hubungi kami dulu untuk menjadwalkan kunjungan.</p>
+        <a class="btn btn-accent" @click="go('kontak')">Lihat Kontak Lengkap</a>
+      </div>
+      <div class="map-embed" style="border-radius:var(--radius);overflow:hidden;height:240px">
+        <iframe src="https://www.google.com/maps?q=Dieng,Wonosobo,Jawa%20Tengah&output=embed" style="border:0;width:100%;height:100%" loading="lazy"></iframe>
+      </div>
+      <div class="map-fallback" style="height:240px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15)">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <p style="margin:0;color:#C7D6C4;font-size:13.5px">Dataran Tinggi Dieng, Jawa Tengah</p>
+        <a class="btn btn-accent btn-sm" href="https://www.google.com/maps?q=Dieng,Wonosobo,Jawa+Tengah" target="_blank" rel="noopener">Buka di Google Maps</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== TENTANG KAMI ===== -->
+<div x-show="page==='tentang'" x-cloak>
+  <section class="section-tight tinted">
+    <div class="container">
+      <div class="breadcrumb"><a @click="go('home')">Beranda</a><span>/</span><span>Tentang Kami</span></div>
+      <div class="eyebrow">Profil Perusahaan</div>
+      <h1 style="font-size:38px">Dari kebun keluarga menjadi mitra tani se-Nusantara</h1>
+      <p style="max-width:620px;font-size:16px">Fredian Farm berdiri sejak 2012 di dataran tinggi Dieng, Jawa Tengah, memulai dari satu petak kebun kentang keluarga hingga kini memasok bibit ke lebih dari 800 mitra tani di Jawa, Sumatra, dan Sulawesi. <em style="font-style:italic;color:var(--text-soft);font-size:14px">(Profil lengkap, visi & misi masih dalam tahap pemutakhiran — konten di bawah bersifat sementara/dummy.)</em></p>
+    </div>
+  </section>
+  <section>
+    <div class="container grid grid-2" style="align-items:center">
+      <div>
+        <h3>Sejarah Singkat</h3>
+        <p>Bermula dari kebutuhan bibit unggul yang sulit didapat petani sekitar, pendiri Fredian Farm mulai menyeleksi dan mengembangbiakkan bibit kentang varietas lokal dan impor sejak 2012. Kini proses produksi telah tersertifikasi dan didukung laboratorium kultur jaringan mini.</p>
+        <h3 style="margin-top:26px">Visi</h3>
+        <p>Menjadi penyedia bibit kentang tepercaya nomor satu di Indonesia yang mendukung ketahanan pangan hortikultura.</p>
+        <h3 style="margin-top:26px">Misi</h3>
+        <div class="tag-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><p>Menyediakan bibit kentang bersertifikat dengan grading konsisten.</p></div>
+        <div class="tag-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><p>Mendampingi petani mitra melalui edukasi budidaya berkelanjutan.</p></div>
+        <div class="tag-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><p>Memperluas jangkauan distribusi ke seluruh sentra kentang Indonesia.</p></div>
+      </div>
+      <div style="background:var(--green-soft);border-radius:var(--radius);padding:40px;text-align:center">
+        <svg viewBox="0 0 240 200" style="width:80%;margin:0 auto">
+          <ellipse cx="120" cy="170" rx="100" ry="14" fill="#c9dbc2"/>
+          <rect x="40" y="90" width="160" height="70" rx="8" fill="#8D6E63"/>
+          <rect x="40" y="90" width="160" height="16" rx="4" fill="#6f5650"/>
+          <path d="M40 90l80-50 80 50" fill="none" stroke="#2E7D32" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="120" cy="70" r="10" fill="#F9A825"/>
+        </svg>
+        <p style="margin-top:14px;font-size:13.5px">Ilustrasi gudang sortir & fasilitas produksi Fredian Farm</p>
+      </div>
+    </div>
+  </section>
+  <section class="tinted">
+    <div class="container">
+      <div class="section-head center"><div class="eyebrow" style="justify-content:center">Legalitas & Sertifikat</div><h2>Terdaftar dan diawasi resmi</h2></div>
+      <div class="grid grid-4">
+        <div class="value-card" style="text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-soft)">NIB</div><h4 style="font-size:15px">0812xxxxxxxx</h4></div>
+        <div class="value-card" style="text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-soft)">Sertifikat</div><h4 style="font-size:15px">Benih Bersertifikat BPSB</h4></div>
+        <div class="value-card" style="text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-soft)">Izin</div><h4 style="font-size:15px">Izin Usaha Pertanian</h4></div>
+        <div class="value-card" style="text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-soft)">Anggota</div><h4 style="font-size:15px">Asosiasi Benih Hortikultura</h4></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== PRODUK (list) ===== -->
+<div x-show="page==='produk'" x-cloak>
+  <section class="section-tight tinted">
+    <div class="container">
+      <div class="breadcrumb"><a @click="go('home')">Beranda</a><span>/</span><span>Produk</span></div>
+      <div class="eyebrow">Katalog Bibit</div>
+      <h1 style="font-size:36px">Bibit kentang untuk setiap kebutuhan tanam</h1>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>Kelas Bibit</label>
+          <select x-model="filter.varietas">
+            <option value="">Semua Kelas Bibit</option>
+            <template x-for="v in varietasList" :key="v"><option :value="v" x-text="v"></option></template>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Ketersediaan</label>
+          <select x-model="filter.stok">
+            <option value="">Semua Status</option>
+            <option>Tersedia</option><option>Terbatas</option><option>Pre-order</option>
+          </select>
+        </div>
+        <div class="filter-group grow">
+          <label>Cari Produk</label>
+          <input type="text" placeholder="cth: granola, atlantik..." x-model="filter.q">
+        </div>
+        <div class="filter-group" style="justify-content:flex-end">
+          <label>&nbsp;</label>
+          <span class="btn btn-ghost btn-sm" @click="filter={varietas:'',stok:'',q:''}">Reset Filter</span>
+        </div>
+      </div>
+
+      <p style="font-size:13.5px;margin-bottom:18px" x-text="filteredProducts.length + ' produk ditemukan'"></p>
+
+      <div class="grid grid-products" x-show="filteredProducts.length">
+        <template x-for="p in filteredProducts" :key="p.id">
+          <div class="prod-card" @click="openProduct(p)">
+            <div class="prod-media" :style="'background:'+p.bg">
+              <span class="prod-tag" :class="stokClass(p.stok)" x-text="p.stok"></span>
+              <div x-html="p.svg"></div>
+            </div>
+            <div class="prod-body">
+              <h4 x-text="p.nama"></h4>
+              <p style="font-size:13.5px" x-text="p.ringkas"></p>
+              <div class="prod-meta">
+                <span class="chip" x-text="p.ketinggian"></span>
+                <span class="chip" x-text="p.kemasan"></span>
+              </div>
+              <div class="prod-foot">
+                <span class="btn btn-ghost btn-sm">Detail</span>
+                <a class="btn btn-primary btn-sm" href="https://wa.me/6281234567890" target="_blank" @click.stop>Tanya Harga</a>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+      <div x-show="!filteredProducts.length" style="text-align:center;padding:60px 0;color:var(--text-soft)">
+        Tidak ada produk yang cocok dengan filter ini. Coba ubah kata kunci atau reset filter.
+      </div>
+
+      <div class="rfq-banner" style="margin-top:40px">
+        <div>
+          <h4 style="margin-bottom:4px">Butuh dalam jumlah besar?</h4>
+          <p style="margin:0;font-size:14px">Ajukan Permintaan Penawaran (RFQ) untuk pembelian partai besar dengan harga khusus.</p>
+        </div>
+        <a class="btn btn-primary" @click="go('kontak')">Ajukan RFQ</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== DETAIL PRODUK ===== -->
+<div x-show="page==='produk-detail' && selectedProduct" x-cloak>
+  <template x-if="selectedProduct">
+  <section class="section-tight">
+    <div class="container">
+      <div class="breadcrumb"><a @click="go('home')">Beranda</a><span>/</span><a @click="go('produk')">Produk</a><span>/</span><span x-text="selectedProduct.nama"></span></div>
+      <div class="grid grid-2" style="align-items:flex-start;gap:44px">
+        <div class="prod-media" :style="'background:'+selectedProduct.bg+';border-radius:var(--radius);aspect-ratio:1/1'">
+          <span class="prod-tag" :class="stokClass(selectedProduct.stok)" x-text="selectedProduct.stok"></span>
+          <div x-html="selectedProduct.svg" style="width:60%;height:60%"></div>
+        </div>
+        <div>
+          <div class="eyebrow" x-text="selectedProduct.kategori"></div>
+          <h1 style="font-size:32px" x-text="selectedProduct.nama"></h1>
+          <p style="font-size:15.5px" x-text="selectedProduct.deskripsi"></p>
+          <table class="spec-table">
+            <tr><td>Ketinggian tanam ideal</td><td x-text="selectedProduct.ketinggian"></td></tr>
+            <tr><td>Ukuran kemasan</td><td x-text="selectedProduct.kemasan"></td></tr>
+            <tr><td>Usia panen</td><td x-text="selectedProduct.usiaPanen"></td></tr>
+            <tr><td>Potensi hasil</td><td x-text="selectedProduct.potensiHasil"></td></tr>
+            <tr><td>Status stok</td><td x-text="selectedProduct.stok"></td></tr>
+          </table>
+          <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap">
+            <a class="btn btn-primary" href="https://wa.me/6281234567890" target="_blank">Chat Admin untuk Harga</a>
+            <a class="btn btn-ghost" @click="go('kontak')">Ajukan RFQ Partai Besar</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="margin-top:60px;align-items:flex-start">
+        <div>
+          <h3>Keunggulan</h3>
+          <template x-for="k in selectedProduct.keunggulan" :key="k">
+            <div class="tag-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><p x-text="k"></p></div>
+          </template>
+        </div>
+        <div>
+          <h3>Cara Tanam Singkat</h3>
+          <template x-for="(s,i) in selectedProduct.caraTanam" :key="i">
+            <div class="tag-check"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--green-primary);flex:none" x-text="(i+1)+'.'"></span><p x-text="s"></p></div>
+          </template>
+        </div>
+      </div>
+
+      <div style="margin-top:56px;max-width:720px">
+        <h3>FAQ Produk</h3>
+        <template x-for="(f,i) in selectedProduct.faq" :key="i">
+          <div class="faq-item">
+            <div class="faq-q" @click="toggleFaqProduk(i)">
+              <span x-text="f.q"></span>
+              <span class="plus" x-text="openFaqProduk===i? '–':'+'"></span>
+            </div>
+            <div class="faq-a" :style="openFaqProduk===i? 'max-height:200px':'max-height:0'">
+              <div class="faq-a-inner" x-text="f.a"></div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </section>
+  </template>
+</div>
+
+<!-- ===== CARA PESAN ===== -->
+<div x-show="page==='cara-pesan'" x-cloak>
+  <section class="section-tight tinted">
+    <div class="container">
+      <div class="breadcrumb"><a @click="go('home')">Beranda</a><span>/</span><span>Cara Pemesanan</span></div>
+      <div class="eyebrow">Alur Pemesanan</div>
+      <h1 style="font-size:36px">Simpel, tanpa keranjang online — langsung terhubung dengan admin</h1>
+      <p style="max-width:560px">Fredian Farm menggunakan sistem inquiry berbasis WhatsApp. Tidak ada pembayaran online; semua transaksi dikonfirmasi langsung oleh tim admin agar lebih personal dan fleksibel untuk pesanan partai besar.</p>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div class="scroll-hint">Geser untuk lihat tahapan berikutnya →</div>
+      <div class="flow" style="margin-bottom:20px">
+        <template x-for="(s,i) in flowSteps" :key="i">
+          <div class="flow-step">
+            <div class="num" x-text="i+1"></div>
+            <h4 x-text="s.title"></h4>
+            <p x-text="s.desc"></p>
+          </div>
+        </template>
+      </div>
+    </div>
+  </section>
+  <section class="tinted">
+    <div class="container grid grid-2">
+      <div class="value-card">
+        <h4>Permintaan Penawaran (RFQ)</h4>
+        <p style="font-size:14.5px">Untuk kelompok tani, distributor, atau dinas pertanian yang memesan dalam jumlah besar, gunakan form RFQ untuk mendapat penawaran harga khusus dan estimasi ketersediaan stok.</p>
+        <a class="btn btn-primary btn-sm" @click="go('kontak')">Isi Form RFQ</a>
+      </div>
+      <div class="value-card">
+        <h4>Pembayaran & Pengiriman</h4>
+        <p style="font-size:14.5px">Pembayaran dikonfirmasi via transfer bank setelah kesepakatan harga dengan admin. Pengiriman menggunakan ekspedisi kargo dengan kemasan berventilasi khusus bibit.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== BLOG (list) ===== -->
+<div x-show="page==='blog'" x-cloak>
+  <section class="section-tight tinted">
+    <div class="container">
+      <div class="breadcrumb"><a @click="go('home')">Beranda</a><span>/</span><span>Blog</span></div>
+      <div class="eyebrow">Blog Budidaya</div>
+      <h1 style="font-size:36px">Panduan & wawasan seputar kentang</h1>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px">
+        <span class="btn btn-sm" :class="filter.kategori===''? 'btn-primary':'btn-ghost'" @click="filter.kategori=''">Semua</span>
+        <template x-for="k in kategoriArtikel" :key="k">
+          <span class="btn btn-sm" :class="filter.kategori===k? 'btn-primary':'btn-ghost'" @click="filter.kategori=k" x-text="k"></span>
+        </template>
+      </div>
+      <div class="grid grid-articles">
+        <template x-for="a in filteredArticles" :key="a.id">
+          <div class="article-card" @click="openArticle(a)">
+            <div class="article-media" :style="'background:'+a.bg" x-html="a.svg"></div>
+            <div class="article-body">
+              <span class="badge-kat" x-text="a.kategori"></span>
+              <h4 x-text="a.judul"></h4>
+              <p style="font-size:13.5px" x-text="a.ringkas"></p>
+              <div class="article-meta" x-text="a.tanggal + ' · ' + a.waktuBaca"></div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== DETAIL ARTIKEL ===== -->
+<div x-show="page==='blog-detail' && selectedArticle" x-cloak>
+  <template x-if="selectedArticle">
+  <section class="section-tight">
+    <div class="container" style="max-width:920px">
+      <div class="breadcrumb"><a @click="go('home')">Beranda</a><span>/</span><a @click="go('blog')">Blog</a><span>/</span><span x-text="selectedArticle.judul"></span></div>
+      <span class="badge-kat" x-text="selectedArticle.kategori"></span>
+      <h1 style="font-size:32px;margin-top:10px" x-text="selectedArticle.judul"></h1>
+      <div class="article-meta" style="margin-bottom:26px" x-text="selectedArticle.tanggal + ' · ' + selectedArticle.waktuBaca + ' · oleh Tim Fredian Farm'"></div>
+      <div class="article-media" :style="'background:'+selectedArticle.bg+';border-radius:var(--radius);margin-bottom:30px'" x-html="selectedArticle.svg"></div>
+
+      <div class="grid grid-2" style="gap:44px;align-items:flex-start">
+        <div style="grid-column:1/-1">
+          <div style="background:var(--green-soft);border-radius:var(--radius);padding:20px 24px;margin-bottom:30px">
+            <b style="font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--green-primary)">Daftar Isi</b>
+            <template x-for="(t,i) in selectedArticle.toc" :key="i">
+              <div style="font-size:14px;margin-top:8px" x-text="(i+1)+'. '+t"></div>
+            </template>
+          </div>
+          <template x-for="(par,i) in selectedArticle.konten" :key="i">
+            <div>
+              <h3 x-text="selectedArticle.toc[i]"></h3>
+              <p x-text="par"></p>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--line)">
+        <h3>FAQ Seputar Topik Ini</h3>
+        <template x-for="(f,i) in selectedArticle.faq" :key="i">
+          <div class="faq-item">
+            <div class="faq-q" @click="toggleFaqArtikel(i)">
+              <span x-text="f.q"></span><span class="plus" x-text="openFaqArtikel===i? '–':'+'"></span>
+            </div>
+            <div class="faq-a" :style="openFaqArtikel===i? 'max-height:200px':'max-height:0'">
+              <div class="faq-a-inner" x-text="f.a"></div>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <div style="margin-top:50px">
+        <h3>Artikel Terkait</h3>
+        <div class="grid grid-articles">
+          <template x-for="a in relatedArticles(selectedArticle)" :key="a.id">
+            <div class="article-card" @click="openArticle(a)">
+              <div class="article-media" :style="'background:'+a.bg" x-html="a.svg"></div>
+              <div class="article-body">
+                <span class="badge-kat" x-text="a.kategori"></span>
+                <h4 x-text="a.judul"></h4>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </section>
+  </template>
+</div>
+
+<!-- ===== GALERI ===== -->
+<div x-show="page==='galeri'" x-cloak>
+  <section class="section-tight tinted">
+    <div class="container">
+      <div class="breadcrumb"><a @click="go('home')">Beranda</a><span>/</span><span>Galeri</span></div>
+      <div class="eyebrow">Dokumentasi</div>
+      <h1 style="font-size:36px">Proses dari kebun sampai pengiriman</h1>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div class="grid grid-products">
+        <template x-for="g in gallery" :key="g.id">
+          <div class="gal-item" :style="'background:'+g.bg" @click="lightbox=g">
+            <div x-html="g.svg" style="width:44%;height:44%"></div>
+            <div class="gal-label" x-text="g.label"></div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </section>
+  <div x-show="lightbox" x-cloak @click="lightbox=null" style="position:fixed;inset:0;background:rgba(20,30,18,.85);z-index:90;display:flex;align-items:center;justify-content:center;padding:24px">
+    <div style="max-width:520px;width:100%" @click.stop>
+      <div class="gal-item" :style="lightbox? 'background:'+lightbox.bg+';aspect-ratio:4/3':''">
+        <div x-html="lightbox? lightbox.svg:''" style="width:40%;height:40%"></div>
+      </div>
+      <p style="color:#fff;text-align:center;margin-top:14px" x-text="lightbox?.label"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TESTIMONI (full) ===== -->
+<div x-show="page==='testimoni'" x-cloak>
+  <section class="section-tight tinted">
+    <div class="container">
+      <div class="breadcrumb"><a @click="go('home')">Beranda</a><span>/</span><span>Testimoni</span></div>
+      <div class="eyebrow">Cerita Mitra</div>
+      <h1 style="font-size:36px">Pengalaman petani menanam bibit kami</h1>
+    </div>
+  </section>
+  <section>
+    <div class="scroll-hint container" style="padding-bottom:0;margin-bottom:10px">Geser untuk baca lainnya →</div>
+    <div class="container grid testi-scroller">
+      <template x-for="t in testimonials" :key="t.id">
+        <div class="test-card">
+          <div class="stars">★★★★★</div>
+          <p class="test-quote" x-text="'“'+t.quote+'”'"></p>
+          <div class="test-person">
+            <div class="avatar" x-text="t.inisial"></div>
+            <div><b x-text="t.nama"></b><span x-text="t.daerah"></span></div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </section>
+</div>
+
+<!-- ===== FAQ ===== -->
+<div x-show="page==='faq'" x-cloak>
+  <section class="section-tight tinted">
+    <div class="container">
+      <div class="breadcrumb"><a @click="go('home')">Beranda</a><span>/</span><span>FAQ</span></div>
+      <div class="eyebrow">Bantuan</div>
+      <h1 style="font-size:36px">Pertanyaan yang sering diajukan</h1>
+    </div>
+  </section>
+  <section>
+    <div class="container" style="max-width:760px">
+      <template x-for="(f,i) in faqs" :key="i">
+        <div class="faq-item">
+          <div class="faq-q" @click="openFaqMain = openFaqMain===i? null : i">
+            <span x-text="f.q"></span><span class="plus" x-text="openFaqMain===i? '–':'+'"></span>
+          </div>
+          <div class="faq-a" :style="openFaqMain===i? 'max-height:220px':'max-height:0'">
+            <div class="faq-a-inner" x-text="f.a"></div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </section>
+</div>
+
+<!-- ===== KONTAK ===== -->
+<div x-show="page==='kontak'" x-cloak>
+  <section class="section-tight tinted">
+    <div class="container">
+      <div class="breadcrumb"><a @click="go('home')">Beranda</a><span>/</span><span>Kontak</span></div>
+      <div class="eyebrow">Hubungi Kami</div>
+      <h1 style="font-size:36px">Kami siap bantu kebutuhan bibit Anda</h1>
+    </div>
+  </section>
+  <section>
+    <div class="container grid grid-2" style="align-items:flex-start">
+      <div>
+        <h3>Informasi Kontak</h3>
+        <div class="tag-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><p>Jl. Raya Dieng No. 45, Dieng Kulon, Kabupaten Wonosobo, Jawa Tengah 56354 <span style="opacity:.6">(alamat sementara/dummy)</span></p></div>
+        <div class="tag-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L8 10a16 16 0 006 6l1.36-1.36a2 2 0 012.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg><p>0812-3456-7890 (WhatsApp & Telepon)</p></div>
+        <div class="tag-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg><p>halo@fredianfarm.co.id</p></div>
+        <div class="tag-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><p>Senin–Sabtu, 08.00–16.00 WIB</p></div>
+        <div class="map-embed" style="border-radius:var(--radius);overflow:hidden;height:220px;margin-top:20px">
+          <iframe src="https://www.google.com/maps?q=Dieng,Wonosobo,Jawa%20Tengah&output=embed" style="border:0;width:100%;height:100%" loading="lazy"></iframe>
+        </div>
+        <div class="map-fallback" style="height:150px;margin-top:20px;background:var(--green-soft)">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--green-primary)" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <p style="margin:0;color:var(--text-soft);font-size:13.5px">Dataran Tinggi Dieng, Jawa Tengah</p>
+          <a class="btn btn-primary btn-sm" href="https://www.google.com/maps?q=Dieng,Wonosobo,Jawa+Tengah" target="_blank" rel="noopener">Buka di Google Maps</a>
+        </div>
+        <div style="background:var(--green-soft);border-radius:var(--radius);padding:18px 20px;margin-top:20px">
+          <b style="font-size:13.5px">Channel utama kami ada di TikTok</b>
+          <p style="font-size:13.5px;margin:6px 0 0">@fredianfarm · 27,9rb pengikut. Nomor pemesanan & Toko Online (TikTok Shop) tersedia di bio profil TikTok kami.</p>
+        </div>
+        <div class="social-row" style="margin-top:20px">
+          <a href="https://www.tiktok.com/@fredianfarm" target="_blank" rel="noopener" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M16.6 5.8a4.6 4.6 0 01-3.3-1.4v9.9a4.9 4.9 0 11-4.9-4.9c.3 0 .5 0 .8.1v2.5a2.4 2.4 0 102 2.4V2h2.5a4.6 4.6 0 003.3 3.9v2.5a7 7 0 01-.4-2.6z"/></svg></a>
+          <a href="https://www.instagram.com/fredianfarm" target="_blank" rel="noopener" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M14 9h3V6h-3a4 4 0 00-4 4v2H8v3h2v6h3v-6h3l1-3h-4v-2a1 1 0 011-1z"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M10 9l5 3-5 3z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h3>Formulir Kontak / RFQ</h3>
+        <form @submit.prevent="submitForm()">
+          <input type="text" name="website" class="honey" tabindex="-1" autocomplete="off">
+          <div class="form-field"><label>Nama Lengkap</label><input type="text" required placeholder="Nama Anda"></div>
+          <div class="form-field"><label>Nomor WhatsApp</label><input type="text" required placeholder="08xx-xxxx-xxxx"></div>
+          <div class="form-field"><label>Tertarik pada Kelas Bibit</label>
+            <select>
+              <option>G-0</option><option>G-0 MZ</option><option>Granola L</option><option>G-0 Plus</option><option>Lainnya / Belum Tahu</option>
+            </select>
+          </div>
+          <div class="form-field"><label>Perkiraan Jumlah / Kebutuhan</label><input type="text" placeholder="cth: 500 kg untuk musim tanam Agustus"></div>
+          <div class="form-field"><label>Pesan</label><textarea rows="4" placeholder="Tuliskan kebutuhan Anda di sini..."></textarea></div>
+          <button class="btn btn-primary" type="submit" style="width:100%">Kirim Pesan</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== KEBIJAKAN PRIVASI ===== -->
+<div x-show="page==='privasi'" x-cloak>
+  <section class="section-tight">
+    <div class="container" style="max-width:760px">
+      <div class="breadcrumb"><a @click="go('home')">Beranda</a><span>/</span><span>Kebijakan Privasi</span></div>
+      <h1>Kebijakan Privasi</h1>
+      <p>Fredian Farm menghargai privasi setiap pengunjung dan pelanggan. Data yang Anda kirimkan melalui formulir kontak — seperti nama, nomor WhatsApp, dan kebutuhan pemesanan — hanya digunakan untuk keperluan komunikasi terkait pemesanan bibit dan tidak dibagikan ke pihak ketiga tanpa izin.</p>
+      <p>Kami menggunakan cookie sederhana untuk keperluan analitik pengunjung situs guna meningkatkan kualitas layanan. Anda dapat menghubungi kami kapan saja melalui halaman Kontak untuk permintaan penghapusan data pribadi.</p>
+    </div>
+  </section>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container foot-grid">
+    <div>
+      <div class="logo" style="color:#fff;margin-bottom:14px" @click="go('home')">
+        <svg class="logo-mark" viewBox="0 0 40 40" fill="none"><ellipse cx="20" cy="23" rx="13" ry="11" fill="#F9A825"/><path d="M20 12c-2-4-7-5-9-3 3 1 4 4 5 6" stroke="#5CB962" stroke-width="2.4" stroke-linecap="round" fill="none"/><path d="M21 12c2-4 7-5 9-3-3 1-4 4-5 6" stroke="#5CB962" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg>
+        Fredian Farm
+      </div>
+      <p style="font-size:14px;max-width:260px">Produsen dan distributor bibit kentang bersertifikat sejak 2012 — Dieng, Jawa Tengah.</p>
+      <div class="social-row" style="margin-top:14px">
+        <a href="https://www.tiktok.com/@fredianfarm" target="_blank" rel="noopener" aria-label="TikTok"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M16.6 5.8a4.6 4.6 0 01-3.3-1.4v9.9a4.9 4.9 0 11-4.9-4.9c.3 0 .5 0 .8.1v2.5a2.4 2.4 0 102 2.4V2h2.5a4.6 4.6 0 003.3 3.9v2.5a7 7 0 01-.4-2.6z"/></svg></a>
+        <a href="https://www.instagram.com/fredianfarm" target="_blank" rel="noopener" aria-label="Instagram"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <h4>Navigasi</h4>
+      <a @click="go('tentang')">Tentang Kami</a>
+      <a @click="go('produk')">Produk</a>
+      <a @click="go('blog')">Blog</a>
+      <a @click="go('galeri')">Galeri</a>
+    </div>
+    <div>
+      <h4>Layanan</h4>
+      <a @click="go('cara-pesan')">Cara Pemesanan</a>
+      <a @click="go('faq')">FAQ</a>
+      <a @click="go('kontak')">RFQ Partai Besar</a>
+      <a @click="go('privasi')">Kebijakan Privasi</a>
+    </div>
+    <div>
+      <h4>Hubungi Kami</h4>
+      <a href="https://wa.me/6281234567890" target="_blank">WA 0812-3456-7890</a>
+      <a href="https://www.tiktok.com/@fredianfarm" target="_blank">TikTok @fredianfarm (27,9rb)</a>
+      <a>halo@fredianfarm.co.id</a>
+      <a>Dieng, Jawa Tengah</a>
+    </div>
+  </div>
+  <div class="container foot-bottom">
+    <span>© 2026 Fredian Farm. Seluruh hak cipta dilindungi.</span>
+    <span>Prototipe desain — dibuat untuk keperluan presentasi PRD</span>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/6281234567890" target="_blank" rel="noopener" aria-label="Chat WhatsApp">
+  <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.1-1.3A10 10 0 1012 2zm5.6 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.5-3.9-4.6-4.1-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.4.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1.2-.2.7-.8.9-1 .2-.3.4-.2.6-.1l1.7.8c.2.1.3.2.4.3.1.2.1.8-.1 1.4z"/></svg>
+</a>
+
+<div x-show="toast" x-cloak class="toast" x-text="toast"></div>
+
+<script>
+function site(){
+  return {
+    page:'home',
+    menuOpen:false,
+    lightbox:null,
+    toast:null,
+    openFaqMain:null,
+    openFaqProduk:null,
+    openFaqArtikel:null,
+    selectedProduct:null,
+    selectedArticle:null,
+    filter:{varietas:'',stok:'',q:'',kategori:''},
+    navItems:[
+      {id:'home',label:'Beranda'},
+      {id:'tentang',label:'Tentang Kami'},
+      {id:'produk',label:'Produk'},
+      {id:'cara-pesan',label:'Cara Pesan'},
+      {id:'blog',label:'Blog'},
+      {id:'galeri',label:'Galeri'},
+      {id:'testimoni',label:'Testimoni'},
+      {id:'faq',label:'FAQ'},
+      {id:'kontak',label:'Kontak'},
+    ],
+    varietasList:['G-0','G-0 MZ','Granola L','G-0 Plus'],
+    kategoriArtikel:['Budidaya','Bibit','Pemupukan','Penyakit','Panen'],
+    flowSteps:[
+      {title:'Pilih Bibit',desc:'Jelajahi katalog & pilih varietas sesuai kebutuhan.'},
+      {title:'Hubungi Admin',desc:'Chat via WhatsApp untuk cek stok & harga.'},
+      {title:'Konfirmasi',desc:'Admin memberi rincian pesanan dan estimasi kirim.'},
+      {title:'Pembayaran',desc:'Transfer sesuai kesepakatan dengan admin.'},
+      {title:'Pengiriman',desc:'Bibit dikemas & dikirim via ekspedisi kargo.'},
+      {title:'Bibit Diterima',desc:'Bibit sampai di kebun Anda, siap ditanam.'},
+    ],
+    products:[
+      {id:1,nama:'G-0',kategori:'Bibit Sumber · Kultur Jaringan',stok:'Terbatas',bg:'#EAF2E6',ketinggian:'1800–2200 MDPL',kemasan:'10 kg / kotak',usiaPanen:'75–90 hari',potensiHasil:'Bibit sumber (bukan untuk konsumsi)',ringkas:'Bibit generasi awal hasil kultur jaringan, bebas virus dan patogen tanah — dasar dari semua kelas bibit kami.',deskripsi:'G-0 adalah bibit kentang generasi paling awal yang dihasilkan langsung dari proses kultur jaringan di laboratorium mini kami. Digunakan sebagai bibit sumber untuk memperbanyak kelas bibit berikutnya (G1, G2, dst). [Data lengkap menyusul — spesifikasi di bawah ini masih bersifat dummy.]',keunggulan:['Bebas virus & patogen tanah karena berasal dari kultur jaringan','Kualitas genetik terjaga penuh sejak dari planlet','Menjadi dasar mutu untuk seluruh kelas bibit turunan'],caraTanam:['Ditanam khusus di screen house atau lahan isolasi','Jaga jarak aman dari tanaman kentang komersial','Lakukan monitoring hama-penyakit secara ketat','Hasil panen digunakan sebagai bibit sumber, bukan konsumsi'],faq:[{q:'Apa itu bibit G-0?',a:'G-0 adalah generasi pertama bibit kentang hasil kultur jaringan yang digunakan sebagai sumber untuk memperbanyak bibit generasi berikutnya.'},{q:'Apakah G-0 bisa langsung dikonsumsi?',a:'Tidak, G-0 diperuntukkan sebagai bibit sumber untuk produksi generasi bibit selanjutnya.'}],svg:'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="55" rx="30" ry="24" fill="#F9A825"/><ellipse cx="40" cy="46" rx="4" ry="3" fill="#1F3D22" opacity=".22"/><circle cx="50" cy="30" r="6" fill="#5CB962"/></svg>'},
+      {id:2,nama:'G-0 MZ',kategori:'Bibit Sumber · Mata Zonal',stok:'Tersedia',bg:'#F1E9E4',ketinggian:'1800–2200 MDPL',kemasan:'10 kg / kotak',usiaPanen:'80–95 hari',potensiHasil:'Bibit sumber (bukan untuk konsumsi)',ringkas:'Hasil perbanyakan G-0 melalui teknik mata zonal untuk mempercepat volume bibit sumber.',deskripsi:'G-0 MZ merupakan hasil perbanyakan dari G-0 menggunakan teknik mata zonal (MZ), memungkinkan produksi bibit sumber dalam volume lebih besar dengan mutu yang tetap terjaga. [Data lengkap menyusul — spesifikasi di bawah ini masih bersifat dummy.]',keunggulan:['Volume produksi lebih besar dibanding G-0 murni','Mutu genetik tetap terjaga dari induk G-0','Mempercepat siklus regenerasi bibit sumber'],caraTanam:['Tanam di lahan isolasi dengan pengawasan ketat','Gunakan media tanam steril bebas patogen','Rotasi lahan wajib setiap siklus tanam','Panen dilakukan secara bertahap sesuai kematangan'],faq:[{q:'Apa beda G-0 MZ dengan G-0 biasa?',a:'G-0 MZ diperbanyak melalui teknik mata zonal sehingga volumenya lebih besar, dengan mutu genetik yang tetap setara G-0.'}],svg:'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="55" rx="32" ry="25" fill="#e6b85c"/><ellipse cx="60" cy="48" rx="4" ry="3" fill="#1F3D22" opacity=".2"/><circle cx="35" cy="32" r="5" fill="#5CB962"/></svg>'},
+      {id:3,nama:'Granola L',kategori:'Bibit Sebar · Konsumsi',stok:'Tersedia',bg:'#EAF2E6',ketinggian:'1500–2000 MDPL',kemasan:'25 kg / karung',usiaPanen:'90–110 hari',potensiHasil:'18–24 ton/ha',ringkas:'Turunan Granola yang sudah siap sebar untuk petani, cocok untuk konsumsi maupun ditanam kembali.',deskripsi:'Granola L adalah kelas bibit sebar turunan dari lini Granola, sudah melalui beberapa generasi perbanyakan dari bibit sumber sehingga siap ditanam langsung oleh petani mitra. [Data lengkap menyusul — spesifikasi di bawah ini masih bersifat dummy.]',keunggulan:['Siap tanam langsung di lahan petani','Hasil umbi seragam dan tahan simpan','Harga lebih terjangkau dibanding bibit sumber'],caraTanam:['Rendam bibit semalaman sebelum tanam','Buat bedengan dengan jarak tanam 30x70 cm','Tanam pada kedalaman 8–10 cm','Siram teratur, hindari genangan air'],faq:[{q:'Apakah Granola L cocok untuk konsumsi rumah tangga?',a:'Ya, Granola L cocok untuk konsumsi maupun ditanam kembali oleh petani.'},{q:'Berapa lama bibit ini bisa disimpan sebelum ditanam?',a:'Idealnya ditanam dalam 2 minggu setelah kedatangan agar tunas tidak terlalu panjang.'}],svg:'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="55" rx="34" ry="27" fill="#F9A825"/><ellipse cx="38" cy="45" rx="5" ry="3.5" fill="#1F3D22" opacity=".25"/><ellipse cx="60" cy="62" rx="4" ry="3" fill="#1F3D22" opacity=".25"/></svg>'},
+      {id:4,nama:'G-0 Plus',kategori:'Bibit Sumber · Generasi Lanjutan',stok:'Pre-order',bg:'#F1E9E4',ketinggian:'1800–2200 MDPL',kemasan:'10 kg / kotak',usiaPanen:'85–100 hari',potensiHasil:'Bibit sumber (bukan untuk konsumsi)',ringkas:'Generasi lanjutan dari G-0 dengan volume produksi lebih besar, tetap menjaga mutu sumber.',deskripsi:'G-0 Plus adalah pengembangan generasi lanjutan dari G-0 yang dirancang untuk memenuhi permintaan bibit sumber dalam skala lebih besar, sambil tetap mempertahankan standar mutu dan kebebasan dari penyakit tular tanah. [Data lengkap menyusul — spesifikasi di bawah ini masih bersifat dummy.]',keunggulan:['Volume lebih besar untuk kebutuhan skala menengah','Tetap bebas dari penyakit tular tanah','Cocok sebagai sumber bibit bagi mitra perbanyakan'],caraTanam:['Tanam di lahan isolasi bersertifikat','Kontrol kelembapan tanah secara berkala','Pemupukan sesuai anjuran teknis kultur jaringan','Panen bertahap sesuai jadwal regenerasi'],faq:[{q:'Kapan estimasi stok pre-order G-0 Plus tersedia?',a:'Umumnya 2–3 minggu setelah pemesanan, tergantung jadwal panen bibit sumber.'}],svg:'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="55" rx="34" ry="26" fill="#e6960f"/><ellipse cx="44" cy="44" rx="5" ry="3.5" fill="#1F3D22" opacity=".2"/><circle cx="65" cy="30" r="5" fill="#5CB962"/></svg>'},
+    ],
+    articles:[
+      {id:1,kategori:'Budidaya',judul:'5 Kesalahan Umum saat Menanam Bibit Kentang',ringkas:'Hindari kesalahan jarak tanam dan pengairan yang sering menurunkan hasil panen.',tanggal:'12 Jul 2026',waktuBaca:'4 menit baca',bg:'#EAF2E6',toc:['Jarak Tanam Terlalu Rapat','Pengairan Berlebih','Salah Waktu Pembumbunan','Mengabaikan Rotasi Tanam','Telat Deteksi Hama'],konten:['Banyak petani pemula menanam bibit terlalu rapat sehingga umbi bersaing mendapatkan nutrisi dan ruang tumbuh, berakibat pada ukuran umbi yang lebih kecil saat panen.','Penyiraman berlebihan dapat menyebabkan pembusukan umbi di dalam tanah, terutama pada lahan dengan drainase kurang baik.','Pembumbunan yang dilakukan terlalu awal atau terlambat dapat memengaruhi jumlah umbi yang terbentuk pada setiap batang tanaman.','Menanam kentang terus-menerus di lahan yang sama tanpa rotasi meningkatkan risiko penumpukan patogen di dalam tanah.','Keterlambatan dalam mengenali gejala serangan hama dapat menyebabkan penyebaran yang lebih sulit dikendalikan.'],faq:[{q:'Berapa jarak tanam ideal untuk kentang?',a:'Umumnya sekitar 30x70 cm tergantung varietas dan kesuburan lahan.'}]},
+      {id:2,kategori:'Bibit',judul:'Cara Memilih Bibit Kentang Bersertifikat',ringkas:'Kenali ciri fisik bibit unggul sebelum membeli dalam jumlah besar.',tanggal:'8 Jul 2026',waktuBaca:'3 menit baca',bg:'#F1E9E4',toc:['Ciri Fisik Bibit Sehat','Pentingnya Sertifikat Mutu','Ukuran & Grading Bibit'],konten:['Bibit yang baik memiliki kulit mulus tanpa bercak, dengan mata tunas yang jelas dan tidak keriput.','Sertifikat mutu dari lembaga berwenang menjadi jaminan bahwa bibit bebas dari penyakit tular tanah dan virus.','Grading berdasarkan ukuran membantu keseragaman pertumbuhan saat ditanam serentak di lahan yang sama.'],faq:[{q:'Apa bedanya bibit bersertifikat dan bibit biasa?',a:'Bibit bersertifikat telah melalui uji bebas penyakit dan grading resmi dari lembaga pengawas benih.'}]},
+      {id:3,kategori:'Pemupukan',judul:'Jadwal Pemupukan Kentang dari Tanam hingga Panen',ringkas:'Panduan dosis dan waktu pemupukan agar pertumbuhan optimal.',tanggal:'2 Jul 2026',waktuBaca:'5 menit baca',bg:'#EAF2E6',toc:['Pupuk Dasar','Pupuk Susulan Pertama','Pupuk Susulan Kedua'],konten:['Pupuk dasar diberikan sebelum tanam untuk menyediakan unsur hara awal bagi pertumbuhan akar dan tunas.','Pupuk susulan pertama biasanya diberikan pada usia 20–25 hari untuk mendukung fase pertumbuhan vegetatif.','Pupuk susulan kedua pada usia 40–45 hari membantu pembentukan dan pembesaran umbi menjelang panen.'],faq:[{q:'Apakah pupuk organik cukup untuk kentang?',a:'Pupuk organik baik sebagai pelengkap, namun umumnya dikombinasikan dengan pupuk anorganik untuk hasil optimal.'}]},
+      {id:4,kategori:'Penyakit',judul:'Mengenali Gejala Awal Penyakit Busuk Daun',ringkas:'Deteksi dini penyakit late blight yang sering menyerang musim hujan.',tanggal:'28 Jun 2026',waktuBaca:'4 menit baca',bg:'#F1E9E4',toc:['Gejala Awal di Daun','Kondisi Cuaca Pemicu','Langkah Pengendalian'],konten:['Bercak coklat kebasahan pada tepi daun sering menjadi tanda awal serangan busuk daun.','Kelembapan tinggi dan suhu sejuk pada musim hujan mempercepat penyebaran penyakit ini di lahan.','Sanitasi lahan dan rotasi tanaman menjadi langkah pencegahan penting selain penyemprotan fungisida sesuai anjuran.'],faq:[{q:'Kapan waktu terbaik menyemprot fungisida preventif?',a:'Idealnya sebelum musim hujan puncak atau saat kelembapan lahan mulai meningkat.'}]},
+      {id:5,kategori:'Panen',judul:'Tanda-Tanda Kentang Siap Dipanen',ringkas:'Kenali waktu panen yang tepat agar kualitas dan hasil maksimal.',tanggal:'20 Jun 2026',waktuBaca:'3 menit baca',bg:'#EAF2E6',toc:['Perubahan Warna Daun','Uji Kulit Umbi','Waktu Panen Ideal'],konten:['Daun yang mulai menguning dan layu menjadi indikator utama bahwa umbi sudah mendekati kematangan.','Kulit umbi yang tidak mudah terkelupas saat digosok menandakan umbi sudah cukup matang untuk dipanen.','Panen sebaiknya dilakukan pada cuaca kering agar umbi tidak mudah membusuk selama proses penyimpanan.'],faq:[{q:'Apa yang terjadi jika panen terlalu cepat?',a:'Umbi akan lebih kecil dan kulitnya lebih tipis sehingga rentan rusak saat penyimpanan.'}]},
+      {id:6,kategori:'Bibit',judul:'Penyimpanan Bibit Kentang Sebelum Tanam',ringkas:'Cara menyimpan bibit agar tunas tumbuh optimal tanpa busuk.',tanggal:'14 Jun 2026',waktuBaca:'3 menit baca',bg:'#F1E9E4',toc:['Suhu & Kelembapan Ideal','Lama Penyimpanan Aman','Tanda Bibit Sudah Tidak Layak'],konten:['Bibit sebaiknya disimpan di tempat sejuk dengan sirkulasi udara baik untuk mencegah pembusukan dini.','Penyimpanan lebih dari tiga minggu tanpa penanaman berisiko membuat tunas tumbuh terlalu panjang dan lemah.','Bibit dengan bercak lembek atau bau tidak sedap sebaiknya tidak digunakan untuk penanaman.'],faq:[{q:'Bolehkah bibit disimpan di kulkas?',a:'Sebaiknya tidak, suhu terlalu dingin dapat mengubah kandungan pati dan memengaruhi rasa hasil panen.'}]},
+    ],
+    testimonials:[
+      {id:1,inisial:'PS',nama:'Pak Suryana',daerah:'Ketua Gapoktan, Garut',quote:'Bibit Granola dari Fredian Farm hasilnya seragam, panen kami jadi lebih mudah dihitung untuk pasokan koperasi.'},
+      {id:2,inisial:'BW',nama:'Ibu Wulandari',daerah:'Distributor, Purworejo',quote:'Pengiriman selalu tepat waktu dan bibit sampai dalam kondisi segar meski jarak cukup jauh dari Dieng.'},
+      {id:3,inisial:'AR',nama:'Pak Ridwan',daerah:'Petani Mandiri, Dieng',quote:'Admin sangat membantu memilihkan kelas bibit Granola L yang cocok untuk lahan dataran tinggi tempat saya bertani.'},
+      {id:4,inisial:'DT',nama:'Pak Dedi Taufik',daerah:'Dinas Pertanian, Jawa Tengah',quote:'Sertifikat mutu yang lengkap memudahkan kami merekomendasikan Fredian Farm ke kelompok tani binaan.'},
+      {id:5,inisial:'NH',nama:'Ibu Nurhayati',daerah:'Toko Tani, Wonosobo',quote:'Bibit sumber G-0 selalu tersedia saat musim perbanyakan, jadi usaha pembibitan saya tidak pernah kehabisan stok.'},
+      {id:6,inisial:'YS',nama:'Pak Yayan S.',daerah:'Petani, Dieng',quote:'Karena lokasi kebun dekat, saya sering berkunjung langsung dan melihat sendiri proses sortir bibitnya.'},
+    ],
+    gallery:[
+      {id:1,label:'Kebun Produksi',bg:'#EAF2E6',svg:'<svg viewBox="0 0 100 100"><path d="M10 70c15-20 25-20 40 0" stroke="#3F9A45" stroke-width="4" fill="none"/><path d="M50 70c15-20 25-20 40 0" stroke="#2E7D32" stroke-width="4" fill="none"/></svg>'},
+      {id:2,label:'Gudang Sortir',bg:'#F1E9E4',svg:'<svg viewBox="0 0 100 100"><rect x="20" y="40" width="60" height="35" fill="#8D6E63"/><path d="M20 40l30-20 30 20" fill="none" stroke="#2E7D32" stroke-width="4"/></svg>'},
+      {id:3,label:'Bibit Siap Kirim',bg:'#EAF2E6',svg:'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="55" rx="30" ry="24" fill="#F9A825"/></svg>'},
+      {id:4,label:'Proses Grading',bg:'#F1E9E4',svg:'<svg viewBox="0 0 100 100"><circle cx="35" cy="55" r="16" fill="#F9A825"/><circle cx="65" cy="55" r="10" fill="#e6960f"/></svg>'},
+      {id:5,label:'Packing Bibit',bg:'#EAF2E6',svg:'<svg viewBox="0 0 100 100"><rect x="25" y="30" width="50" height="50" rx="4" fill="#8D6E63"/><path d="M25 45h50" stroke="#5c4740" stroke-width="3"/></svg>'},
+      {id:6,label:'Pengiriman Kargo',bg:'#F1E9E4',svg:'<svg viewBox="0 0 100 100"><rect x="15" y="45" width="45" height="25" fill="#2E7D32"/><rect x="60" y="55" width="20" height="15" fill="#3F9A45"/><circle cx="30" cy="75" r="6" fill="#1F3D22"/><circle cx="65" cy="75" r="6" fill="#1F3D22"/></svg>'},
+      {id:7,label:'Kunjungan Petani',bg:'#EAF2E6',svg:'<svg viewBox="0 0 100 100"><circle cx="50" cy="35" r="12" fill="#8D6E63"/><path d="M30 80c0-15 9-25 20-25s20 10 20 25" fill="#2E7D32"/></svg>'},
+      {id:8,label:'Uji Kualitas Tanah',bg:'#F1E9E4',svg:'<svg viewBox="0 0 100 100"><rect x="45" y="20" width="10" height="45" fill="#8D6E63"/><ellipse cx="50" cy="70" rx="30" ry="10" fill="#5c4740"/></svg>'},
+    ],
+    faqs:[
+      {q:'Apakah Fredian Farm melayani pengiriman ke luar Jawa?',a:'Ya, kami melayani pengiriman ke Sumatra dan Sulawesi menggunakan ekspedisi kargo dengan kemasan khusus bibit.'},
+      {q:'Apakah tersedia sistem keranjang belanja online?',a:'Belum. Saat ini pemesanan dilakukan melalui inquiry via WhatsApp agar admin dapat memastikan stok dan harga terbaru.'},
+      {q:'Bagaimana cara mengajukan penawaran untuk partai besar?',a:'Anda dapat mengisi form RFQ di halaman Kontak atau menghubungi admin langsung melalui WhatsApp.'},
+      {q:'Apakah bibit memiliki garansi jika rusak saat pengiriman?',a:'Kami memproses klaim penggantian untuk kerusakan akibat pengiriman dengan bukti foto saat unboxing.'},
+      {q:'Apakah bisa kunjungan langsung ke kebun?',a:'Bisa, silakan hubungi admin terlebih dahulu untuk menjadwalkan kunjungan kelompok tani atau instansi.'},
+      {q:'Metode pembayaran apa saja yang diterima?',a:'Saat ini pembayaran dilakukan melalui transfer bank setelah konfirmasi pesanan dengan admin.'},
+    ],
+    init(){ window.scrollTo(0,0); },
+    go(p){ this.page=p; this.menuOpen=false; window.scrollTo({top:0,behavior:'smooth'}); },
+    openProduct(p){ this.selectedProduct=p; this.openFaqProduk=null; this.go('produk-detail'); },
+    openArticle(a){ this.selectedArticle=a; this.openFaqArtikel=null; this.go('blog-detail'); },
+    toggleFaqProduk(i){ this.openFaqProduk = this.openFaqProduk===i? null : i; },
+    toggleFaqArtikel(i){ this.openFaqArtikel = this.openFaqArtikel===i? null : i; },
+    stokClass(s){ return s==='Tersedia'?'stok-tersedia': s==='Terbatas'?'stok-terbatas':'stok-preorder'; },
+    relatedArticles(a){ return this.articles.filter(x=>x.id!==a.id && x.kategori===a.kategori).slice(0,3).concat(this.articles.filter(x=>x.id!==a.id && x.kategori!==a.kategori)).slice(0,3); },
+    get filteredProducts(){
+      return this.products.filter(p=>{
+        if(this.filter.varietas && p.nama!==this.filter.varietas) return false;
+        if(this.filter.stok && p.stok!==this.filter.stok) return false;
+        if(this.filter.q && !p.nama.toLowerCase().includes(this.filter.q.toLowerCase())) return false;
+        return true;
+      });
+    },
+    get filteredArticles(){
+      return this.articles.filter(a=> !this.filter.kategori || a.kategori===this.filter.kategori);
+    },
+    submitForm(){
+      this.toast='Pesan terkirim! (prototipe — belum terhubung backend)';
+      setTimeout(()=>{ this.toast=null; },3200);
+    }
+  }
+}
+</script>
+<style>[x-cloak]{display:none!important;}</style>
+</body>
+</html>

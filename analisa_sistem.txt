@@ -1,0 +1,450 @@
+Untuk website **penjualan bibit kentang** (Granola, Atlantik, Medians, dll.), target utamanya biasanya adalah:
+
+* Petani
+* Kelompok tani
+* Distributor bibit
+* Dinas Pertanian
+* Toko pertanian
+* Pencari informasi melalui Google (SEO)
+
+Artinya website jangan hanya terlihat "menjual produk", tetapi juga **membangun kepercayaan** karena bibit merupakan produk pertanian yang sensitif terhadap kualitas.
+
+---
+
+# Rekomendasi Kombinasi Warna
+
+## Kombinasi 1 (Paling Direkomendasikan)
+
+Tema : Fresh Agriculture
+
+| Elemen     | Warna          | Hex     |
+| ---------- | -------------- | ------- |
+| Primary    | Hijau Daun     | #2E7D32 |
+| Secondary  | Coklat Tanah   | #8D6E63 |
+| Accent     | Kuning Kentang | #F9A825 |
+| Background | Cream          | #FAF7F0 |
+| Text       | Abu gelap      | #333333 |
+
+Kesan:
+
+✅ alami
+
+✅ profesional
+
+✅ terpercaya
+
+✅ modern
+
+Cocok untuk perusahaan bibit.
+
+**Kombinasi 1** adalah yang paling sesuai.
+
+Karena:
+
+* identik pertanian
+* tidak terlalu mencolok
+* nyaman dibaca
+* mudah dipadukan dengan foto tanaman
+
+---
+
+# Struktur Website
+
+Saya akan menganalisa dari sisi UX dan SEO.
+
+```
+HOME
+
+├── Tentang Kami
+
+├── Produk
+│      ├── Bibit Granola
+│      ├── Bibit Atlantik
+│      ├── Bibit Medians
+│      ├── Bibit GM
+│      └── Semua Bibit
+
+├── Cara Pemesanan
+
+├── Blog
+
+├── Galeri
+
+├── Testimoni
+
+├── FAQ
+
+├── Kontak
+
+└── Kebijakan Privasi
+```
+
+---
+
+# Detail Halaman
+
+## 1. Home
+
+Landing page.
+
+Isi:
+
+Hero Section
+
+"Bibit Kentang Bersertifikat Berkualitas"
+
+CTA
+
+> Lihat Produk
+
+> Lihat Artikel
+
+Section:
+
+* Kenapa memilih kami
+* Produk unggulan
+* Cara pemesanan
+* Artikel terbaru
+* Testimoni
+* Partner
+* Lokasi
+* CTA WhatsApp
+
+---
+
+## 2. Tentang Kami
+
+Berisi:
+
+* sejarah
+* visi misi
+* legalitas
+* sertifikat
+* lokasi kebun
+* proses produksi
+* foto perusahaan
+
+Karena orang membeli bibit harus percaya dulu.
+
+---
+
+## 3. Produk
+
+Ini halaman utama.
+
+Filter:
+
+* Varietas
+* Musim tanam
+* Ketinggian lahan
+* Berat
+* Ketersediaan
+
+Card produk:
+
+Foto
+
+Nama
+
+Granola
+
+Kategori
+
+Harga (opsional)
+
+Stok
+
+Button Detail
+
+Button WhatsApp
+
+---
+
+## 4. Detail Produk
+
+Misal
+
+Bibit Kentang Granola
+
+Berisi:
+
+* foto
+* deskripsi
+* spesifikasi
+* ukuran
+* sertifikat
+* keunggulan
+* cocok ditanam dimana
+* usia panen
+* hasil panen rata-rata
+* cara penyimpanan
+* FAQ produk
+* tombol WA
+
+---
+
+## 5. Cara Pemesanan
+
+Flow:
+
+```
+Pilih Bibit
+
+↓
+
+Hubungi Admin
+
+↓
+
+Konfirmasi
+
+↓
+
+Pembayaran
+
+↓
+
+Pengiriman
+
+↓
+
+Bibit diterima
+```
+
+---
+
+## 6. Blog
+
+Ini halaman SEO utama.
+
+Kategori:
+
+* Tips Budidaya
+* Penyakit Kentang
+* Pemupukan
+* Panen
+* Bibit
+* Teknologi Pertanian
+
+---
+
+## 7. Detail Artikel
+
+SEO Friendly.
+
+Contoh:
+
+Cara Memilih Bibit Kentang Granola Berkualitas
+
+Berisi:
+
+gambar
+
+heading
+
+toc
+
+artikel
+
+FAQ
+
+Related Article
+
+---
+
+## 8. Galeri
+
+Isi:
+
+* foto kebun
+* gudang
+* bibit
+* proses sortir
+* proses packing
+* pengiriman
+
+Ini meningkatkan kepercayaan.
+
+---
+
+## 9. Testimoni
+
+Foto pelanggan
+
+Video
+
+Review
+
+Nama
+
+Daerah
+
+---
+
+## 10. FAQ
+
+Misalnya:
+
+Apakah bibit bersertifikat?
+
+Minimal pembelian?
+
+Bisa kirim luar pulau?
+
+Berapa lama pengiriman?
+
+---
+
+## 11. Kontak
+
+Berisi:
+
+Alamat
+
+Google Maps
+
+WA
+
+Email
+
+Instagram
+
+Facebook
+
+Youtube
+
+Jam operasional
+
+Form kontak
+
+---
+
+# Menu Admin (CMS)
+
+Untuk mengelola website, minimal dibutuhkan modul berikut.
+
+```
+Dashboard
+
+Produk
+
+Kategori Produk
+
+Artikel
+
+Kategori Artikel
+
+Galeri
+
+Testimoni
+
+FAQ
+
+Banner
+
+Media Sosial
+
+Profil Perusahaan
+
+Kontak
+
+SEO
+
+Pengguna/Admin
+```
+
+---
+
+# Struktur Database (High Level)
+
+```
+produk
+
+kategori_produk
+
+gambar_produk
+
+artikel
+
+kategori_artikel
+
+galeri
+
+testimoni
+
+faq
+
+setting
+
+media_sosial
+
+banner
+
+kontak
+
+users
+```
+
+---
+
+# Fitur SEO yang Wajib
+
+Website blog adalah mesin utama untuk mendatangkan pengunjung. Oleh karena itu, setiap artikel dan halaman produk sebaiknya mendukung:
+
+* URL SEO-friendly (`/produk/bibit-kentang-granola`)
+* Meta title & meta description
+* Open Graph untuk berbagi ke media sosial
+* Breadcrumb
+* Sitemap XML otomatis
+* Robots.txt
+* Schema.org (Product, Article, Organization, FAQ)
+* Alt text pada gambar
+* Internal link antar artikel dan produk
+* Artikel terkait (Related Posts)
+* Pencarian (Search)
+* Tag dan kategori artikel
+* Optimasi kecepatan (lazy loading gambar, kompresi aset)
+
+---
+
+# Struktur Navigasi yang Direkomendasikan
+
+```
+HOME
+│
+├── Tentang Kami
+│
+├── Produk
+│      ├── Semua Produk
+│      ├── Granola
+│      ├── Atlantik
+│      ├── Medians
+│      └── Lainnya
+│
+├── Blog
+│      ├── Budidaya
+│      ├── Bibit
+│      ├── Pemupukan
+│      ├── Penyakit
+│      └── Panen
+│
+├── Galeri
+│
+├── Testimoni
+│
+├── FAQ
+│
+└── Kontak
+```
+
+## Rekomendasi tambahan dari sisi sistem analis
+
+Agar website tidak hanya menjadi katalog tetapi juga berpotensi berkembang menjadi sistem yang lebih besar, saya menyarankan menyiapkan pondasi dengan modul yang mudah diperluas, seperti:
+
+* **Permintaan Penawaran (Request for Quote)**, sehingga pelanggan dapat mengajukan kebutuhan bibit dalam jumlah besar tanpa harus langsung melihat harga.
+* **Manajemen Stok Sederhana**, untuk menampilkan status "Tersedia", "Terbatas", atau "Pre-order".
+* **Riwayat Artikel dan Produk Terpopuler** di dashboard admin untuk membantu strategi pemasaran.
+* **Lead Management**, yaitu menyimpan data calon pelanggan yang menghubungi melalui formulir agar dapat ditindaklanjuti.
+* **Integrasi WhatsApp CTA** pada setiap halaman produk dan artikel untuk meningkatkan konversi.
+
+Dengan struktur tersebut, website dapat dimulai sebagai **Company Profile + Katalog Produk + Blog SEO**, lalu di masa depan berkembang menjadi sistem yang lebih lengkap, misalnya dengan fitur pemesanan online, pelacakan pengiriman, hingga portal pelanggan tanpa perlu mengubah arsitektur dasar.

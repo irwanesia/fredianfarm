@@ -1,0 +1,12 @@
+@import '@tabler/core/dist/css/tabler.css';
+@import '@tabler/core/dist/css/tabler-flags.css';
+@import '@tabler/core/dist/css/tabler-payments.css';
+@import '@tabler/core/dist/css/tabler-vendors.css';
+
+:root {
+    --tblr-primary: #2E7D32;
+    --tblr-secondary: #8D6E63;
+    --tblr-warning: #F9A825;
+    --tblr-bg-surface: #FAF7F0;
+    --tblr-body-color: #333333;
+}

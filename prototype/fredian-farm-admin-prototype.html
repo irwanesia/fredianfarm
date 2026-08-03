@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fredian Farm — Admin CMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js"></script>
+<style>
+:root{
+  --tblr-primary:#2E7D32;
+  --tblr-body-bg:#ffffff;
+  --brand-green:#2E7D32;
+  --brand-green-deep:#1F3D22;
+  --brand-yellow:#F9A825;
+  --brand-soft:#EEF5EC;
+}
+body{font-family:'Inter',sans-serif;background:#fff;}
+.navbar-vertical{background:#fff;border-right:1px solid #eef0f2;}
+.navbar-vertical .navbar-brand{padding:1rem 1.25rem;}
+.navbar-vertical .nav-link{color:#5a6169;font-weight:500;border-radius:8px;margin:2px 8px;padding:.55rem .75rem;}
+.navbar-vertical .nav-link.active,.navbar-vertical .nav-link:hover{background:var(--brand-soft);color:var(--brand-green-deep);}
+.navbar-vertical .nav-link.active .nav-link-icon,.navbar-vertical .nav-link:hover .nav-link-icon{color:var(--brand-green);}
+.nav-link-icon{font-size:1.15rem;margin-right:.6rem;color:#9aa1a8;}
+.nav-group-title{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#b7bdc3;padding:1rem 1.25rem .35rem;}
+.page-wrapper{background:#fff;}
+.card{border:1px solid #eef0f2;box-shadow:0 1px 3px rgba(0,0,0,.03);}
+.avatar{font-weight:700;}
+.badge-stok-tersedia{background:#e7f5ea;color:#1F5C23;}
+.badge-stok-terbatas{background:#fdf1de;color:#9a5b0a;}
+.badge-stok-preorder{background:#f1e9e4;color:#6b4f45;}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;}
+.brand-mark{width:34px;height:34px;}
+.topbar-search{max-width:320px;}
+.table thead th{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:#9aa1a8;font-weight:700;border-bottom:1px solid #eef0f2;}
+.ratio-icon{width:100%;aspect-ratio:1/1;border-radius:8px;display:flex;align-items:center;justify-content:center;}
+[x-cloak]{display:none!important;}
+.kpi-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#fff;flex:none;}
+.subnav-badge{font-size:.65rem;padding:2px 7px;}
+</style>
+</head>
+<body x-data="admin()" x-init="init()">
+<div class="page">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="navbar navbar-vertical navbar-expand-lg" style="width:260px;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:40;">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#" @click.prevent="go('dashboard')">
+        <svg class="brand-mark" viewBox="0 0 40 40" fill="none">
+          <ellipse cx="20" cy="23" rx="13" ry="11" fill="#F9A825"/>
+          <path d="M20 12c-2-4-7-5-9-3 3 1 4 4 5 6" stroke="#2E7D32" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+          <path d="M21 12c2-4 7-5 9-3-3 1-4 4-5 6" stroke="#3F9A45" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        </svg>
+        <div>
+          <div style="font-weight:800;font-size:.95rem;color:#1F3D22;line-height:1.1">Fredian Farm</div>
+          <div style="font-size:.68rem;color:#9aa1a8;font-weight:600;letter-spacing:.03em">ADMIN CMS</div>
+        </div>
+      </a>
+      <div class="navbar-collapse">
+        <ul class="navbar-nav pt-2">
+          <li class="nav-item"><a class="nav-link" :class="page==='dashboard'?'active':''" href="#" @click.prevent="go('dashboard')"><i class="ti ti-layout-dashboard nav-link-icon"></i>Dashboard</a></li>
+        </ul>
+        <div class="nav-group-title">Katalog</div>
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" :class="page==='produk'?'active':''" href="#" @click.prevent="go('produk')"><i class="ti ti-shopping-bag nav-link-icon"></i>Produk</a></li>
+          <li class="nav-item"><a class="nav-link" :class="page==='kategori-produk'?'active':''" href="#" @click.prevent="go('kategori-produk')"><i class="ti ti-category-2 nav-link-icon"></i>Kategori Produk</a></li>
+        </ul>
+        <div class="nav-group-title">Konten</div>
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" :class="page==='artikel'?'active':''" href="#" @click.prevent="go('artikel')"><i class="ti ti-article nav-link-icon"></i>Artikel</a></li>
+          <li class="nav-item"><a class="nav-link" :class="page==='kategori-artikel'?'active':''" href="#" @click.prevent="go('kategori-artikel')"><i class="ti ti-tags nav-link-icon"></i>Kategori Artikel</a></li>
+          <li class="nav-item"><a class="nav-link" :class="page==='galeri'?'active':''" href="#" @click.prevent="go('galeri')"><i class="ti ti-photo nav-link-icon"></i>Galeri</a></li>
+          <li class="nav-item"><a class="nav-link" :class="page==='testimoni'?'active':''" href="#" @click.prevent="go('testimoni')"><i class="ti ti-message-star nav-link-icon"></i>Testimoni</a></li>
+          <li class="nav-item"><a class="nav-link" :class="page==='faq'?'active':''" href="#" @click.prevent="go('faq')"><i class="ti ti-help-hexagon nav-link-icon"></i>FAQ</a></li>
+          <li class="nav-item"><a class="nav-link" :class="page==='banner'?'active':''" href="#" @click.prevent="go('banner')"><i class="ti ti-layout-2 nav-link-icon"></i>Banner</a></li>
+        </ul>
+        <div class="nav-group-title">Pengaturan</div>
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" :class="page==='medsos'?'active':''" href="#" @click.prevent="go('medsos')"><i class="ti ti-brand-tiktok nav-link-icon"></i>Media Sosial</a></li>
+          <li class="nav-item"><a class="nav-link" :class="page==='profil'?'active':''" href="#" @click.prevent="go('profil')"><i class="ti ti-building-store nav-link-icon"></i>Profil Perusahaan</a></li>
+          <li class="nav-item"><a class="nav-link" :class="page==='kontak'?'active':''" href="#" @click.prevent="go('kontak')">
+            <i class="ti ti-inbox nav-link-icon"></i>Kontak <span class="badge bg-red-lt ms-auto subnav-badge" x-show="leadsBaru">·<span x-text="leadsBaru"></span> baru</span>
+          </a></li>
+          <li class="nav-item"><a class="nav-link" :class="page==='seo'?'active':''" href="#" @click.prevent="go('seo')"><i class="ti ti-seo nav-link-icon"></i>SEO</a></li>
+          <li class="nav-item"><a class="nav-link" :class="page==='pengguna'?'active':''" href="#" @click.prevent="go('pengguna')"><i class="ti ti-users nav-link-icon"></i>Pengguna</a></li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+  <div style="margin-left:260px">
+    <!-- ===== TOPBAR ===== -->
+    <header class="navbar navbar-expand-md sticky-top d-print-none" style="background:#fff;border-bottom:1px solid #eef0f2;">
+      <div class="container-fluid d-flex align-items-center">
+        <h1 class="navbar-brand d-none d-sm-block" style="font-size:1.05rem;font-weight:700;color:#1F3D22;text-transform:capitalize" x-text="pageTitle()"></h1>
+        <div class="ms-auto d-flex align-items-center gap-3">
+          <div class="input-icon topbar-search d-none d-md-block">
+            <span class="input-icon-addon"><i class="ti ti-search"></i></span>
+            <input type="text" class="form-control form-control-sm" placeholder="Cari di admin...">
+          </div>
+          <a href="#" class="text-secondary position-relative">
+            <i class="ti ti-bell fs-3"></i>
+            <span class="badge bg-red" style="position:absolute;top:-4px;right:-4px;width:8px;height:8px;padding:0;border-radius:50%"></span>
+          </a>
+          <div class="d-flex align-items-center gap-2">
+            <span class="avatar avatar-sm" style="background:var(--brand-green);color:#fff">AF</span>
+            <div class="d-none d-sm-block">
+              <div style="font-size:.82rem;font-weight:700;color:#1F3D22">Admin Fredian</div>
+              <div style="font-size:.7rem;color:#9aa1a8">Super Admin</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-body">
+      <div class="container-fluid py-3">
+
+        <!-- ============ DASHBOARD ============ -->
+        <div x-show="page==='dashboard'" x-cloak>
+          <div class="row row-cards mb-3">
+            <div class="col-sm-6 col-lg-3">
+              <div class="card"><div class="card-body d-flex align-items-center gap-3">
+                <div class="kpi-icon" style="background:var(--brand-green)"><i class="ti ti-shopping-bag"></i></div>
+                <div><div class="text-secondary" style="font-size:.78rem">Total Produk</div><div style="font-size:1.4rem;font-weight:800" x-text="produk.length"></div></div>
+              </div></div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="card"><div class="card-body d-flex align-items-center gap-3">
+                <div class="kpi-icon" style="background:#8D6E63"><i class="ti ti-article"></i></div>
+                <div><div class="text-secondary" style="font-size:.78rem">Artikel Dipublikasi</div><div style="font-size:1.4rem;font-weight:800" x-text="artikel.filter(a=>a.status==='Publish').length"></div></div>
+              </div></div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="card"><div class="card-body d-flex align-items-center gap-3">
+                <div class="kpi-icon" style="background:#F9A825"><i class="ti ti-mail"></i></div>
+                <div><div class="text-secondary" style="font-size:.78rem">Pesan Masuk Baru</div><div style="font-size:1.4rem;font-weight:800" x-text="leadsBaru"></div></div>
+              </div></div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="card"><div class="card-body d-flex align-items-center gap-3">
+                <div class="kpi-icon" style="background:#000"><i class="ti ti-brand-tiktok"></i></div>
+                <div><div class="text-secondary" style="font-size:.78rem">Pengikut TikTok</div><div style="font-size:1.4rem;font-weight:800">27,9rb</div></div>
+              </div></div>
+            </div>
+          </div>
+
+          <div class="row row-cards mb-3">
+            <div class="col-lg-8">
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Pesan Masuk & Kunjungan Website (30 Hari Terakhir)</h3></div>
+                <div class="card-body"><div id="chartTraffic" style="min-height:250px"></div></div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Produk Paling Diminati</h3></div>
+                <div class="card-body p-0">
+                  <template x-for="p in produk" :key="p.id">
+                    <div class="d-flex align-items-center justify-content-between px-3 py-2 border-bottom">
+                      <div>
+                        <div style="font-weight:600;font-size:.88rem" x-text="p.nama"></div>
+                        <div class="text-secondary" style="font-size:.72rem" x-text="p.kategori"></div>
+                      </div>
+                      <span class="badge" :class="'badge-stok-'+stokKey(p.stok)" x-text="p.stok"></span>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row row-cards">
+            <div class="col-lg-6">
+              <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between"><h3 class="card-title">Artikel Terbaru</h3><a href="#" @click.prevent="go('artikel')" class="text-secondary" style="font-size:.8rem">Lihat Semua</a></div>
+                <div class="card-body p-0">
+                  <template x-for="a in artikel.slice(0,4)" :key="a.id">
+                    <div class="d-flex align-items-center justify-content-between px-3 py-2 border-bottom">
+                      <div>
+                        <div style="font-weight:600;font-size:.86rem" x-text="a.judul"></div>
+                        <div class="text-secondary" style="font-size:.72rem" x-text="a.kategori+' · '+a.tanggal"></div>
+                      </div>
+                      <span class="badge" :class="a.status==='Publish'?'bg-green-lt':'bg-yellow-lt'" x-text="a.status"></span>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between"><h3 class="card-title">Kontak Masuk Terbaru</h3><a href="#" @click.prevent="go('kontak')" class="text-secondary" style="font-size:.8rem">Lihat Semua</a></div>
+                <div class="card-body p-0">
+                  <template x-for="k in kontak.slice(0,4)" :key="k.id">
+                    <div class="d-flex align-items-center justify-content-between px-3 py-2 border-bottom">
+                      <div>
+                        <div style="font-weight:600;font-size:.86rem" x-text="k.nama"></div>
+                        <div class="text-secondary" style="font-size:.72rem" x-text="k.minat+' · '+k.tanggal"></div>
+                      </div>
+                      <span class="badge" :class="statusLeadClass(k.status)" x-text="k.status"></span>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ PRODUK ============ -->
+        <div x-show="page==='produk'" x-cloak>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="text-secondary" style="font-size:.85rem" x-text="produk.length+' produk terdaftar'"></div>
+            <button class="btn btn-sm text-white" style="background:var(--brand-green)" @click="openProdukModal()"><i class="ti ti-plus me-1"></i>Tambah Produk</button>
+          </div>
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table table-vcenter card-table">
+                <thead><tr><th>Produk</th><th>Kategori</th><th>Ketinggian</th><th>Kemasan</th><th>Stok</th><th class="w-1">Aksi</th></tr></thead>
+                <tbody>
+                  <template x-for="p in produk" :key="p.id">
+                    <tr>
+                      <td class="d-flex align-items-center gap-2"><span class="avatar avatar-sm rounded" :style="'background:'+p.bg"><i class="ti ti-plant-2" style="color:#8a5b0a"></i></span><span style="font-weight:600" x-text="p.nama"></span></td>
+                      <td class="text-secondary" x-text="p.kategori"></td>
+                      <td class="text-secondary" x-text="p.ketinggian"></td>
+                      <td class="text-secondary" x-text="p.kemasan"></td>
+                      <td><span class="badge" :class="'badge-stok-'+stokKey(p.stok)" x-text="p.stok"></span></td>
+                      <td>
+                        <div class="btn-list flex-nowrap">
+                          <button class="btn btn-icon btn-sm" @click="openProdukModal(p)"><i class="ti ti-pencil"></i></button>
+                          <button class="btn btn-icon btn-sm text-danger" @click="removeItem('produk',p.id)"><i class="ti ti-trash"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ KATEGORI PRODUK ============ -->
+        <div x-show="page==='kategori-produk'" x-cloak>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="text-secondary" style="font-size:.85rem" x-text="kategoriProduk.length+' kategori'"></div>
+            <button class="btn btn-sm text-white" style="background:var(--brand-green)" @click="openSimpleModal('kategoriProduk')"><i class="ti ti-plus me-1"></i>Tambah Kategori</button>
+          </div>
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table table-vcenter card-table">
+                <thead><tr><th>Nama Kategori</th><th>Deskripsi Singkat</th><th>Jumlah Produk</th><th class="w-1">Aksi</th></tr></thead>
+                <tbody>
+                  <template x-for="k in kategoriProduk" :key="k.id">
+                    <tr>
+                      <td style="font-weight:600" x-text="k.nama"></td>
+                      <td class="text-secondary" x-text="k.deskripsi"></td>
+                      <td x-text="k.jumlah"></td>
+                      <td><div class="btn-list flex-nowrap">
+                        <button class="btn btn-icon btn-sm" @click="openSimpleModal('kategoriProduk',k)"><i class="ti ti-pencil"></i></button>
+                        <button class="btn btn-icon btn-sm text-danger" @click="removeItem('kategoriProduk',k.id)"><i class="ti ti-trash"></i></button>
+                      </div></td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ ARTIKEL ============ -->
+        <div x-show="page==='artikel'" x-cloak>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="text-secondary" style="font-size:.85rem" x-text="artikel.length+' artikel'"></div>
+            <button class="btn btn-sm text-white" style="background:var(--brand-green)" @click="openArtikelModal()"><i class="ti ti-plus me-1"></i>Tulis Artikel</button>
+          </div>
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table table-vcenter card-table">
+                <thead><tr><th>Judul</th><th>Kategori</th><th>Tanggal</th><th>Status</th><th class="w-1">Aksi</th></tr></thead>
+                <tbody>
+                  <template x-for="a in artikel" :key="a.id">
+                    <tr>
+                      <td style="font-weight:600;max-width:320px" x-text="a.judul"></td>
+                      <td><span class="badge bg-yellow-lt" x-text="a.kategori"></span></td>
+                      <td class="text-secondary" x-text="a.tanggal"></td>
+                      <td><span class="badge" :class="a.status==='Publish'?'bg-green-lt':'bg-secondary-lt'" x-text="a.status"></span></td>
+                      <td><div class="btn-list flex-nowrap">
+                        <button class="btn btn-icon btn-sm" @click="openArtikelModal(a)"><i class="ti ti-pencil"></i></button>
+                        <button class="btn btn-icon btn-sm text-danger" @click="removeItem('artikel',a.id)"><i class="ti ti-trash"></i></button>
+                      </div></td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ KATEGORI ARTIKEL ============ -->
+        <div x-show="page==='kategori-artikel'" x-cloak>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="text-secondary" style="font-size:.85rem" x-text="kategoriArtikel.length+' kategori blog'"></div>
+            <button class="btn btn-sm text-white" style="background:var(--brand-green)" @click="openSimpleModal('kategoriArtikel')"><i class="ti ti-plus me-1"></i>Tambah Kategori</button>
+          </div>
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table table-vcenter card-table">
+                <thead><tr><th>Nama Kategori</th><th>Deskripsi Singkat</th><th>Jumlah Artikel</th><th class="w-1">Aksi</th></tr></thead>
+                <tbody>
+                  <template x-for="k in kategoriArtikel" :key="k.id">
+                    <tr>
+                      <td style="font-weight:600" x-text="k.nama"></td>
+                      <td class="text-secondary" x-text="k.deskripsi"></td>
+                      <td x-text="k.jumlah"></td>
+                      <td><div class="btn-list flex-nowrap">
+                        <button class="btn btn-icon btn-sm" @click="openSimpleModal('kategoriArtikel',k)"><i class="ti ti-pencil"></i></button>
+                        <button class="btn btn-icon btn-sm text-danger" @click="removeItem('kategoriArtikel',k.id)"><i class="ti ti-trash"></i></button>
+                      </div></td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ GALERI ============ -->
+        <div x-show="page==='galeri'" x-cloak>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="text-secondary" style="font-size:.85rem" x-text="galeri.length+' foto'"></div>
+            <button class="btn btn-sm text-white" style="background:var(--brand-green)" @click="galeriModal=true"><i class="ti ti-upload me-1"></i>Unggah Foto</button>
+          </div>
+          <div class="row row-cards">
+            <template x-for="g in galeri" :key="g.id">
+              <div class="col-6 col-md-3">
+                <div class="card">
+                  <div class="ratio-icon" :style="'background:'+g.bg"><i class="ti ti-photo fs-1" style="color:#8a5b0a;opacity:.5"></i></div>
+                  <div class="card-body py-2 d-flex justify-content-between align-items-center">
+                    <span style="font-size:.82rem;font-weight:600" x-text="g.label"></span>
+                    <button class="btn btn-icon btn-sm text-danger" @click="removeItem('galeri',g.id)"><i class="ti ti-trash"></i></button>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- ============ TESTIMONI ============ -->
+        <div x-show="page==='testimoni'" x-cloak>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="text-secondary" style="font-size:.85rem" x-text="testimoni.length+' testimoni'"></div>
+            <button class="btn btn-sm text-white" style="background:var(--brand-green)" @click="testiModal=true"><i class="ti ti-plus me-1"></i>Tambah Testimoni</button>
+          </div>
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table table-vcenter card-table">
+                <thead><tr><th>Nama</th><th>Daerah</th><th>Rating</th><th>Kutipan</th><th>Tampil</th><th class="w-1">Aksi</th></tr></thead>
+                <tbody>
+                  <template x-for="t in testimoni" :key="t.id">
+                    <tr>
+                      <td class="d-flex align-items-center gap-2"><span class="avatar avatar-sm" style="background:var(--brand-soft);color:var(--brand-green)" x-text="t.inisial"></span><span style="font-weight:600" x-text="t.nama"></span></td>
+                      <td class="text-secondary" x-text="t.daerah"></td>
+                      <td class="text-warning">★★★★★</td>
+                      <td class="text-secondary" style="max-width:260px" x-text="t.quote"></td>
+                      <td><label class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" x-model="t.tampil"></label></td>
+                      <td><div class="btn-list flex-nowrap">
+                        <button class="btn btn-icon btn-sm"><i class="ti ti-pencil"></i></button>
+                        <button class="btn btn-icon btn-sm text-danger" @click="removeItem('testimoni',t.id)"><i class="ti ti-trash"></i></button>
+                      </div></td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ FAQ ============ -->
+        <div x-show="page==='faq'" x-cloak>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="text-secondary" style="font-size:.85rem" x-text="faqList.length+' pertanyaan'"></div>
+            <button class="btn btn-sm text-white" style="background:var(--brand-green)" @click="faqModal=true"><i class="ti ti-plus me-1"></i>Tambah FAQ</button>
+          </div>
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table table-vcenter card-table">
+                <thead><tr><th style="width:30px"></th><th>Pertanyaan</th><th>Jawaban Singkat</th><th class="w-1">Aksi</th></tr></thead>
+                <tbody>
+                  <template x-for="f in faqList" :key="f.id">
+                    <tr>
+                      <td class="text-secondary"><i class="ti ti-grip-vertical"></i></td>
+                      <td style="font-weight:600" x-text="f.q"></td>
+                      <td class="text-secondary" style="max-width:340px" x-text="f.a"></td>
+                      <td><div class="btn-list flex-nowrap">
+                        <button class="btn btn-icon btn-sm"><i class="ti ti-pencil"></i></button>
+                        <button class="btn btn-icon btn-sm text-danger" @click="removeItem('faqList',f.id)"><i class="ti ti-trash"></i></button>
+                      </div></td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ BANNER ============ -->
+        <div x-show="page==='banner'" x-cloak>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="text-secondary" style="font-size:.85rem" x-text="banner.length+' banner hero'"></div>
+            <button class="btn btn-sm text-white" style="background:var(--brand-green)" @click="bannerModal=true"><i class="ti ti-plus me-1"></i>Tambah Banner</button>
+          </div>
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table table-vcenter card-table">
+                <thead><tr><th>Preview</th><th>Judul Banner</th><th>Urutan</th><th>Aktif</th><th class="w-1">Aksi</th></tr></thead>
+                <tbody>
+                  <template x-for="b in banner" :key="b.id">
+                    <tr>
+                      <td><div style="width:70px;height:40px;border-radius:6px" :style="'background:'+b.bg"></div></td>
+                      <td style="font-weight:600" x-text="b.judul"></td>
+                      <td x-text="b.urutan"></td>
+                      <td><label class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" x-model="b.aktif"></label></td>
+                      <td><div class="btn-list flex-nowrap">
+                        <button class="btn btn-icon btn-sm"><i class="ti ti-pencil"></i></button>
+                        <button class="btn btn-icon btn-sm text-danger" @click="removeItem('banner',b.id)"><i class="ti ti-trash"></i></button>
+                      </div></td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ MEDIA SOSIAL ============ -->
+        <div x-show="page==='medsos'" x-cloak>
+          <div class="row row-cards">
+            <div class="col-lg-7">
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Kelola Tautan Media Sosial</h3></div>
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label class="form-label"><i class="ti ti-brand-tiktok me-1"></i>TikTok (Channel Utama)</label>
+                    <div class="row g-2">
+                      <div class="col-md-6"><input class="form-control" x-model="medsos.tiktok.handle"></div>
+                      <div class="col-md-6"><input class="form-control" x-model="medsos.tiktok.followers" placeholder="Jumlah pengikut"></div>
+                    </div>
+                    <textarea class="form-control mt-2" rows="2" x-model="medsos.tiktok.bio"></textarea>
+                    <input class="form-control mt-2" x-model="medsos.tiktok.shopUrl" placeholder="Link Toko Online (TikTok Shop)">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label"><i class="ti ti-brand-instagram me-1"></i>Instagram</label>
+                    <div class="row g-2">
+                      <div class="col-md-6"><input class="form-control" x-model="medsos.instagram.handle"></div>
+                      <div class="col-md-6"><input class="form-control" x-model="medsos.instagram.followers" placeholder="Jumlah pengikut"></div>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label"><i class="ti ti-brand-whatsapp me-1"></i>Nomor Pemesanan (WhatsApp)</label>
+                    <input class="form-control" x-model="medsos.whatsapp">
+                  </div>
+                  <div class="row g-2">
+                    <div class="col-md-6"><label class="form-label"><i class="ti ti-brand-facebook me-1"></i>Facebook</label><input class="form-control" x-model="medsos.facebook"></div>
+                    <div class="col-md-6"><label class="form-label"><i class="ti ti-brand-youtube me-1"></i>YouTube</label><input class="form-control" x-model="medsos.youtube"></div>
+                  </div>
+                  <button class="btn text-white mt-3" style="background:var(--brand-green)" @click="toast('Perubahan tersimpan (prototipe)')"><i class="ti ti-device-floppy me-1"></i>Simpan Perubahan</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Pratinjau Channel Utama</h3></div>
+                <div class="card-body">
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="avatar" style="background:#000;color:#fff"><i class="ti ti-brand-tiktok"></i></span>
+                    <div><div style="font-weight:700" x-text="medsos.tiktok.handle"></div><div class="text-secondary" style="font-size:.78rem" x-text="medsos.tiktok.followers+' Pengikut'"></div></div>
+                  </div>
+                  <p class="text-secondary" style="font-size:.85rem" x-text="medsos.tiktok.bio"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ PROFIL PERUSAHAAN ============ -->
+        <div x-show="page==='profil'" x-cloak>
+          <div class="alert alert-warning" role="alert"><i class="ti ti-alert-triangle me-1"></i>Data profil, visi &amp; misi di bawah masih bersifat sementara (dummy) — akan diperbarui setelah data resmi diterima.</div>
+          <div class="card">
+            <div class="card-header"><h3 class="card-title">Profil Perusahaan</h3></div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6"><label class="form-label">Nama Perusahaan</label><input class="form-control" x-model="profil.nama"></div>
+                <div class="col-md-6"><label class="form-label">Tahun Berdiri</label><input class="form-control" x-model="profil.tahun"></div>
+                <div class="col-12"><label class="form-label">Alamat</label><input class="form-control" x-model="profil.alamat"></div>
+                <div class="col-md-6"><label class="form-label">Nomor Telepon / WA</label><input class="form-control" x-model="profil.telp"></div>
+                <div class="col-md-6"><label class="form-label">Email</label><input class="form-control" x-model="profil.email"></div>
+                <div class="col-12"><label class="form-label">Visi</label><textarea class="form-control" rows="2" x-model="profil.visi"></textarea></div>
+                <div class="col-12"><label class="form-label">Misi</label><textarea class="form-control" rows="3" x-model="profil.misi"></textarea></div>
+                <div class="col-md-6"><label class="form-label">Jam Operasional</label><input class="form-control" x-model="profil.jam"></div>
+                <div class="col-md-6">
+                  <label class="form-label">Logo Perusahaan</label>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="avatar avatar-lg" style="background:var(--brand-soft)"><i class="ti ti-photo" style="color:#8a5b0a"></i></div>
+                    <button class="btn btn-outline-secondary btn-sm"><i class="ti ti-upload me-1"></i>Unggah Logo</button>
+                  </div>
+                </div>
+              </div>
+              <button class="btn text-white mt-3" style="background:var(--brand-green)" @click="toast('Profil perusahaan tersimpan (prototipe)')"><i class="ti ti-device-floppy me-1"></i>Simpan Profil</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ KONTAK / LEAD MANAGEMENT ============ -->
+        <div x-show="page==='kontak'" x-cloak>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="text-secondary" style="font-size:.85rem" x-text="kontak.length+' pesan masuk'"></div>
+            <select class="form-select form-select-sm w-auto" x-model="kontakFilter">
+              <option value="">Semua Status</option><option>Baru</option><option>Diproses</option><option>Selesai</option>
+            </select>
+          </div>
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table table-vcenter card-table">
+                <thead><tr><th>Nama</th><th>Kontak</th><th>Minat</th><th>Pesan</th><th>Tanggal</th><th>Status</th><th class="w-1">Aksi</th></tr></thead>
+                <tbody>
+                  <template x-for="k in kontak.filter(x=>!kontakFilter || x.status===kontakFilter)" :key="k.id">
+                    <tr>
+                      <td style="font-weight:600" x-text="k.nama"></td>
+                      <td class="text-secondary" x-text="k.wa"></td>
+                      <td><span class="badge bg-yellow-lt" x-text="k.minat"></span></td>
+                      <td class="text-secondary" style="max-width:240px" x-text="k.pesan"></td>
+                      <td class="text-secondary" x-text="k.tanggal"></td>
+                      <td>
+                        <select class="form-select form-select-sm" x-model="k.status" :class="statusLeadClass(k.status)">
+                          <option>Baru</option><option>Diproses</option><option>Selesai</option>
+                        </select>
+                      </td>
+                      <td><button class="btn btn-icon btn-sm text-danger" @click="removeItem('kontak',k.id)"><i class="ti ti-trash"></i></button></td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ SEO ============ -->
+        <div x-show="page==='seo'" x-cloak>
+          <div class="row row-cards">
+            <div class="col-lg-7">
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Meta Global</h3></div>
+                <div class="card-body">
+                  <div class="mb-3"><label class="form-label">Meta Title Default</label><input class="form-control" x-model="seo.title"></div>
+                  <div class="mb-3"><label class="form-label">Meta Description Default</label><textarea class="form-control" rows="2" x-model="seo.desc"></textarea></div>
+                  <div class="mb-3"><label class="form-label">Open Graph Image</label>
+                    <div class="d-flex align-items-center gap-2"><div class="avatar avatar-lg" style="background:var(--brand-soft)"><i class="ti ti-photo" style="color:#8a5b0a"></i></div><button class="btn btn-outline-secondary btn-sm"><i class="ti ti-upload me-1"></i>Unggah Gambar OG</button></div>
+                  </div>
+                  <div class="mb-3"><label class="form-label">Robots.txt</label><textarea class="form-control font-monospace" rows="4" x-model="seo.robots"></textarea></div>
+                  <button class="btn text-white" style="background:var(--brand-green)" @click="toast('Pengaturan SEO tersimpan (prototipe)')"><i class="ti ti-device-floppy me-1"></i>Simpan Pengaturan</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Sitemap</h3></div>
+                <div class="card-body">
+                  <p class="text-secondary" style="font-size:.85rem">Sitemap XML dibuat otomatis dari seluruh produk dan artikel yang dipublikasikan.</p>
+                  <div class="d-flex align-items-center gap-2 mb-3"><span class="status-dot" style="background:#2E7D32"></span><span style="font-size:.85rem">Terakhir digenerate: 18 Jul 2026, 09.12 WIB</span></div>
+                  <button class="btn btn-outline-secondary btn-sm" @click="toast('Sitemap digenerate ulang (prototipe)')"><i class="ti ti-refresh me-1"></i>Generate Ulang Sitemap</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ PENGGUNA ============ -->
+        <div x-show="page==='pengguna'" x-cloak>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="text-secondary" style="font-size:.85rem" x-text="pengguna.length+' pengguna admin'"></div>
+            <button class="btn btn-sm text-white" style="background:var(--brand-green)" @click="penggunaModal=true"><i class="ti ti-plus me-1"></i>Tambah Pengguna</button>
+          </div>
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table table-vcenter card-table">
+                <thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Status</th><th class="w-1">Aksi</th></tr></thead>
+                <tbody>
+                  <template x-for="u in pengguna" :key="u.id">
+                    <tr>
+                      <td class="d-flex align-items-center gap-2"><span class="avatar avatar-sm" style="background:var(--brand-soft);color:var(--brand-green)" x-text="u.inisial"></span><span style="font-weight:600" x-text="u.nama"></span></td>
+                      <td class="text-secondary" x-text="u.email"></td>
+                      <td><span class="badge" :class="u.role==='Super Admin'?'bg-purple-lt':(u.role==='Editor'?'bg-blue-lt':'bg-teal-lt')" x-text="u.role"></span></td>
+                      <td><span class="badge" :class="u.aktif?'bg-green-lt':'bg-secondary-lt'" x-text="u.aktif?'Aktif':'Nonaktif'"></span></td>
+                      <td><div class="btn-list flex-nowrap">
+                        <button class="btn btn-icon btn-sm"><i class="ti ti-pencil"></i></button>
+                        <button class="btn btn-icon btn-sm text-danger" @click="removeItem('pengguna',u.id)"><i class="ti ti-trash"></i></button>
+                      </div></td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: PRODUK ===== -->
+<div class="modal" :class="produkModal?'d-block':''" x-show="produkModal" x-cloak style="background:rgba(0,0,0,.4)">
+  <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content" @click.away="produkModal=false">
+    <div class="modal-header"><h5 class="modal-title" x-text="editing.id? 'Edit Produk':'Tambah Produk'"></h5><button class="btn-close" @click="produkModal=false"></button></div>
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label">Nama Produk</label><input class="form-control" x-model="editing.nama"></div>
+        <div class="col-md-6"><label class="form-label">Kategori</label>
+          <select class="form-select" x-model="editing.kategori"><template x-for="k in kategoriProduk" :key="k.id"><option x-text="k.nama"></option></template></select>
+        </div>
+        <div class="col-md-4"><label class="form-label">Ketinggian Tanam</label><input class="form-control" x-model="editing.ketinggian" placeholder="cth: 1800-2200 MDPL"></div>
+        <div class="col-md-4"><label class="form-label">Kemasan</label><input class="form-control" x-model="editing.kemasan" placeholder="cth: 10 kg / kotak"></div>
+        <div class="col-md-4"><label class="form-label">Status Stok</label>
+          <select class="form-select" x-model="editing.stok"><option>Tersedia</option><option>Terbatas</option><option>Pre-order</option></select>
+        </div>
+        <div class="col-12"><label class="form-label">Deskripsi</label><textarea class="form-control" rows="3" x-model="editing.ringkas"></textarea></div>
+        <div class="col-12">
+          <label class="form-label">Gambar Produk</label>
+          <div class="border rounded p-3 text-center text-secondary" style="font-size:.85rem"><i class="ti ti-cloud-upload fs-2 d-block mb-1"></i>Seret gambar ke sini atau klik untuk unggah</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-link" @click="produkModal=false">Batal</button><button class="btn text-white" style="background:var(--brand-green)" @click="saveProduk()">Simpan Produk</button></div>
+  </div></div>
+</div>
+
+<!-- ===== MODAL: ARTIKEL ===== -->
+<div class="modal" :class="artikelModal?'d-block':''" x-show="artikelModal" x-cloak style="background:rgba(0,0,0,.4)">
+  <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content" @click.away="artikelModal=false">
+    <div class="modal-header"><h5 class="modal-title" x-text="editing.id? 'Edit Artikel':'Tulis Artikel Baru'"></h5><button class="btn-close" @click="artikelModal=false"></button></div>
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-12"><label class="form-label">Judul Artikel</label><input class="form-control" x-model="editing.judul"></div>
+        <div class="col-md-6"><label class="form-label">Kategori</label>
+          <select class="form-select" x-model="editing.kategori"><template x-for="k in kategoriArtikel" :key="k.id"><option x-text="k.nama"></option></template></select>
+        </div>
+        <div class="col-md-6"><label class="form-label">Status</label>
+          <select class="form-select" x-model="editing.status"><option>Publish</option><option>Draft</option></select>
+        </div>
+        <div class="col-12"><label class="form-label">Konten</label><textarea class="form-control" rows="6" x-model="editing.ringkas" placeholder="Tulis isi artikel di sini... (editor rich-text pada versi produksi)"></textarea></div>
+        <div class="col-12">
+          <label class="form-label">Gambar Sampul</label>
+          <div class="border rounded p-3 text-center text-secondary" style="font-size:.85rem"><i class="ti ti-cloud-upload fs-2 d-block mb-1"></i>Seret gambar ke sini atau klik untuk unggah</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-link" @click="artikelModal=false">Batal</button><button class="btn text-white" style="background:var(--brand-green)" @click="saveArtikel()">Simpan Artikel</button></div>
+  </div></div>
+</div>
+
+<!-- ===== MODAL: SIMPLE (kategori) ===== -->
+<div class="modal" :class="simpleModal?'d-block':''" x-show="simpleModal" x-cloak style="background:rgba(0,0,0,.4)">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content" @click.away="simpleModal=false">
+    <div class="modal-header"><h5 class="modal-title" x-text="editing.id? 'Edit Kategori':'Tambah Kategori'"></h5><button class="btn-close" @click="simpleModal=false"></button></div>
+    <div class="modal-body">
+      <div class="mb-3"><label class="form-label">Nama Kategori</label><input class="form-control" x-model="editing.nama"></div>
+      <div class="mb-3"><label class="form-label">Deskripsi Singkat</label><textarea class="form-control" rows="2" x-model="editing.deskripsi"></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-link" @click="simpleModal=false">Batal</button><button class="btn text-white" style="background:var(--brand-green)" @click="saveSimple()">Simpan</button></div>
+  </div></div>
+</div>
+
+<!-- ===== MODAL: GALERI UPLOAD ===== -->
+<div class="modal" :class="galeriModal?'d-block':''" x-show="galeriModal" x-cloak style="background:rgba(0,0,0,.4)">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content" @click.away="galeriModal=false">
+    <div class="modal-header"><h5 class="modal-title">Unggah Foto Galeri</h5><button class="btn-close" @click="galeriModal=false"></button></div>
+    <div class="modal-body">
+      <div class="border rounded p-4 text-center text-secondary mb-3"><i class="ti ti-cloud-upload fs-1 d-block mb-1"></i>Seret gambar ke sini atau klik untuk unggah</div>
+      <label class="form-label">Label Foto</label><input class="form-control" x-model="newGaleriLabel" placeholder="cth: Proses Sortir Bibit">
+    </div>
+    <div class="modal-footer"><button class="btn btn-link" @click="galeriModal=false">Batal</button><button class="btn text-white" style="background:var(--brand-green)" @click="saveGaleri()">Unggah</button></div>
+  </div></div>
+</div>
+
+<!-- ===== MODAL: TESTIMONI ===== -->
+<div class="modal" :class="testiModal?'d-block':''" x-show="testiModal" x-cloak style="background:rgba(0,0,0,.4)">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content" @click.away="testiModal=false">
+    <div class="modal-header"><h5 class="modal-title">Tambah Testimoni</h5><button class="btn-close" @click="testiModal=false"></button></div>
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label">Nama</label><input class="form-control" x-model="newTesti.nama"></div>
+        <div class="col-md-6"><label class="form-label">Daerah</label><input class="form-control" x-model="newTesti.daerah"></div>
+        <div class="col-12"><label class="form-label">Kutipan Testimoni</label><textarea class="form-control" rows="3" x-model="newTesti.quote"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-link" @click="testiModal=false">Batal</button><button class="btn text-white" style="background:var(--brand-green)" @click="saveTesti()">Simpan Testimoni</button></div>
+  </div></div>
+</div>
+
+<!-- ===== MODAL: FAQ ===== -->
+<div class="modal" :class="faqModal?'d-block':''" x-show="faqModal" x-cloak style="background:rgba(0,0,0,.4)">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content" @click.away="faqModal=false">
+    <div class="modal-header"><h5 class="modal-title">Tambah FAQ</h5><button class="btn-close" @click="faqModal=false"></button></div>
+    <div class="modal-body">
+      <div class="mb-3"><label class="form-label">Pertanyaan</label><input class="form-control" x-model="newFaq.q"></div>
+      <div class="mb-3"><label class="form-label">Jawaban</label><textarea class="form-control" rows="3" x-model="newFaq.a"></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-link" @click="faqModal=false">Batal</button><button class="btn text-white" style="background:var(--brand-green)" @click="saveFaq()">Simpan FAQ</button></div>
+  </div></div>
+</div>
+
+<!-- ===== MODAL: BANNER ===== -->
+<div class="modal" :class="bannerModal?'d-block':''" x-show="bannerModal" x-cloak style="background:rgba(0,0,0,.4)">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content" @click.away="bannerModal=false">
+    <div class="modal-header"><h5 class="modal-title">Tambah Banner Hero</h5><button class="btn-close" @click="bannerModal=false"></button></div>
+    <div class="modal-body">
+      <div class="border rounded p-4 text-center text-secondary mb-3"><i class="ti ti-cloud-upload fs-1 d-block mb-1"></i>Seret gambar banner ke sini atau klik untuk unggah</div>
+      <label class="form-label">Judul Banner</label><input class="form-control" x-model="newBanner.judul">
+    </div>
+    <div class="modal-footer"><button class="btn btn-link" @click="bannerModal=false">Batal</button><button class="btn text-white" style="background:var(--brand-green)" @click="saveBanner()">Simpan Banner</button></div>
+  </div></div>
+</div>
+
+<!-- ===== MODAL: PENGGUNA ===== -->
+<div class="modal" :class="penggunaModal?'d-block':''" x-show="penggunaModal" x-cloak style="background:rgba(0,0,0,.4)">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content" @click.away="penggunaModal=false">
+    <div class="modal-header"><h5 class="modal-title">Tambah Pengguna</h5><button class="btn-close" @click="penggunaModal=false"></button></div>
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label">Nama</label><input class="form-control" x-model="newUser.nama"></div>
+        <div class="col-md-6"><label class="form-label">Email</label><input class="form-control" x-model="newUser.email"></div>
+        <div class="col-md-6"><label class="form-label">Role</label>
+          <select class="form-select" x-model="newUser.role"><option>Super Admin</option><option>Editor</option><option>Kontributor</option></select>
+        </div>
+        <div class="col-md-6"><label class="form-label">Password Sementara</label><input type="password" class="form-control" placeholder="••••••••"></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-link" @click="penggunaModal=false">Batal</button><button class="btn text-white" style="background:var(--brand-green)" @click="saveUser()">Simpan Pengguna</button></div>
+  </div></div>
+</div>
+
+<div x-show="toastMsg" x-cloak class="toast align-items-center show position-fixed" style="bottom:20px;right:20px;z-index:9999;background:#1F3D22;color:#fff;">
+  <div class="d-flex"><div class="toast-body" x-text="toastMsg"></div></div>
+</div>
+
+<script>
+function admin(){
+  return {
+    page:'dashboard',
+    toastMsg:null,
+    kontakFilter:'',
+    produkModal:false, artikelModal:false, simpleModal:false, galeriModal:false, testiModal:false, faqModal:false, bannerModal:false, penggunaModal:false,
+    simpleTarget:null,
+    editing:{},
+    newGaleriLabel:'',
+    newTesti:{nama:'',daerah:'',quote:''},
+    newFaq:{q:'',a:''},
+    newBanner:{judul:''},
+    newUser:{nama:'',email:'',role:'Editor'},
+
+    kategoriProduk:[
+      {id:1,nama:'Bibit Sumber · Kultur Jaringan',deskripsi:'Bibit generasi awal G-0 dan turunannya',jumlah:3},
+      {id:2,nama:'Bibit Sebar · Konsumsi',deskripsi:'Bibit siap tanam untuk petani',jumlah:1},
+    ],
+    kategoriArtikel:[
+      {id:1,nama:'Budidaya',deskripsi:'Teknik dan tips budidaya kentang',jumlah:1},
+      {id:2,nama:'Bibit',deskripsi:'Seputar pemilihan & penyimpanan bibit',jumlah:2},
+      {id:3,nama:'Pemupukan',deskripsi:'Jadwal dan dosis pemupukan',jumlah:1},
+      {id:4,nama:'Penyakit',deskripsi:'Hama dan penyakit tanaman kentang',jumlah:1},
+      {id:5,nama:'Panen',deskripsi:'Waktu dan teknik panen ideal',jumlah:1},
+    ],
+    produk:[
+      {id:1,nama:'G-0',kategori:'Bibit Sumber · Kultur Jaringan',stok:'Terbatas',bg:'#EAF2E6',ketinggian:'1800–2200 MDPL',kemasan:'10 kg / kotak',ringkas:'Bibit generasi awal hasil kultur jaringan, bebas virus dan patogen tanah.'},
+      {id:2,nama:'G-0 MZ',kategori:'Bibit Sumber · Kultur Jaringan',stok:'Tersedia',bg:'#F1E9E4',ketinggian:'1800–2200 MDPL',kemasan:'10 kg / kotak',ringkas:'Hasil perbanyakan G-0 melalui teknik mata zonal.'},
+      {id:3,nama:'Granola L',kategori:'Bibit Sebar · Konsumsi',stok:'Tersedia',bg:'#EAF2E6',ketinggian:'1500–2000 MDPL',kemasan:'25 kg / karung',ringkas:'Turunan Granola siap sebar untuk petani.'},
+      {id:4,nama:'G-0 Plus',kategori:'Bibit Sumber · Kultur Jaringan',stok:'Pre-order',bg:'#F1E9E4',ketinggian:'1800–2200 MDPL',kemasan:'10 kg / kotak',ringkas:'Generasi lanjutan dari G-0 dengan volume lebih besar.'},
+    ],
+    artikel:[
+      {id:1,judul:'5 Kesalahan Umum saat Menanam Bibit Kentang',kategori:'Budidaya',tanggal:'12 Jul 2026',status:'Publish',ringkas:''},
+      {id:2,judul:'Cara Memilih Bibit Kentang Bersertifikat',kategori:'Bibit',tanggal:'8 Jul 2026',status:'Publish',ringkas:''},
+      {id:3,judul:'Jadwal Pemupukan Kentang dari Tanam hingga Panen',kategori:'Pemupukan',tanggal:'2 Jul 2026',status:'Publish',ringkas:''},
+      {id:4,judul:'Mengenali Gejala Awal Penyakit Busuk Daun',kategori:'Penyakit',tanggal:'28 Jun 2026',status:'Draft',ringkas:''},
+      {id:5,judul:'Tanda-Tanda Kentang Siap Dipanen',kategori:'Panen',tanggal:'20 Jun 2026',status:'Publish',ringkas:''},
+      {id:6,judul:'Penyimpanan Bibit Kentang Sebelum Tanam',kategori:'Bibit',tanggal:'14 Jun 2026',status:'Draft',ringkas:''},
+    ],
+    galeri:[
+      {id:1,label:'Kebun Produksi',bg:'#EAF2E6'},{id:2,label:'Gudang Sortir',bg:'#F1E9E4'},{id:3,label:'Bibit Siap Kirim',bg:'#EAF2E6'},{id:4,label:'Proses Grading',bg:'#F1E9E4'},
+      {id:5,label:'Packing Bibit',bg:'#EAF2E6'},{id:6,label:'Pengiriman Kargo',bg:'#F1E9E4'},{id:7,label:'Kunjungan Petani',bg:'#EAF2E6'},{id:8,label:'Uji Kualitas Tanah',bg:'#F1E9E4'},
+    ],
+    testimoni:[
+      {id:1,inisial:'PS',nama:'Pak Suryana',daerah:'Ketua Gapoktan, Garut',quote:'Bibit dari Fredian Farm hasilnya seragam, panen kami jadi lebih mudah dihitung.',tampil:true},
+      {id:2,inisial:'BW',nama:'Ibu Wulandari',daerah:'Distributor, Purworejo',quote:'Pengiriman selalu tepat waktu meski jarak cukup jauh dari Dieng.',tampil:true},
+      {id:3,inisial:'AR',nama:'Pak Ridwan',daerah:'Petani Mandiri, Dieng',quote:'Admin sangat membantu memilihkan kelas bibit yang cocok untuk lahan saya.',tampil:false},
+    ],
+    faqList:[
+      {id:1,q:'Apakah Fredian Farm melayani pengiriman ke luar Jawa?',a:'Ya, kami melayani pengiriman ke Sumatra dan Sulawesi dengan kemasan khusus bibit.'},
+      {id:2,q:'Apakah tersedia sistem keranjang belanja online?',a:'Belum. Pemesanan dilakukan via inquiry WhatsApp atau TikTok Shop.'},
+      {id:3,q:'Bagaimana cara mengajukan penawaran partai besar?',a:'Isi form RFQ di halaman Kontak atau hubungi admin langsung.'},
+    ],
+    banner:[
+      {id:1,judul:'Promo Bibit G-0 Musim Tanam Agustus',urutan:1,aktif:true,bg:'#F9A825'},
+      {id:2,judul:'Kunjungi Kebun Kami di Dieng',urutan:2,aktif:true,bg:'#2E7D32'},
+      {id:3,judul:'Ikuti TikTok @fredianfarm',urutan:3,aktif:false,bg:'#000'},
+    ],
+    medsos:{
+      tiktok:{handle:'@fredianfarm',followers:'27,9rb',bio:'Pertanian modern, berbagi ilmu, pengalaman & cerita seputar kultur jaringan, budidaya & pembibitan kentang.',shopUrl:'https://www.tiktok.com/@fredianfarm/shop'},
+      instagram:{handle:'@fredianfarm',followers:'3.240'},
+      whatsapp:'0812-3456-7890',
+      facebook:'',
+      youtube:'',
+    },
+    profil:{
+      nama:'Fredian Farm',tahun:'2012',
+      alamat:'Jl. Raya Dieng No. 45, Dieng Kulon, Kabupaten Wonosobo, Jawa Tengah 56354 (dummy)',
+      telp:'0812-3456-7890',email:'halo@fredianfarm.co.id',
+      visi:'Menjadi penyedia bibit kentang tepercaya nomor satu di Indonesia. (dummy)',
+      misi:'Menyediakan bibit bersertifikat, mendampingi petani mitra, dan memperluas distribusi. (dummy)',
+      jam:'Senin–Sabtu, 08.00–16.00 WIB',
+    },
+    seo:{
+      title:'Fredian Farm — Bibit Kentang Bersertifikat',
+      desc:'Produsen dan distributor bibit kentang G-0, G-0 MZ, Granola L, dan G-0 Plus dari Dieng, Jawa Tengah.',
+      robots:'User-agent: *\nAllow: /\nSitemap: https://fredianfarm.co.id/sitemap.xml',
+    },
+    kontak:[
+      {id:1,nama:'Budi Santoso',wa:'0813-2222-1111',minat:'G-0',pesan:'Ingin tanya stok G-0 untuk 200kg.',tanggal:'18 Jul 2026',status:'Baru'},
+      {id:2,nama:'Kelompok Tani Makmur',wa:'0821-3333-4444',minat:'Granola L',pesan:'Butuh penawaran partai besar 1 ton.',tanggal:'17 Jul 2026',status:'Diproses'},
+      {id:3,nama:'Dinas Pertanian Wonosobo',wa:'0274-xxxxxx',minat:'G-0 Plus',pesan:'Permintaan kerja sama pengadaan bibit.',tanggal:'15 Jul 2026',status:'Baru'},
+      {id:4,nama:'Toko Tani Sejahtera',wa:'0815-5555-6666',minat:'G-0 MZ',pesan:'Tanya ketersediaan bulan depan.',tanggal:'12 Jul 2026',status:'Selesai'},
+    ],
+    pengguna:[
+      {id:1,inisial:'AF',nama:'Admin Fredian',email:'admin@fredianfarm.co.id',role:'Super Admin',aktif:true},
+      {id:2,inisial:'RT',nama:'Rina Tania',email:'rina@fredianfarm.co.id',role:'Editor',aktif:true},
+      {id:3,inisial:'DS',nama:'Dimas S.',email:'dimas@fredianfarm.co.id',role:'Kontributor',aktif:false},
+    ],
+
+    get leadsBaru(){ return this.kontak.filter(k=>k.status==='Baru').length; },
+
+    init(){
+      this.$nextTick(()=>{
+        if(window.ApexCharts){
+          new ApexCharts(document.querySelector("#chartTraffic"), {
+            chart:{type:'area',height:250,toolbar:{show:false},fontFamily:'Inter'},
+            series:[{name:'Pesan Masuk',data:[3,5,4,6,8,7,9,6,10,8,12,9,11,14]},{name:'Kunjungan Blog',data:[40,55,48,60,72,68,80,75,90,85,95,88,100,110]}],
+            colors:['#F9A825','#2E7D32'],
+            stroke:{curve:'smooth',width:2},
+            fill:{type:'gradient',gradient:{opacityFrom:.35,opacityTo:0}},
+            grid:{borderColor:'#eef0f2'},
+            xaxis:{categories:Array.from({length:14},(_,i)=>'Jul '+(i+5)),labels:{style:{fontSize:'11px'}}},
+            legend:{position:'top',horizontalAlign:'right'}
+          }).render();
+        }
+      });
+    },
+    go(p){ this.page=p; },
+    pageTitle(){
+      const titles={dashboard:'Dashboard',produk:'Produk','kategori-produk':'Kategori Produk',artikel:'Artikel','kategori-artikel':'Kategori Artikel',galeri:'Galeri',testimoni:'Testimoni',faq:'FAQ',banner:'Banner',medsos:'Media Sosial',profil:'Profil Perusahaan',kontak:'Kontak / Lead Management',seo:'SEO',pengguna:'Pengguna'};
+      return titles[this.page]||'';
+    },
+    stokKey(s){ return s==='Tersedia'?'tersedia': s==='Terbatas'?'terbatas':'preorder'; },
+    statusLeadClass(s){ return s==='Baru'?'bg-red-lt': s==='Diproses'?'bg-yellow-lt':'bg-green-lt'; },
+    toast(msg){ this.toastMsg=msg; setTimeout(()=>this.toastMsg=null,2800); },
+    removeItem(arr,id){ this[arr] = this[arr].filter(x=>x.id!==id); this.toast('Data dihapus (prototipe)'); },
+
+    openProdukModal(p){ this.editing = p? {...p} : {nama:'',kategori:this.kategoriProduk[0]?.nama||'',ketinggian:'',kemasan:'',stok:'Tersedia',ringkas:'',bg:'#EAF2E6'}; this.produkModal=true; },
+    saveProduk(){
+      if(this.editing.id){ const i=this.produk.findIndex(x=>x.id===this.editing.id); this.produk[i]={...this.editing}; }
+      else { this.editing.id=Date.now(); this.produk.push({...this.editing}); }
+      this.produkModal=false; this.toast('Produk tersimpan (prototipe)');
+    },
+    openArtikelModal(a){ this.editing = a? {...a} : {judul:'',kategori:this.kategoriArtikel[0]?.nama||'',status:'Draft',tanggal:new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}),ringkas:''}; this.artikelModal=true; },
+    saveArtikel(){
+      if(this.editing.id){ const i=this.artikel.findIndex(x=>x.id===this.editing.id); this.artikel[i]={...this.editing}; }
+      else { this.editing.id=Date.now(); this.artikel.unshift({...this.editing}); }
+      this.artikelModal=false; this.toast('Artikel tersimpan (prototipe)');
+    },
+    openSimpleModal(target,item){ this.simpleTarget=target; this.editing = item? {...item} : {nama:'',deskripsi:'',jumlah:0}; this.simpleModal=true; },
+    saveSimple(){
+      const arr=this[this.simpleTarget];
+      if(this.editing.id){ const i=arr.findIndex(x=>x.id===this.editing.id); arr[i]={...this.editing}; }
+      else { this.editing.id=Date.now(); this.editing.jumlah=0; arr.push({...this.editing}); }
+      this.simpleModal=false; this.toast('Kategori tersimpan (prototipe)');
+    },
+    saveGaleri(){ this.galeri.push({id:Date.now(),label:this.newGaleriLabel||'Foto Baru',bg:'#EAF2E6'}); this.newGaleriLabel=''; this.galeriModal=false; this.toast('Foto diunggah (prototipe)'); },
+    saveTesti(){ this.testimoni.push({id:Date.now(),inisial:(this.newTesti.nama||'??').slice(0,2).toUpperCase(),nama:this.newTesti.nama,daerah:this.newTesti.daerah,quote:this.newTesti.quote,tampil:true}); this.newTesti={nama:'',daerah:'',quote:''}; this.testiModal=false; this.toast('Testimoni ditambahkan (prototipe)'); },
+    saveFaq(){ this.faqList.push({id:Date.now(),q:this.newFaq.q,a:this.newFaq.a}); this.newFaq={q:'',a:''}; this.faqModal=false; this.toast('FAQ ditambahkan (prototipe)'); },
+    saveBanner(){ this.banner.push({id:Date.now(),judul:this.newBanner.judul||'Banner Baru',urutan:this.banner.length+1,aktif:true,bg:'#8D6E63'}); this.newBanner={judul:''}; this.bannerModal=false; this.toast('Banner ditambahkan (prototipe)'); },
+    saveUser(){ this.pengguna.push({id:Date.now(),inisial:(this.newUser.nama||'??').slice(0,2).toUpperCase(),nama:this.newUser.nama,email:this.newUser.email,role:this.newUser.role,aktif:true}); this.newUser={nama:'',email:'',role:'Editor'}; this.penggunaModal=false; this.toast('Pengguna ditambahkan (prototipe)'); },
+  }
+}
+</script>
+</body>
+</html>

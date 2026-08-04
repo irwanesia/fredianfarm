@@ -353,6 +353,7 @@ function openConfirm(id) {
 }
 
 function renderConfirm(d, id) {
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const o = d.order;
   const items = d.itemList || [];
   const banks = d.banks || [];
@@ -362,12 +363,12 @@ function renderConfirm(d, id) {
   items.forEach(it => {
     const icon = it.stock_ok ? '✅' : '⚠️';
     if (!it.stock_ok) allStockOk = false;
-    const name = it.nama + (it.variant_nama ? ' (' + it.variant_nama + ')' : '');
+    const name = esc(it.nama) + (it.variant_nama ? ' (' + esc(it.variant_nama) + ')' : '');
     itemsHtml += `<tr>
       <td style="font-size:13px">${name}</td>
-      <td style="font-size:13px">${it.qty}</td>
+      <td style="font-size:13px">${Number(it.qty)}</td>
       <td style="font-size:13px">Rp ${Number(it.harga).toLocaleString('id-ID')}</td>
-      <td style="font-size:13px;color:${it.stock_ok ? '#16A34A' : '#EF4444'}">${icon} ${it.stock_status || '-'}</td>
+      <td style="font-size:13px;color:${it.stock_ok ? '#16A34A' : '#EF4444'}">${icon} ${esc(it.stock_status) || '-'}</td>
     </tr>`;
   });
 
@@ -377,10 +378,10 @@ function renderConfirm(d, id) {
 
   body.innerHTML = `
     <div style="margin-bottom:16px;padding:14px;background:#F9FAFB;border-radius:10px;font-size:13px;line-height:1.8">
-      <strong>${o.customer_name}</strong><br>
-      📞 ${o.customer_wa}<br>
-      📍 ${o.customer_address}<br>
-      🆔 ${o.order_number} · ${new Date(o.created_at).toLocaleString('id-ID')}<br>
+      <strong>${esc(o.customer_name)}</strong><br>
+      📞 ${esc(o.customer_wa)}<br>
+      📍 ${esc(o.customer_address)}<br>
+      🆔 ${esc(o.order_number)} · ${esc(o.created_at)}<br>
       💳 ${o.payment_method === 'cod' ? 'COD (Bayar di Tempat)' : 'Transfer Bank'}
     </div>
     <table class="table table-sm" style="font-size:13px">
@@ -410,7 +411,7 @@ function renderConfirm(d, id) {
     ${o.payment_method === 'transfer' && banks.length ? `
     <div style="margin-bottom:14px;font-size:13px;padding:12px 14px;background:#EFF6FF;border-radius:10px">
       <strong style="display:block;margin-bottom:6px">🏦 Transfer ke:</strong>
-      ${banks.map(b => '🏦 <strong>' + b.bank_name + '</strong> — ' + b.account_number + ' a.n. ' + b.account_holder).join('<br>')}
+      ${banks.map(b => '🏦 <strong>' + esc(b.bank_name) + '</strong> — ' + esc(b.account_number) + ' a.n. ' + esc(b.account_holder)).join('<br>')}
     </div>` : o.payment_method === 'cod' ? `
     <div style="margin-bottom:14px;font-size:13px;padding:12px 14px;background:#F3E8FF;border-radius:10px">
       <strong>💵 Pembayaran COD (Bayar di Tempat)</strong><br>

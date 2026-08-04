@@ -972,6 +972,7 @@ async function quickWaCheckout() {
 }
 
 // ═══ TRACKING ═══
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function openTrack() { document.getElementById('trackOverlay').classList.add('open'); }
 
 async function cekPesanan() {
@@ -998,9 +999,9 @@ async function cekPesanan() {
     let itemTotal = 0;
     if (Array.isArray(o.items)) {
       itemsHtml = o.items.map(it => {
-        const name = it.nama + (it.variant_nama ? ' (' + it.variant_nama + ')' : '');
+        const name = esc(it.nama) + (it.variant_nama ? ' (' + esc(it.variant_nama) + ')' : '');
         itemTotal += it.harga * it.qty;
-        return '<div class="track-item"><span>' + name + ' ×' + it.qty + '</span><span>Rp ' + fmt(it.harga * it.qty) + '</span></div>';
+        return '<div class="track-item"><span>' + name + ' ×' + Number(it.qty) + '</span><span>Rp ' + fmt(it.harga * it.qty) + '</span></div>';
       }).join('');
     }
     const waNumber = '{{ \App\Models\Setting::getValue("NOMOR_WA", "6281234567890") }}';
@@ -1008,24 +1009,24 @@ async function cekPesanan() {
     resEl.innerHTML = `
       <div style="margin-bottom:12px">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
-          <div><strong style="font-size:15px">${o.order_number}</strong><br><span style="font-size:12px;color:var(--text-soft)">${o.created_at}</span></div>
-          <span class="status-badge" style="background:${s.bg};color:${s.color}">${s.label}</span>
+          <div><strong style="font-size:15px">${esc(o.order_number)}</strong><br><span style="font-size:12px;color:var(--text-soft)">${esc(o.created_at)}</span></div>
+          <span class="status-badge" style="background:${s.bg};color:${s.color}">${esc(s.label)}</span>
         </div>
-        <div style="font-size:14px;margin-top:4px"><strong>${o.customer_name}</strong></div>
+        <div style="font-size:14px;margin-top:4px"><strong>${esc(o.customer_name)}</strong></div>
       </div>
       <div style="margin-bottom:12px">
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-soft);margin-bottom:6px">PESANAN</div>
-        ${itemsHtml || '<div style="font-size:13px;color:var(--text-soft)">' + (o.items || '') + '</div>'}
+        ${itemsHtml || '<div style="font-size:13px;color:var(--text-soft)">' + esc(Array.isArray(o.items) ? '' : String(o.items || '')) + '</div>'}
         <div style="display:flex;justify-content:space-between;padding:6px 0 0;margin-top:4px;border-top:1.5px solid var(--line);font-weight:700;font-size:15px">
-          <span>Total</span><span style="color:var(--green-primary)">Rp ${fmt(o.grand_total)}</span>
+          <span>Total</span><span style="color:var(--green-primary)">Rp ${esc(o.grand_total)}</span>
         </div>
       </div>
       ${o.payment_method ? '<div style="font-size:13px;margin-bottom:8px">💳 ' + (o.payment_method === 'cod' ? 'COD (Bayar di Tempat)' : 'Transfer Bank') + '</div>' : ''}
       ${o.courier && o.tracking_number ? `
       <div style="background:${s.bg};border-radius:10px;padding:12px 14px;font-size:13px;margin-bottom:12px">
-        <strong>🚚 Pengiriman:</strong> ${o.courier}<br>
-        <strong>📮 Resi:</strong> ${o.tracking_number}<br>
-        <a href="https://cekresi.com/${o.tracking_number}" target="_blank" style="color:var(--green-primary);font-weight:700;font-size:12px">🔗 Lacak paket →</a>
+        <strong>🚚 Pengiriman:</strong> ${esc(o.courier)}<br>
+        <strong>📮 Resi:</strong> ${esc(o.tracking_number)}<br>
+        <a href="https://cekresi.com/${encodeURIComponent(o.tracking_number)}" target="_blank" style="color:var(--green-primary);font-weight:700;font-size:12px">🔗 Lacak paket →</a>
       </div>` : o.status === 'dikirim' || o.status === 'selesai' ? `
       <div style="background:var(--cream);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text-soft);margin-bottom:12px">Nomor resi belum tersedia, hubungi admin via WhatsApp</div>` : ''}
       <a href="https://wa.me/${waClean}?text=${encodeURIComponent('Halo Fredian Farm! Saya ingin tanya soal pesanan ' + o.order_number)}" target="_blank" class="btn btn-primary" style="width:100%;text-decoration:none">💬 Hubungi Admin</a>

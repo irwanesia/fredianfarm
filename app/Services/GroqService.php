@@ -12,26 +12,8 @@ class GroqService
 
     public function __construct()
     {
-        $this->apiKey = $this->resolveApiKey();
+        $this->apiKey = (string) config('services.groq.api_key', '');
         $this->model = config('services.groq.model', 'llama-3.3-70b-versatile');
-    }
-
-    protected function resolveApiKey(): string
-    {
-        $key = config('services.groq.api_key');
-
-        if (!empty($key)) {
-            return $key;
-        }
-
-        $envFile = base_path('.env');
-        if (!file_exists($envFile)) {
-            return '';
-        }
-
-        preg_match('/^GROQ_API_KEY\s*=\s*"?(.+?)"?\s*$/m', file_get_contents($envFile), $m);
-
-        return $m[1] ?? '';
     }
 
     public function isConfigured(): bool

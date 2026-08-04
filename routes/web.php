@@ -37,16 +37,16 @@ Route::get('/testimoni', [PublicController::class, 'testimoni'])->name('testimon
 Route::get('/faq', [PublicController::class, 'faq'])->name('faq');
 Route::get('/cari', [PublicController::class, 'search'])->name('cari');
 Route::get('/kontak', [PublicController::class, 'kontak'])->name('kontak');
-Route::post('/kontak', [PublicController::class, 'kontakStore'])->middleware(\Spatie\Honeypot\ProtectAgainstSpam::class)->name('kontak.store');
+Route::post('/kontak', [PublicController::class, 'kontakStore'])->middleware(\Spatie\Honeypot\ProtectAgainstSpam::class, 'throttle:10,1')->name('kontak.store');
 Route::get('/privasi', [PublicController::class, 'privasi'])->name('privasi');
-Route::post('/checkout', [PublicController::class, 'checkout'])->name('checkout');
-Route::get('/tracking', [PublicController::class, 'tracking'])->name('tracking');
+Route::post('/checkout', [PublicController::class, 'checkout'])->middleware('throttle:10,1')->name('checkout');
+Route::get('/tracking', [PublicController::class, 'tracking'])->middleware('throttle:10,1')->name('tracking');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots.txt');
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.xml');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.post');
 });
 
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
@@ -66,7 +66,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('produk', ProdukController::class);
     Route::resource('kategori-artikel', KategoriArtikelController::class);
     Route::resource('artikel', ArtikelController::class);
-    Route::post('ai-artikel/{action}', ArtikelAiController::class)->name('ai-artikel');
+    Route::post('ai-artikel/{action}', ArtikelAiController::class)->middleware('throttle:5,60')->name('ai-artikel');
     Route::resource('galeri', GaleriController::class);
     Route::resource('testimoni', TestimoniController::class);
     Route::resource('faq', FaqController::class);

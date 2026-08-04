@@ -11,6 +11,7 @@ use App\Models\Kontak;
 use App\Models\Setting;
 use App\Models\Galeri;
 use App\Models\Order;
+use App\Models\ProdukVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class PublicController extends Controller
@@ -158,6 +159,7 @@ class PublicController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
             'no_wa' => 'required|string|max:20',
             'pesan' => 'required|string',
         ]);
@@ -181,7 +183,6 @@ class PublicController extends Controller
             'customer_address' => 'required|string',
             'payment_method' => 'required|in:transfer,cod',
             'items' => 'required|json',
-            'subtotal' => 'required|numeric|min:0',
         ]);
 
         if ($validator->fails()) {
@@ -191,6 +192,55 @@ class PublicController extends Controller
         $items = json_decode($request->items, true);
         if (!is_array($items) || empty($items)) {
             return response()->json(['ok' => false, 'error' => 'Keranjang kosong'], 400);
+        }
+
+        $cleanItems = [];
+        $subtotal = 0;
+        foreach ($items as $it) {
+            $produkId = (int)($it['produk_id'] ?? 0);
+            $variantId = (int)($it['variant_id'] ?? 0);
+            $qty = max(1, (int)($it['qty'] ?? 1));
+
+            $nama = '-';
+            $variantNama = null;
+            $harga = 0;
+            $berat = null;
+
+            if ($variantId) {
+                $var = ProdukVariant::with('produk')->find($variantId);
+                if ($var && $var->is_active && (int)$var->produk_id === $produkId && (int)$var->produk->is_active === 1) {
+                    $nama = $var->produk->nama ?? '-';
+                    $variantNama = $var->nama;
+                    $harga = (float)$var->harga;
+                    $berat = $var->berat;
+                }
+            } elseif ($produkId) {
+                $prod = Produk::find($produkId);
+                if ($prod && $prod->is_active) {
+                    $nama = $prod->nama;
+                    $harga = (float)$prod->harga;
+                    $berat = $prod->berat;
+                }
+            }
+
+            if ($nama === '-') {
+                continue;
+            }
+
+            $subtotal += $harga * $qty;
+            $cleanItems[] = [
+                'produk_id' => $produkId,
+                'variant_id' => $variantId ?: null,
+                'nama' => $nama,
+                'variant_nama' => $variantNama,
+                'harga' => $harga,
+                'qty' => $qty,
+                'berat' => $berat,
+            ];
+        }
+
+        if (empty($cleanItems)) {
+            return response()->json(['ok' => false, 'error' => 'Produk tidak ditemukan pada keranjang'], 422);
         }
 
         $last = Order::orderBy('id', 'desc')->first();
@@ -203,10 +253,10 @@ class PublicController extends Controller
             'customer_name' => $request->customer_name,
             'customer_wa' => $request->customer_wa,
             'customer_address' => $request->customer_address,
-            'items' => $items,
-            'subtotal' => $request->subtotal,
+            'items' => $cleanItems,
+            'subtotal' => $subtotal,
             'shipping_cost' => 0,
-            'grand_total' => $request->subtotal,
+            'grand_total' => $subtotal,
             'payment_method' => $request->payment_method,
             'payment_status' => 'pending',
             'status' => 'baru',
@@ -219,7 +269,7 @@ class PublicController extends Controller
         }
 
         $itemsStr = '';
-        foreach ($items as $it) {
+        foreach ($cleanItems as $it) {
             $name = $it['nama'] ?? '-';
             $vname = $it['variant_nama'] ?? null;
             $qty = (int)($it['qty'] ?? 1);

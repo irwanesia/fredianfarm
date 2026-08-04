@@ -12,6 +12,7 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\Format;
 use Illuminate\Support\Facades\Storage;
+use Mews\Purifier\Facades\Purifier;
 
 class ProdukController extends Controller
 {
@@ -31,6 +32,7 @@ class ProdukController extends Controller
     {
         $data = $request->validated();
         $data['is_active'] = $request->boolean('is_active');
+        $data['deskripsi'] = Purifier::clean($data['deskripsi'] ?? '');
 
         $produk = Produk::create($data);
 
@@ -53,6 +55,7 @@ class ProdukController extends Controller
     {
         $data = $request->validated();
         $data['is_active'] = $request->boolean('is_active');
+        $data['deskripsi'] = Purifier::clean($data['deskripsi'] ?? '');
 
         if ($request->filled('hapus_foto')) {
             $produk->load('gambar');

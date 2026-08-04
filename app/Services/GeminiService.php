@@ -12,26 +12,8 @@ class GeminiService
 
     public function __construct()
     {
-        $this->apiKey = $this->resolveApiKey();
+        $this->apiKey = (string) config('services.gemini.api_key', '');
         $this->model = config('services.gemini.model', 'gemini-2.0-flash');
-    }
-
-    protected function resolveApiKey(): string
-    {
-        $key = config('services.gemini.api_key');
-
-        if (!empty($key)) {
-            return $key;
-        }
-
-        $envFile = base_path('.env');
-        if (!file_exists($envFile)) {
-            return '';
-        }
-
-        preg_match('/^GEMINI_API_KEY\s*=\s*"?(.+?)"?\s*$/m', file_get_contents($envFile), $m);
-
-        return $m[1] ?? '';
     }
 
     public function isConfigured(): bool

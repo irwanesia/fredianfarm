@@ -84,12 +84,13 @@ body{font-family:'Inter',sans-serif;background:#fff;}
           <li class="nav-item"><a class="nav-link @if(Route::is('admin.testimoni.*')) active @endif" href="{{ route('admin.testimoni.index') }}"><i class="ti ti-message-star nav-link-icon"></i>Testimoni</a></li>
           <li class="nav-item"><a class="nav-link @if(Route::is('admin.faq.*')) active @endif" href="{{ route('admin.faq.index') }}"><i class="ti ti-help-hexagon nav-link-icon"></i>FAQ</a></li>
           <li class="nav-item"><a class="nav-link @if(Route::is('admin.banner.*')) active @endif" href="{{ route('admin.banner.index') }}"><i class="ti ti-layout-2 nav-link-icon"></i>Banner</a></li>
+          <li class="nav-item"><a class="nav-link @if(Route::is('admin.mitra.*')) active @endif" href="{{ route('admin.mitra.index') }}"><i class="ti ti-affiliate nav-link-icon"></i>Mitra</a></li>
         </ul>
         @if(auth()->user()->isAdmin())
         <div class="nav-group-title">Pengaturan</div>
         <ul class="navbar-nav">
           <li class="nav-item"><a class="nav-link @if(Route::is('admin.media-sosial.*')) active @endif" href="{{ route('admin.media-sosial.index') }}"><i class="ti ti-brand-tiktok nav-link-icon"></i>Media Sosial</a></li>
-          <li class="nav-item"><a class="nav-link @if(Route::is('admin.setting.*')) active @endif" href="{{ route('admin.setting.index') }}"><i class="ti ti-building-store nav-link-icon"></i>Profil Perusahaan</a></li>
+          <li class="nav-item"><a class="nav-link @if(Route::is('admin.setting.*')) active @endif" href="{{ route('admin.setting.index') }}"><i class="ti ti-settings nav-link-icon"></i>Pengaturan Website</a></li>
           <li class="nav-item"><a class="nav-link @if(Route::is('admin.kontak.*')) active @endif" href="{{ route('admin.kontak.index') }}"><i class="ti ti-inbox nav-link-icon"></i>Kotak Masuk</a></li>
           <li class="nav-item"><a class="nav-link @if(Route::is('admin.seo.*')) active @endif" href="{{ route('admin.seo.index') }}"><i class="ti ti-seo nav-link-icon"></i>SEO</a></li>
           <li class="nav-item"><a class="nav-link @if(Route::is('admin.pengguna.*')) active @endif" href="{{ route('admin.pengguna.index') }}"><i class="ti ti-users nav-link-icon"></i>Pengguna</a></li>

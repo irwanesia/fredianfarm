@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\PenggunaController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\BankController;
+use App\Http\Controllers\Admin\MitraController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Http\Request;
@@ -27,6 +28,10 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/about', [PublicController::class, 'about'])->name('about');
+Route::get('/tentang/sejarah', [PublicController::class, 'aboutSejarah'])->name('about.sejarah');
+Route::get('/tentang/visi-misi', [PublicController::class, 'aboutVisiMisi'])->name('about.visi-misi');
+Route::get('/tentang/lokasi', [PublicController::class, 'aboutLokasi'])->name('about.lokasi');
+Route::get('/tentang/sertifikasi', [PublicController::class, 'aboutSertifikasi'])->name('about.sertifikasi');
 Route::get('/produk', [PublicController::class, 'produkIndex'])->name('produk.index');
 Route::get('/produk/{slug}', [PublicController::class, 'produkShow'])->name('produk.show');
 Route::get('/blog', [PublicController::class, 'blogIndex'])->name('blog.index');
@@ -89,5 +94,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
         Route::delete('orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
         Route::get('orders/{order}/confirm', [OrderController::class, 'confirm'])->name('orders.confirm');
         Route::resource('banks', BankController::class);
+        Route::resource('mitra', MitraController::class);
     });
 });

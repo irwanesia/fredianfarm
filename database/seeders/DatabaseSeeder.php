@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             KontakSeeder::class,
             SettingSeeder::class,
             MediaSosialSeeder::class,
+            MitraSeeder::class,
         ]);
     }
 }

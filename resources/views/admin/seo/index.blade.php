@@ -19,7 +19,7 @@
                     <div class="mb-3">
                         <label class="form-label">Open Graph Image</label>
                         <div class="d-flex align-items-center gap-2 flex-wrap">
-                            @php($ogImage = optional($settings->get('OG_IMAGE'))->value ?? '')
+                            @php $ogImage = optional($settings->get('OG_IMAGE'))->value ?? ''; @endphp
                             @if($ogImage)
                             <img src="{{ $ogImage }}" alt="OG Image" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #eef0f2;">
                             @else

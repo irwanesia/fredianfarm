@@ -17,9 +17,9 @@
       <a href="{{ route('blog.index', ['kategori' => $k->slug]) }}" class="btn btn-sm {{ request('kategori') == $k->slug ? 'btn-primary' : 'btn-ghost' }}">{{ $k->nama }}</a>
       @endforeach
     </div>
-    <div class="grid grid-articles">
+      <div class="grid grid-articles">
       @forelse ($artikels as $a)
-      <a href="{{ route('blog.show', $a->slug) }}" class="article-card">
+      <div class="article-card">
         <div class="article-media" style="background:var(--green-soft)">
           @if ($a->image)
           <img src="{{ $a->image }}" alt="{{ $a->judul }}" loading="lazy">
@@ -28,12 +28,12 @@
           @endif
         </div>
         <div class="article-body">
-          <span class="badge-kat">{{ $a->kategori->nama ?? 'Umum' }}</span>
           <h4>{{ $a->judul }}</h4>
           <p>{{ $a->excerpt ?? $a->judul }}</p>
-          <div class="article-meta">{{ $a->published_at ? $a->published_at->format('d M Y') : '' }}</div>
+          <div class="article-meta">{{ $a->published_at ? $a->published_at->format('d M Y') : '' }} · <span class="cat">{{ $a->kategori->nama ?? 'Umum' }}</span></div>
+          <a href="{{ route('blog.show', $a->slug) }}" class="article-link">Baca selengkapnya <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
-      </a>
+      </div>
       @empty
       <div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--text-soft)">Belum ada artikel.</div>
       @endforelse

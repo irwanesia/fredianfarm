@@ -11,8 +11,9 @@
 </section>
 <section>
   <div class="container">
-    <form method="GET" action="{{ route('cari') }}" class="filter-bar">
-      <input type="text" name="q" value="{{ $q }}" placeholder="Ketik kata kunci… mis. kentang, agria" style="flex:1">
+    <form method="GET" action="{{ route('cari') }}" style="display:flex;align-items:center;gap:10px;background:var(--cream);border:1px solid var(--line);border-radius:100px;padding:8px 8px 8px 20px;max-width:560px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-soft)" stroke-width="2" style="flex:none"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" name="q" value="{{ $q }}" placeholder="Cari produk atau artikel…" style="flex:1;border:none;background:transparent;outline:none;font-family:'Manrope',sans-serif;font-size:14.5px;color:var(--text);min-width:0">
       <button type="submit" class="btn btn-primary">Cari</button>
     </form>
 
@@ -61,7 +62,7 @@
       <div class="eyebrow" style="margin:8px 0 16px">Artikel ({{ $artikels->count() }})</div>
       <div class="grid grid-articles" style="margin-bottom:36px">
         @foreach ($artikels as $a)
-        <a href="{{ route('blog.show', $a->slug) }}" class="article-card">
+        <div class="article-card">
           <div class="article-media" style="background:var(--green-soft)">
             @if ($a->image)
             <img src="{{ $a->image }}" alt="{{ $a->judul }}" loading="lazy">
@@ -70,12 +71,12 @@
             @endif
           </div>
           <div class="article-body">
-            <span class="badge-kat">{{ $a->kategori->nama ?? 'Umum' }}</span>
-            <h4>{{ $a->judul }}</h4>
-            <p>{{ $a->excerpt ?? $a->judul }}</p>
-            <div class="article-meta">{{ $a->published_at ? $a->published_at->format('d M Y') : '' }}</div>
+          <h4>{{ $a->judul }}</h4>
+          <p>{{ $a->excerpt ?? $a->judul }}</p>
+          <div class="article-meta">{{ $a->published_at ? $a->published_at->format('d M Y') : '' }} · <span class="cat">{{ $a->kategori->nama ?? 'Umum' }}</span></div>
+            <a href="{{ route('blog.show', $a->slug) }}" class="article-link">Baca selengkapnya <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           </div>
-        </a>
+        </div>
         @endforeach
       </div>
       @endif

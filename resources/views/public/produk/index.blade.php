@@ -61,7 +61,7 @@
           </div>
         </div>
         <div class="prod-foot" style="padding:0 20px 18px;display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-accent btn-sm" onclick="event.stopPropagation();addToCart({{ $p->id }}, {{ $cartVarId ?? 'null' }}, '{{ addslashes($p->nama) }}', '{{ addslashes($cartVarNama) }}', {{ $cartHarga }}, '{{ $cartBerat }}', '{{ $cartStok }}');showToast('✅','{{ addslashes($p->nama) }} ditambahkan')" style="flex:1">+ Keranjang</button>
+          <button class="btn btn-accent btn-sm" onclick="event.stopPropagation();addToCart({{ $p->id }}, {{ $cartVarId ?? 'null' }}, '{{ addslashes($p->nama) }}', '{{ addslashes($cartVarNama) }}', {{ $cartHarga }}, '{{ $cartBerat }}', '{{ $cartStok }}');showToast('{{ addslashes($p->nama) }} ditambahkan')" style="flex:1">+ Keranjang</button>
           <a class="btn btn-primary btn-sm" href="{{ route('produk.show', $p->slug) }}" style="flex:1;text-align:center">Detail</a>
         </div>
       </div>

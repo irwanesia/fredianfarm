@@ -3,25 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>@yield('title', $settings['META_TITLE']->value ?? 'Fredian Farm — Bibit Kentang Unggul')</title>
+@php
+    $settingValue = fn (string $key, $default = null) => ($settings->get($key)?->value) ?: $default;
+@endphp
+<title>@yield('title', $settingValue('META_TITLE', 'Fredian Farm — Bibit Kentang Unggul'))</title>
 <link rel="canonical" href="{{ url()->current() }}">
 @hasSection('meta_head')
     @yield('meta_head')
 @else
-    <meta name="description" content="{{ $settings['META_DESCRIPTION']->value ?? 'Produsen dan distributor bibit kentang G-0, G-0 MZ, Granola L, dan G-0 Plus dari Dieng, Jawa Tengah.' }}">
+    <meta name="description" content="{{ $settingValue('META_DESCRIPTION', 'Produsen dan distributor bibit kentang G-0, G-0 MZ, Granola L, dan G-0 Plus dari Dieng, Jawa Tengah.') }}">
     <meta name="robots" content="index, follow">
-    <meta property="og:site_name" content="{{ $settings['APP_NAME']->value ?? 'Fredian Farm' }}">
+    <meta property="og:site_name" content="{{ $settingValue('APP_NAME', 'Fredian Farm') }}">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="@yield('title', $settings['META_TITLE']->value ?? 'Fredian Farm')">
-    <meta property="og:description" content="{{ $settings['META_DESCRIPTION']->value ?? 'Produsen dan distributor bibit kentang G-0, G-0 MZ, Granola L, dan G-0 Plus dari Dieng, Jawa Tengah.' }}">
+    <meta property="og:title" content="@yield('title', $settingValue('META_TITLE', 'Fredian Farm'))">
+    <meta property="og:description" content="{{ $settingValue('META_DESCRIPTION', 'Produsen dan distributor bibit kentang G-0, G-0 MZ, Granola L, dan G-0 Plus dari Dieng, Jawa Tengah.') }}">
     <meta property="og:url" content="{{ url()->current() }}">
-    @if(!empty($settings['OG_IMAGE']->value))
-    <meta property="og:image" content="{{ $settings['OG_IMAGE']->value }}">
+    @if(!empty($settingValue('OG_IMAGE')))
+    <meta property="og:image" content="{{ $settingValue('OG_IMAGE') }}">
     @endif
 @endif
 @php
-    $orgName = $settings['APP_NAME']->value ?? 'Fredian Farm';
-    $orgLogo = $settings['LOGO_URL']->value ?? null;
+    $orgName = $settingValue('APP_NAME', 'Fredian Farm');
+    $orgLogo = $settingValue('LOGO_URL');
     $orgJson = [
         '@context' => 'https://schema.org',
         '@type' => 'Organization',
@@ -31,10 +34,10 @@
     if ($orgLogo) {
         $orgJson['logo'] = url($orgLogo);
     }
-    if (!empty($settings['ALAMAT']->value)) {
-        $orgJson['address'] = ['@type' => 'PostalAddress', 'streetAddress' => $settings['ALAMAT']->value];
+    if (!empty($settingValue('ALAMAT'))) {
+        $orgJson['address'] = ['@type' => 'PostalAddress', 'streetAddress' => $settingValue('ALAMAT')];
     }
-    $phoneRaw = preg_replace('/[^0-9]/', '', $settings['NOMOR_WA']->value ?? '');
+    $phoneRaw = preg_replace('/[^0-9]/', '', $settingValue('NOMOR_WA', ''));
     $contact = [];
     if (str_starts_with($phoneRaw, '62')) {
         $contact['telephone'] = '+' . $phoneRaw;
@@ -43,8 +46,8 @@
     } elseif ($phoneRaw) {
         $contact['telephone'] = '+62' . $phoneRaw;
     }
-    if (!empty($settings['EMAIL']->value)) {
-        $contact['email'] = $settings['EMAIL']->value;
+    if (!empty($settingValue('EMAIL'))) {
+        $contact['email'] = $settingValue('EMAIL');
     }
     if ($contact) {
         $contact['@type'] = 'ContactPoint';
@@ -55,7 +58,7 @@
 <script type="application/ld+json">{!! json_encode($orgJson, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_HEX_APOS) !!}</script>
 @stack('schema')
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --green-deep:#1F3D22;
@@ -75,12 +78,12 @@
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{margin:0;background:var(--cream);color:var(--text);font-family:'Manrope',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+body{margin:0;background:#fff;color:var(--text);font-family:'Manrope',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
 h1{font-size:36px;}
 h2{font-size:28px;}
 h3{font-size:20px;}
 h4{font-size:17px;}
-h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-.01em;margin:0 0 .4em;color:var(--green-deep);}
+h1,h2,h3,h4{font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:-.01em;margin:0 0 .4em;color:var(--green-deep);}
 @media(max-width:600px){
   h1{font-size:clamp(22px,5vw,28px);}
   h2{font-size:clamp(18px,4vw,22px);}
@@ -108,7 +111,7 @@ img{max-width:100%;display:block;}
 .btn-sm{padding:9px 18px;font-size:13px;}
 
 /* nav */
-.nav{position:sticky;top:0;z-index:50;background:rgba(250,247,240,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.nav{position:sticky;top:0;z-index:50;background:#fff;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:1180px;margin:0 auto;}
 .logo{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:var(--green-deep);cursor:pointer;}
 .logo-mark{width:34px;height:34px;flex:none;}
@@ -132,12 +135,25 @@ img{max-width:100%;display:block;}
 .nav-dropdown-menu a:hover,.nav-dropdown-menu a.active{background:var(--green-soft);color:var(--green-primary);}
 @media(hover:hover){.nav-dropdown:hover .nav-dropdown-menu{display:block;}}
 .nav-mobile-extra{display:none;}
+.nav-sub-wrap{position:relative;}
+.nav-sub-wrap .nav-sub-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;font-size:14px;font-weight:600;color:var(--text-soft);border-radius:8px;transition:.12s;white-space:nowrap;}
+.nav-sub-wrap .nav-sub-head:hover,.nav-sub-wrap .nav-sub-head.active{background:var(--green-soft);color:var(--green-primary);}
+.nav-submenu{display:none;position:absolute;left:100%;top:-6px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px;min-width:190px;box-shadow:0 8px 30px rgba(0,0,0,.1);z-index:61;margin-left:6px;}
+.nav-submenu a{display:block;padding:9px 14px;font-size:14px;font-weight:600;color:var(--text-soft);border-radius:8px;transition:.12s;white-space:nowrap;}
+.nav-submenu a:hover,.nav-submenu a.active{background:var(--green-soft);color:var(--green-primary);}
+.nav-sub-wrap:hover .nav-submenu{display:block;}
+.nav-search{display:none;max-width:1180px;margin:0 auto;padding:12px 24px 18px;}
+.nav-search.open{display:block;}
+.nav-search form{display:flex;align-items:center;gap:10px;background:var(--cream);border:1px solid var(--line);border-radius:100px;padding:8px 8px 8px 18px;}
+.nav-search form svg{flex:none;}
+.nav-search input{flex:1;border:none;background:transparent;outline:none;font-family:'Manrope',sans-serif;font-size:14.5px;color:var(--text);min-width:0;}
+.nav-search .btn{flex:none;}
 .nav-icon-link{font-size:18px;cursor:pointer;padding:6px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;transition:.15s;color:var(--text-soft);text-decoration:none;position:relative;}
 .nav-icon-link:hover{background:var(--green-soft)!important;color:var(--green-primary)!important;}
-.cart-badge{position:absolute;top:-2px;right:-2px;background:var(--yellow-potato);color:var(--green-deep);font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:9px;display:none;align-items:center;justify-content:center;border:2px solid var(--cream);}
+.cart-badge{position:absolute;top:-2px;right:-2px;background:var(--yellow-potato);color:var(--green-deep);font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:9px;display:none;align-items:center;justify-content:center;border:2px solid #fff;}
 
 @media(max-width:960px){
-  .nav-links{position:fixed;top:64px;left:0;right:0;background:var(--cream);flex-direction:column;align-items:flex-start;padding:20px 24px 26px;border-bottom:1px solid var(--line);gap:16px;display:none;}
+  .nav-links{position:fixed;top:64px;left:0;right:0;background:#fff;flex-direction:column;align-items:flex-start;padding:20px 24px 26px;border-bottom:1px solid var(--line);gap:16px;display:none;}
   .nav-links.open{display:flex;}
   .burger{display:flex;}
   .nav-cta .btn-primary,.nav-cta .nav-icon-link{display:none;}
@@ -145,6 +161,11 @@ img{max-width:100%;display:block;}
   .nav-dropdown-menu{position:static;box-shadow:none;border:none;padding:4px 0 0 16px;background:transparent;}
   .nav-dropdown-menu a{padding:8px 12px;font-size:13px;}
   .nav-dropdown.open .nav-dropdown-menu{display:block;}
+  .nav-submenu{position:static;box-shadow:none;border:none;background:transparent;margin:0;padding:0 0 0 10px;display:block;min-width:0;}
+  .nav-submenu a{padding:8px 12px;font-size:13px;}
+  .nav-search{margin:0;padding:4px 24px 16px;}
+  .nav-search form{border-radius:14px;padding:6px 6px 6px 14px;}
+  .nav-search .btn{font-size:12px;padding:8px 14px;}
 }
 
 /* section rhythm */
@@ -162,13 +183,13 @@ section{padding:88px 0;}
 
 /* grid utilities */
 .grid{display:grid;gap:24px;}
-.grid-2{grid-template-columns:repeat(2,1fr);}
-.grid-3{grid-template-columns:repeat(3,1fr);}
-.grid-4{grid-template-columns:repeat(4,1fr);}
-@media(max-width:900px){.grid-3{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:600px){.grid-2{grid-template-columns:1fr;}}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr));}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr));}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr));}
+@media(max-width:900px){.grid-3{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:600px){.grid-2{grid-template-columns:minmax(0,1fr);}}
 /* grid-4 (e.g. Legalitas) stays at 2 columns all the way down instead of collapsing to 1 */
-@media(max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:900px){.grid-4{grid-template-columns:repeat(2,minmax(0,1fr));}}
 
 /* marketplace-style fixed 2-column grids for product/article/gallery cards on mobile */
 .grid-products,.grid-articles{grid-template-columns:repeat(3,1fr);}
@@ -316,20 +337,21 @@ section{padding:88px 0;}
   .filter-bar select{font-size:13px;padding:7px 10px;width:100%;}
   .filter-bar .btn-sm{font-size:12px;padding:7px 12px;width:100%;text-align:center;}
 }
-@media(max-width:600px){
-  .article-body h4{font-size:15px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-  .article-body p{font-size:13px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
-}
-
 /* article card */
-.article-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:.2s;}
+.article-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:.2s;}
 .article-card:hover{transform:translateY(-4px);}
 .article-media{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;}.article-media img{width:100%;height:100%;object-fit:cover;}
 .article-media svg{width:40%;}
-.article-body{padding:20px;}
+.article-body{display:flex;flex-direction:column;padding:20px;}
 .badge-kat{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.04em;padding:4px 10px;border-radius:100px;background:var(--yellow-soft);color:#8A5A00;margin-bottom:10px;text-transform:uppercase;}
-.article-body h4{font-size:16.5px;margin-bottom:6px;}
+.article-body h4{font-size:16.5px;line-height:1.45;margin:0 0 8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.article-body p{font-size:13.5px;line-height:1.65;color:var(--text-soft);margin:0 0 10px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;}
 .article-meta{font-size:12.5px;color:var(--text-soft);margin-top:10px;}
+.article-meta .cat{color:var(--green-primary);font-weight:700;}
+.article-link{display:inline-flex;align-items:center;gap:6px;margin-top:auto;padding-top:12px;color:var(--green-primary);font-weight:700;font-size:13px;text-decoration:none;}
+.article-link svg{transition:transform .2s;}
+.article-link:hover{text-decoration:underline;}
+.article-link:hover svg{transform:translateX(3px);}
 
 /* testimonial */
 .test-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);}
@@ -369,12 +391,12 @@ section{padding:88px 0;}
 /* footer */
 footer{background:var(--green-deep);color:#C7D6C4;padding:64px 0 24px;}
 footer h4{color:#fff;font-size:15px;margin-bottom:16px;font-family:'Manrope',sans-serif;font-weight:700;}
-footer a{font-size:14px;color:#C7D6C4;display:block;margin-bottom:9px;cursor:pointer;}
+footer a{font-size:14px;color:#C7D6C4;display:block;margin-bottom:9px;cursor:pointer;overflow-wrap:anywhere;}
 footer a:hover{color:var(--yellow-potato);}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:32px;}
-@media(max-width:800px){.foot-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:800px){.foot-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;}}
 .foot-bottom{border-top:1px solid rgba(255,255,255,.12);margin-top:44px;padding-top:22px;font-size:12.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;color:#9EB39A;}
-.social-row{display:flex;gap:10px;margin-top:6px;}
+.social-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;}
 .social-row a{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;margin:0;}
 
 /* wa float */
@@ -419,7 +441,7 @@ footer a:hover{color:var(--yellow-potato);}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:420px;max-width:92vw;z-index:101;background:#fff;box-shadow:-8px 0 40px rgba(0,0,0,.15);transform:translateX(100%);transition:.4s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;}
 .drawer.open{transform:translateX(0);}
 .drawer-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line);}
-.drawer-head h3{margin:0;font-size:18px;font-family:'Fraunces',serif;color:var(--green-deep);}
+.drawer-head h3{margin:0;font-size:18px;font-family:'Montserrat',sans-serif;color:var(--green-deep);}
 .drawer-close{width:36px;height:36px;border-radius:50%;border:none;background:var(--cream);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--text-soft);transition:.2s;}
 .drawer-close:hover{background:var(--green-soft);color:var(--green-deep);}
 .drawer-body{flex:1;overflow-y:auto;padding:16px 22px;}
@@ -452,7 +474,7 @@ footer a:hover{color:var(--yellow-potato);}
 .modal-box{background:#fff;border-radius:18px;width:520px;max-width:92vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);padding:0;transform:scale(.95);transition:.3s cubic-bezier(.22,1,.36,1);}
 .modal-overlay.open .modal-box{transform:scale(1);}
 .modal-box-head{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;z-index:2;border-radius:18px 18px 0 0;}
-.modal-box-head h3{margin:0;font-size:18px;font-family:'Fraunces',serif;color:var(--green-deep);}
+.modal-box-head h3{margin:0;font-size:18px;font-family:'Montserrat',sans-serif;color:var(--green-deep);}
 .modal-box-body{padding:20px 24px;}
 .modal-box-foot{border-top:1px solid var(--line);padding:14px 24px;display:flex;justify-content:flex-end;gap:8px;}
 
@@ -526,6 +548,17 @@ function toggleInfoMenu(e) {
   if (e) e.preventDefault();
   var dd = document.querySelector('.nav-dropdown');
   if (dd) dd.classList.toggle('open');
+}
+function toggleSearch(e) {
+  if (e) e.preventDefault();
+  var box = document.getElementById('navSearch');
+  if (box) {
+    box.classList.toggle('open');
+    if (box.classList.contains('open')) {
+      var inp = box.querySelector('input');
+      if (inp) inp.focus();
+    }
+  }
 }
 document.addEventListener('DOMContentLoaded', function() {
     var burger = document.querySelector('.burger');
@@ -627,9 +660,9 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="container foot-grid">
     <div>
       <div class="logo" style="margin-bottom:14px">
-        <img src="{{ asset('images/logo.png') }}" alt="Fredian Farm" class="logo-img" style="height:44px">
+        <img src="{{ $settingValue('LOGO_URL', asset('images/logo.png')) }}" alt="{{ $settingValue('APP_NAME', 'Fredian Farm') }}" class="logo-img" style="height:44px">
       </div>
-      <p style="font-size:14px;max-width:260px">Produsen dan distributor bibit kentang bersertifikat sejak 2012 — Dieng, Jawa Tengah.</p>
+      <p style="font-size:14px;max-width:260px">{{ $settingValue('FOOTER_TAGLINE', 'Produsen dan distributor bibit kentang bersertifikat sejak 2012 — Dieng, Jawa Tengah.') }}</p>
       <div class="social-row" style="margin-top:14px">
         @forelse ($mediaSosials as $ms)
           <a href="{{ $ms->url }}" target="_blank" rel="noopener" aria-label="{{ $ms->platform }}">@include('partials.social-icon', ['platform' => $ms->platform, 'size' => 15])</a>
@@ -668,7 +701,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
   <div class="container foot-bottom">
-    <span>© {{ date('Y') }} Fredian Farm. Seluruh hak cipta dilindungi.</span>
+    <span>{{ $settingValue('FOOTER_TEXT', '© ' . date('Y') . ' Fredian Farm. Seluruh hak cipta dilindungi.') }}</span>
   </div>
 </footer>
 
@@ -682,12 +715,14 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- CART DRAWER -->
 <div class="drawer" id="cartDrawer">
   <div class="drawer-head">
-    <h3>🛒 Keranjang</h3>
+    <h3>Keranjang</h3>
     <button class="drawer-close" onclick="closeCart()">✕</button>
   </div>
   <div class="drawer-body" id="cartBody">
     <div class="cart-empty-state">
-      <div class="empty-icon">🛒</div>
+      <div class="empty-icon">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--text-soft)" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/></svg>
+      </div>
       <div class="empty-title">Keranjang Kosong</div>
       <div class="empty-sub">Belum ada produk yang dipilih.<br>Mulai belanja sekarang!</div>
     </div>
@@ -697,8 +732,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span>Total</span>
       <span id="cartTotal">Rp 0</span>
     </div>
-    <button class="btn btn-primary" onclick="openCheckout()" style="width:100%">📝 Checkout & Isi Data</button>
-    <button class="btn btn-accent" onclick="quickWaCheckout()" style="width:100%">💬 Langsung Pesan via WhatsApp</button>
+    <button class="btn btn-primary" onclick="openCheckout()" style="width:100%">Checkout & Isi Data</button>
+    <button class="btn btn-accent" onclick="quickWaCheckout()" style="width:100%">Langsung Pesan via WhatsApp</button>
   </div>
 </div>
 
@@ -706,7 +741,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="modal-overlay" id="checkoutOverlay" onclick="closeCheckout(event)">
   <div class="modal-box">
     <div class="modal-box-head">
-      <h3>📋 Checkout</h3>
+      <h3>Checkout</h3>
       <button class="drawer-close" onclick="closeCheckout()">✕</button>
     </div>
     <div class="modal-box-body">
@@ -741,7 +776,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
     <div class="modal-box-foot">
       <button class="btn btn-ghost" onclick="closeCheckout()">Batal</button>
-      <button class="btn btn-primary" onclick="submitOrder()">✅ Kirim Pesanan via WhatsApp</button>
+      <button class="btn btn-primary" onclick="submitOrder()">Kirim Pesanan via WhatsApp</button>
     </div>
   </div>
 </div>
@@ -750,7 +785,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="modal-overlay" id="trackOverlay" onclick="closeTrack(event)">
   <div class="modal-box">
     <div class="modal-box-head">
-      <h3>📦 Lacak Pesanan</h3>
+      <h3>Lacak Pesanan</h3>
       <button class="drawer-close" onclick="closeTrack()">✕</button>
     </div>
     <div class="modal-box-body">
@@ -762,7 +797,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <label>Nomor WhatsApp (sesuai saat order)</label>
         <input type="tel" id="trackWa" placeholder="08xxxxxxxxxx">
       </div>
-      <button class="btn btn-primary" onclick="cekPesanan()" style="width:100%">🔍 Cari Pesanan</button>
+      <button class="btn btn-primary" onclick="cekPesanan()" style="width:100%">Cari Pesanan</button>
       <div class="track-result" id="trackResult" style="display:none"></div>
     </div>
   </div>
@@ -799,7 +834,7 @@ function addToCart(produkId, variantId, nama, variantNama, harga, berat, stokSta
   }
   saveCart();
   updateCartBadge();
-  showToast('✅', (variantNama || nama) + ' ditambahkan');
+  showToast((variantNama || nama) + ' ditambahkan');
 }
 
 function updateCartBadge() {
@@ -825,7 +860,7 @@ function renderCart() {
   const body = document.getElementById('cartBody');
   const foot = document.getElementById('cartFoot');
   if (!cart.length) {
-    body.innerHTML = '<div class="cart-empty-state"><div class="empty-icon">🛒</div><div class="empty-title">Keranjang Kosong</div><div class="empty-sub">Belum ada produk yang dipilih.<br>Mulai belanja sekarang!</div></div>';
+    body.innerHTML = '<div class="cart-empty-state"><div class="empty-icon"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--text-soft)" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/></svg></div><div class="empty-title">Keranjang Kosong</div><div class="empty-sub">Belum ada produk yang dipilih.<br>Mulai belanja sekarang!</div></div>';
     foot.style.display = 'none';
     return;
   }
@@ -834,7 +869,7 @@ function renderCart() {
   document.getElementById('cartTotal').textContent = 'Rp ' + fmt(total);
   body.innerHTML = cart.map(item => `
     <div class="cart-item">
-      <div class="cart-item-thumb">${item.variant_nama ? '📦' : '🌱'}</div>
+      <div class="cart-item-thumb"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 8l8.7 4.9L20.7 8M12 12.9V21"/></svg></div>
       <div class="cart-item-info">
         <div class="cart-item-name">${item.nama}</div>
         ${item.variant_nama ? '<div class="cart-item-variant">' + item.variant_nama + '</div>' : ''}
@@ -845,7 +880,7 @@ function renderCart() {
           <button class="qty-ctrl" onclick="chQty('${item.key}',1)">+</button>
         </div>
       </div>
-      <button class="cart-item-del" onclick="delItem('${item.key}')">🗑️</button>
+      <button class="cart-item-del" onclick="delItem('${item.key}')" title="Hapus"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg></button>
     </div>
   `).join('');
 }
@@ -865,7 +900,7 @@ function delItem(key) {
   saveCart();
   updateCartBadge();
   renderCart();
-  showToast('🗑️', 'Produk dihapus dari keranjang');
+  showToast('Produk dihapus dari keranjang');
 }
 
 // ═══ CHECKOUT ═══
@@ -878,7 +913,7 @@ function selectPayment(el) {
 }
 
 function openCheckout() {
-  if (!cart.length) { showToast('⚠️', 'Keranjang masih kosong'); return; }
+  if (!cart.length) { showToast('Keranjang masih kosong'); return; }
   closeCart();
   const total = cart.reduce((s, x) => s + x.harga * x.qty, 0);
   document.getElementById('checkoutTotal').textContent = 'Rp ' + fmt(total);
@@ -938,7 +973,7 @@ async function submitOrder() {
     if (data.wa_url) window.open(data.wa_url, '_blank');
     cart = []; saveCart(); updateCartBadge();
     closeCheckout();
-    showToast('🎉', 'Pesanan berhasil dikirim via WhatsApp!');
+    showToast('Pesanan berhasil dikirim via WhatsApp!');
   } catch (e) {
     errEl.textContent = 'Gagal terhubung ke server. Coba lagi.';
     errEl.style.display = 'block';
@@ -946,7 +981,7 @@ async function submitOrder() {
 }
 
 async function quickWaCheckout() {
-  if (!cart.length) { showToast('⚠️', 'Keranjang masih kosong'); return; }
+  if (!cart.length) { showToast('Keranjang masih kosong'); return; }
   const total = cart.reduce((s, x) => s + x.harga * x.qty, 0);
   const items = cart.map(x => ({
     produk_id: x.produk_id,
@@ -981,19 +1016,19 @@ async function cekPesanan() {
   const resEl = document.getElementById('trackResult');
   resEl.style.display = 'block';
   if (!id || !wa) {
-    resEl.innerHTML = '<div style="text-align:center;padding:10px;color:#EF4444">⚠️ Isi nomor pesanan dan nomor WA</div>';
+    resEl.innerHTML = '<div style="text-align:center;padding:10px;color:#EF4444">Isi nomor pesanan dan nomor WA</div>';
     return;
   }
-  resEl.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text-soft)">⏳ Mencari pesanan...</div>';
+  resEl.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text-soft)">Mencari pesanan...</div>';
   try {
     const res = await fetch('{{ route("tracking") }}?order_number=' + encodeURIComponent(id) + '&customer_wa=' + encodeURIComponent(wa));
     const d = await res.json();
     if (!d.ok || !d.data) {
-      resEl.innerHTML = '<div style="text-align:center;padding:20px;color:#EF4444"><div style="font-size:36px;margin-bottom:8px">😕</div><div style="font-weight:700;margin-bottom:4px">Pesanan Tidak Ditemukan</div><div style="font-size:13px;color:var(--text-soft)">Periksa kembali nomor pesanan dan nomor WA Anda.</div></div>';
+      resEl.innerHTML = '<div style="text-align:center;padding:20px;color:#EF4444"><div style="font-weight:700;margin-bottom:4px">Pesanan Tidak Ditemukan</div><div style="font-size:13px;color:var(--text-soft)">Periksa kembali nomor pesanan dan nomor WA Anda.</div></div>';
       return;
     }
     const o = d.data;
-    const statusMap = { baru: {bg:'#FEF3C7',color:'#D97706',label:'🕐 Baru'}, diproses:{bg:'#EFF6FF',color:'#2563EB',label:'⚙️ Diproses'}, dikirim:{bg:'#DCFCE7',color:'#16A34A',label:'🚚 Dikirim'}, selesai:{bg:'#F3F4F6',color:'#6B7280',label:'✅ Selesai'}, dibatalkan:{bg:'#FEE2E2',color:'#EF4444',label:'❌ Dibatalkan'} };
+    const statusMap = { baru: {bg:'#FEF3C7',color:'#D97706',label:'Baru'}, diproses:{bg:'#EFF6FF',color:'#2563EB',label:'Diproses'}, dikirim:{bg:'#DCFCE7',color:'#16A34A',label:'Dikirim'}, selesai:{bg:'#F3F4F6',color:'#6B7280',label:'Selesai'}, dibatalkan:{bg:'#FEE2E2',color:'#EF4444',label:'Dibatalkan'} };
     const s = statusMap[o.status] || {bg:'#F3F4F6',color:'#6B7280',label:o.status};
     let itemsHtml = '';
     let itemTotal = 0;
@@ -1021,15 +1056,15 @@ async function cekPesanan() {
           <span>Total</span><span style="color:var(--green-primary)">Rp ${esc(o.grand_total)}</span>
         </div>
       </div>
-      ${o.payment_method ? '<div style="font-size:13px;margin-bottom:8px">💳 ' + (o.payment_method === 'cod' ? 'COD (Bayar di Tempat)' : 'Transfer Bank') + '</div>' : ''}
+      ${o.payment_method ? '<div style="font-size:13px;margin-bottom:8px">' + (o.payment_method === 'cod' ? 'Pembayaran: COD (Bayar di Tempat)' : 'Pembayaran: Transfer Bank') + '</div>' : ''}
       ${o.courier && o.tracking_number ? `
       <div style="background:${s.bg};border-radius:10px;padding:12px 14px;font-size:13px;margin-bottom:12px">
-        <strong>🚚 Pengiriman:</strong> ${esc(o.courier)}<br>
-        <strong>📮 Resi:</strong> ${esc(o.tracking_number)}<br>
-        <a href="https://cekresi.com/${encodeURIComponent(o.tracking_number)}" target="_blank" style="color:var(--green-primary);font-weight:700;font-size:12px">🔗 Lacak paket →</a>
+        <strong>Pengiriman:</strong> ${esc(o.courier)}<br>
+        <strong>Resi:</strong> ${esc(o.tracking_number)}<br>
+        <a href="https://cekresi.com/${encodeURIComponent(o.tracking_number)}" target="_blank" style="color:var(--green-primary);font-weight:700;font-size:12px">Lacak paket →</a>
       </div>` : o.status === 'dikirim' || o.status === 'selesai' ? `
       <div style="background:var(--cream);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text-soft);margin-bottom:12px">Nomor resi belum tersedia, hubungi admin via WhatsApp</div>` : ''}
-      <a href="https://wa.me/${waClean}?text=${encodeURIComponent('Halo Fredian Farm! Saya ingin tanya soal pesanan ' + o.order_number)}" target="_blank" class="btn btn-primary" style="width:100%;text-decoration:none">💬 Hubungi Admin</a>
+      <a href="https://wa.me/${waClean}?text=${encodeURIComponent('Halo Fredian Farm! Saya ingin tanya soal pesanan ' + o.order_number)}" target="_blank" class="btn btn-primary" style="width:100%;text-decoration:none">Hubungi Admin</a>
     `;
   } catch(e) {
     resEl.innerHTML = '<div style="text-align:center;padding:10px;color:#EF4444">Gagal menghubungi server. Coba lagi.</div>';
@@ -1037,11 +1072,11 @@ async function cekPesanan() {
 }
 
 // ═══ TOAST ═══
-function showToast(icon, msg) {
+function showToast(msg) {
   const stack = document.getElementById('toastStack');
   const el = document.createElement('div');
   el.className = 'toast-item';
-  el.innerHTML = '<span style="margin-right:8px">' + icon + '</span>' + msg;
+  el.innerHTML = msg;
   stack.appendChild(el);
   requestAnimationFrame(() => { requestAnimationFrame(() => el.classList.add('in')); });
   setTimeout(() => {

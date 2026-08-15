@@ -1,17 +1,20 @@
 @extends("layouts.public")
 @section("title", $artikel->judul . " — Fredian Farm")
 @section("meta_head")
-    <meta name="description" content="{{ $artikel->meta_description ?: ($artikel->excerpt ?: ($settings['META_DESCRIPTION']->value ?? 'Produsen dan distributor bibit kentang G-0, G-0 MZ, Granola L, dan G-0 Plus dari Dieng, Jawa Tengah.')) }}">
+    @php
+        $settingValue = fn (string $key, $default = null) => optional($settings->get($key))->value ?? $default;
+    @endphp
+    <meta name="description" content="{{ $artikel->meta_description ?: ($artikel->excerpt ?: ($settingValue('META_DESCRIPTION', 'Produsen dan distributor bibit kentang G-0, G-0 MZ, Granola L, dan G-0 Plus dari Dieng, Jawa Tengah.'))) }}">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="article">
-    <meta property="og:site_name" content="{{ $settings['APP_NAME']->value ?? 'Fredian Farm' }}">
+    <meta property="og:site_name" content="{{ $settingValue('APP_NAME', 'Fredian Farm') }}">
     <meta property="og:title" content="{{ $artikel->meta_title ?: ($artikel->judul . ' — Fredian Farm') }}">
-    <meta property="og:description" content="{{ $artikel->meta_description ?: ($artikel->excerpt ?: ($settings['META_DESCRIPTION']->value ?? '')) }}">
+    <meta property="og:description" content="{{ $artikel->meta_description ?: ($artikel->excerpt ?: ($settingValue('META_DESCRIPTION', ''))) }}">
     <meta property="og:url" content="{{ url()->current() }}">
     @if($artikel->image)
     <meta property="og:image" content="{{ url($artikel->image) }}">
-    @elseif(!empty($settings['OG_IMAGE']->value))
-    <meta property="og:image" content="{{ $settings['OG_IMAGE']->value }}">
+    @elseif(!empty($settingValue('OG_IMAGE')))
+    <meta property="og:image" content="{{ $settingValue('OG_IMAGE') }}">
     @endif
 @endsection
 @php
@@ -24,7 +27,7 @@
         'datePublished' => $artikel->published_at ? $artikel->published_at->toIso8601String() : $artikel->created_at->toIso8601String(),
         'dateModified' => ($artikel->updated_at ?: $artikel->created_at)->toIso8601String(),
         'author' => ['@type' => 'Person', 'name' => $artikel->user->name ?? 'Tim Fredian Farm'],
-        'publisher' => ['@type' => 'Organization', 'name' => $settings['APP_NAME']->value ?? 'Fredian Farm'],
+        'publisher' => ['@type' => 'Organization', 'name' => $settingValue('APP_NAME', 'Fredian Farm')],
     ];
     if ($artikel->image) {
         $articleJson['image'] = url($artikel->image);
@@ -111,7 +114,7 @@
       <h3>Artikel Terkait</h3>
       <div class="grid grid-articles">
         @foreach ($artikelTerkait as $a)
-        <a href="{{ route("blog.show", $a->slug) }}" class="article-card">
+        <div class="article-card">
           <div class="article-media" style="background:var(--green-soft)">
             @if ($a->image)
             <img src="{{ $a->image }}" alt="{{ $a->judul }}" loading="lazy">
@@ -120,11 +123,12 @@
             @endif
           </div>
           <div class="article-body">
-            <span class="badge-kat">{{ $a->kategori->nama ?? "Umum" }}</span>
             <h4>{{ $a->judul }}</h4>
             <p>{{ $a->excerpt ?? "" }}</p>
+            <div class="article-meta">{{ $a->published_at ? $a->published_at->format("d M Y") : "" }} · <span class="cat">{{ $a->kategori->nama ?? "Umum" }}</span></div>
+            <a href="{{ route("blog.show", $a->slug) }}" class="article-link">Baca selengkapnya <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           </div>
-        </a>
+        </div>
         @endforeach
       </div>
     </div>

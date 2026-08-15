@@ -6,7 +6,7 @@
   <div class="container">
     <div class="breadcrumb"><a href="{{ route('home') }}">Beranda</a><span>/</span><span>Cara Pemesanan</span></div>
     <div class="eyebrow">Alur Pemesanan</div>
-    <h1>Pilih, checkout, konfirmasi via WhatsApp — simpel tanpa ribet</h1>
+    <h1>Pilih, checkout, konfirmasi via WhatsApp - simpel tanpa ribet</h1>
     <p style="max-width:580px">Cukup tambahkan produk ke keranjang, isi data pemesanan, dan pilih metode pembayaran (Transfer Bank atau COD). Pesanan langsung terkirim ke admin kami via WhatsApp.</p>
   </div>
 </section>

@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
             return "<?php echo \$expression ? 'Rp ' . number_format(\$expression, 0, ',', '.') : '-'; ?>";
         });
 
-        View::composer(['layouts.public', 'public.kontak'], function ($view) {
+        View::composer(['layouts.public', 'public.*'], function ($view) {
             $view->with('mediaSosials', MediaSosial::where('is_active', true)->orderBy('urutan')->get());
             $view->with('settings', Setting::all()->keyBy('key'));
         });

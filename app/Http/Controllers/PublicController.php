@@ -23,14 +23,40 @@ class PublicController extends Controller
         $testimonis = Testimoni::where('is_active', true)->get();
         $faqs = Faq::where('is_active', true)->orderBy('urutan')->get();
         $banners = Banner::where('is_active', true)->orderBy('urutan')->orderBy('created_at', 'desc')->get();
+        $mitras = \App\Models\Mitra::where('is_active', true)->orderBy('urutan')->get();
         $settings = Setting::all()->keyBy('key');
-        return view('public.home', compact('produks', 'artikels', 'testimonis', 'faqs', 'banners', 'settings'));
+        return view('public.home', compact('produks', 'artikels', 'testimonis', 'faqs', 'banners', 'mitras', 'settings'));
     }
 
     public function about()
     {
         $settings = Setting::all()->keyBy('key');
         return view('public.about', compact('settings'));
+    }
+
+    public function aboutSejarah()
+    {
+        $settings = Setting::all()->keyBy('key');
+        return view('public.tentang.sejarah', compact('settings'));
+    }
+
+    public function aboutVisiMisi()
+    {
+        $settings = Setting::all()->keyBy('key');
+        $misi = array_values(array_filter(array_map('trim', explode("\n", Setting::getValue('MISI', '')))));
+        return view('public.tentang.visi-misi', compact('settings', 'misi'));
+    }
+
+    public function aboutLokasi()
+    {
+        $settings = Setting::all()->keyBy('key');
+        return view('public.tentang.lokasi', compact('settings'));
+    }
+
+    public function aboutSertifikasi()
+    {
+        $settings = Setting::all()->keyBy('key');
+        return view('public.tentang.sertifikasi', compact('settings'));
     }
 
     public function produkIndex(Request $request)
@@ -152,7 +178,8 @@ class PublicController extends Controller
 
     public function kontak()
     {
-        return view('public.kontak');
+        $settings = Setting::all()->keyBy('key');
+        return view('public.kontak', compact('settings'));
     }
 
     public function kontakStore(Request $request)

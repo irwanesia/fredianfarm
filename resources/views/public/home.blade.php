@@ -33,7 +33,7 @@
       </svg>
     </div>
   </div>
-  <svg class="soil-divider" viewBox="0 0 1200 46" preserveAspectRatio="none" style="width:100%;height:46px;display:block"><path d="M0 20 C 200 46 400 0 600 20 C 800 40 1000 4 1200 20 L1200 46 L0 46 Z" fill="#FAF7F0"/></svg>
+  <svg class="soil-divider" viewBox="0 0 1200 46" preserveAspectRatio="none" style="width:100%;height:46px;display:block"><path d="M0 20 C 200 46 400 0 600 20 C 800 40 1000 4 1200 20 L1200 46 L0 46 Z" fill="#fff"/></svg>
 </section>
 --}}
 
@@ -83,7 +83,7 @@
     @endforeach
   </div>
   @endif
-  <svg class="soil-divider" viewBox="0 0 1200 46" preserveAspectRatio="none" style="width:100%;height:46px;display:block"><path d="M0 20 C 200 46 400 0 600 20 C 800 40 1000 4 1200 20 L1200 46 L0 46 Z" fill="#FAF7F0"/></svg>
+  <svg class="soil-divider" viewBox="0 0 1200 46" preserveAspectRatio="none" style="width:100%;height:46px;display:block"><path d="M0 20 C 200 46 400 0 600 20 C 800 40 1000 4 1200 20 L1200 46 L0 46 Z" fill="#fff"/></svg>
 </section>
 @else
 <section class="hero">
@@ -108,7 +108,7 @@
       </svg>
     </div>
   </div>
-  <svg class="soil-divider" viewBox="0 0 1200 46" preserveAspectRatio="none" style="width:100%;height:46px;display:block"><path d="M0 20 C 200 46 400 0 600 20 C 800 40 1000 4 1200 20 L1200 46 L0 46 Z" fill="#FAF7F0"/></svg>
+  <svg class="soil-divider" viewBox="0 0 1200 46" preserveAspectRatio="none" style="width:100%;height:46px;display:block"><path d="M0 20 C 200 46 400 0 600 20 C 800 40 1000 4 1200 20 L1200 46 L0 46 Z" fill="#fff"/></svg>
 </section>
 @endif
 
@@ -117,14 +117,14 @@
   <div class="container">
     <div class="section-head center">
       <div class="eyebrow" style="justify-content:center">Kenapa Fredian Farm</div>
-      <h2>Bibit yang lolos sortir tiga kali sebelum sampai ke kebun Anda</h2>
+      <h2>Bibit sehat dan siap tanam, dari kebun sampai ke kebun Anda</h2>
     </div>
     <div class="scroll-hint">Geser untuk lihat semua →</div>
     <div class="grid value-scroller">
       <div class="value-card">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <h4>Bersertifikat</h4>
-        <p>Setiap batch memiliki sertifikat mutu bibit dan bebas penyakit dari dinas terkait.</p>
+        <h4>Premium</h4>
+        <p>Kualitas benih pilihan yang dipersiapkan secara optimal sebelum dikirim.</p>
       </div>
       <div class="value-card">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -182,7 +182,7 @@
           </div>
         </div>
         <div class="prod-foot" style="padding:0 20px 18px;display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-accent btn-sm" onclick="event.stopPropagation();addToCart({{ $p->id }}, {{ $cartVarId ?? 'null' }}, '{{ addslashes($p->nama) }}', '{{ addslashes($cartVarNama) }}', {{ $cartHarga }}, '{{ $cartBerat }}', '{{ $cartStok }}');showToast('✅','{{ addslashes($p->nama) }} ditambahkan')" style="flex:1">+ Keranjang</button>
+          <button class="btn btn-accent btn-sm" onclick="event.stopPropagation();addToCart({{ $p->id }}, {{ $cartVarId ?? 'null' }}, '{{ addslashes($p->nama) }}', '{{ addslashes($cartVarNama) }}', {{ $cartHarga }}, '{{ $cartBerat }}', '{{ $cartStok }}');showToast('{{ addslashes($p->nama) }} ditambahkan')" style="flex:1">+ Keranjang</button>
           <a class="btn btn-primary btn-sm" href="{{ route('produk.show', $p->slug) }}" style="flex:1;text-align:center">Detail</a>
         </div>
       </div>
@@ -225,7 +225,7 @@
     </div>
     <div class="grid grid-articles">
       @foreach ($artikels->take(3) as $a)
-      <a href="{{ route('blog.show', $a->slug) }}" class="article-card">
+      <div class="article-card">
         <div class="article-media" style="background:var(--green-soft)">
           @if ($a->image)
           <img src="{{ $a->image }}" alt="{{ $a->judul }}" loading="lazy">
@@ -234,12 +234,12 @@
           @endif
         </div>
         <div class="article-body">
-          <span class="badge-kat">{{ $a->kategori->nama ?? 'Umum' }}</span>
           <h4>{{ $a->judul }}</h4>
           <p>{{ $a->excerpt }}</p>
-          <div class="article-meta">{{ $a->published_at ? $a->published_at->format('d M Y') : '' }} · 3 menit baca</div>
+          <div class="article-meta">{{ $a->published_at ? $a->published_at->format('d M Y') : '' }} · <span class="cat">{{ $a->kategori->nama ?? 'Umum' }}</span></div>
+          <a href="{{ route('blog.show', $a->slug) }}" class="article-link">Baca selengkapnya <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
-      </a>
+      </div>
       @endforeach
     </div>
   </div>
@@ -269,14 +269,18 @@
 </section>
 
 <!-- PARTNER -->
+@if($mitras->isNotEmpty())
 <section class="section-tight tinted">
   <div class="container">
-    <p style="text-align:center;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--text-soft);margin-bottom:26px">Dipercaya oleh</p>
+    <p style="text-align:center;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--text-soft);margin-bottom:26px">Mitra Kami</p>
     <div style="display:flex;justify-content:center;gap:44px;flex-wrap:wrap;opacity:.75;font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--brown-earth)">
-      <span>Dinas Pertanian Jabar</span><span>Koperasi Tani Makmur</span><span>Gapoktan Sukamaju</span><span>Toko Tani Sejahtera</span><span>UPTD Benih Hortikultura</span>
+      @foreach ($mitras as $mitra)
+      <span>{{ $mitra->nama }}</span>
+      @endforeach
     </div>
   </div>
 </section>
+@endif
 
 <!-- SOSIAL MEDIA -->
 <section>
@@ -315,6 +319,11 @@
 </section>
 
 <!-- LOKASI -->
+@php
+    $settingValue = fn (string $key, $default = null) => optional($settings->get($key))->value ?? $default;
+    $mapsEmbed = $settingValue('LOKASI_MAPS_EMBED', 'https://www.google.com/maps?q=Dieng,Wonosobo,Jawa%20Tengah&output=embed');
+    $mapsLink = preg_replace('/[?&]output=embed$/', '', $mapsEmbed);
+@endphp
 <section class="dark">
   <div class="container lokasi-grid" style="align-items:center">
     <div>
@@ -324,12 +333,12 @@
       <a href="{{ route('kontak') }}" class="btn btn-accent">Lihat Kontak Lengkap</a>
     </div>
     <div class="map-embed" style="border-radius:var(--radius);overflow:hidden;height:240px">
-      <iframe src="https://www.google.com/maps?q=Dieng,Wonosobo,Jawa%20Tengah&output=embed" style="border:0;width:100%;height:100%" loading="lazy"></iframe>
+      <iframe src="{{ $mapsEmbed }}" style="border:0;width:100%;height:100%" loading="lazy"></iframe>
     </div>
     <div class="map-fallback" style="height:240px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15)">
       <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      <p style="margin:0;color:#C7D6C4;font-size:13.5px">Dataran Tinggi Dieng, Jawa Tengah</p>
-      <a class="btn btn-accent btn-sm" href="https://www.google.com/maps?q=Dieng,Wonosobo,Jawa+Tengah" target="_blank" rel="noopener">Buka di Google Maps</a>
+      <p style="margin:0;color:#C7D6C4;font-size:13.5px">{{ $settingValue('ALAMAT', 'Dieng, Jawa Tengah') }}</p>
+      <a class="btn btn-accent btn-sm" href="{{ $mapsLink }}" target="_blank" rel="noopener">Buka di Google Maps</a>
     </div>
   </div>
 </section>

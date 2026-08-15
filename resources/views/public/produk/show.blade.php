@@ -1,17 +1,20 @@
 @extends('layouts.public')
 @section('title', $produk->nama . ' — Fredian Farm')
 @section('meta_head')
-    <meta name="description" content="{{ Str::limit(strip_tags($produk->deskripsi ?? ''), 160) ?: ($settings['META_DESCRIPTION']->value ?? 'Produsen dan distributor bibit kentang G-0, G-0 MZ, Granola L, dan G-0 Plus dari Dieng, Jawa Tengah.') }}">
+    @php
+        $settingValue = fn (string $key, $default = null) => optional($settings->get($key))->value ?? $default;
+    @endphp
+    <meta name="description" content="{{ Str::limit(strip_tags($produk->deskripsi ?? ''), 160) ?: ($settingValue('META_DESCRIPTION', 'Produsen dan distributor bibit kentang G-0, G-0 MZ, Granola L, dan G-0 Plus dari Dieng, Jawa Tengah.')) }}">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="product">
-    <meta property="og:site_name" content="{{ $settings['APP_NAME']->value ?? 'Fredian Farm' }}">
+    <meta property="og:site_name" content="{{ $settingValue('APP_NAME', 'Fredian Farm') }}">
     <meta property="og:title" content="{{ $produk->nama }} — Fredian Farm">
-    <meta property="og:description" content="{{ Str::limit(strip_tags($produk->deskripsi ?? ''), 160) ?: ($settings['META_DESCRIPTION']->value ?? '') }}">
+    <meta property="og:description" content="{{ Str::limit(strip_tags($produk->deskripsi ?? ''), 160) ?: ($settingValue('META_DESCRIPTION', '')) }}">
     <meta property="og:url" content="{{ url()->current() }}">
     @if($produk->fotoUtama)
     <meta property="og:image" content="{{ url($produk->fotoUtama) }}">
-    @elseif(!empty($settings['OG_IMAGE']->value))
-    <meta property="og:image" content="{{ $settings['OG_IMAGE']->value }}">
+    @elseif(!empty($settingValue('OG_IMAGE')))
+    <meta property="og:image" content="{{ $settingValue('OG_IMAGE') }}">
     @endif
 @endsection
 @php
@@ -23,7 +26,7 @@
         'description' => Str::limit(strip_tags($produk->deskripsi ?? ''), 200),
         'url' => url()->current(),
         'sku' => $produk->slug,
-        'brand' => ['@type' => 'Brand', 'name' => $settings['APP_NAME']->value ?? 'Fredian Farm'],
+        'brand' => ['@type' => 'Brand', 'name' => $settingValue('APP_NAME', 'Fredian Farm')],
         'offers' => [
             '@type' => 'Offer',
             'url' => url()->current(),
@@ -184,7 +187,7 @@ function keranjangDulu(id) {
     addToCart(id, selectedVariantId, nama, detailNama, detailHarga, detailBerat, detailStok);
   }
   document.getElementById('detailQty').textContent = 1;
-  showToast('✅', (detailNama || nama) + ' ×' + qty + ' ditambahkan ke keranjang');
+  showToast((detailNama || nama) + ' ×' + qty + ' ditambahkan ke keranjang');
 }
 
 function setMainFoto(el) {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Produk;
 use App\Models\KategoriProduk;
 use App\Models\GambarProduk;
+use App\Models\ProdukVariant;
 use App\Http\Requests\Admin\StoreProdukRequest;
 use App\Http\Requests\Admin\UpdateProdukRequest;
 use Intervention\Image\ImageManager;
@@ -25,7 +26,9 @@ class ProdukController extends Controller
     public function create()
     {
         $kategoris = KategoriProduk::where('is_active', true)->orderBy('nama')->get();
-        return view('admin.produk.form', compact('kategoris'));
+        $jenisList = $this->nilaiDistinct('jenis');
+        $varietasList = $this->nilaiDistinct('varietas');
+        return view('admin.produk.form', compact('kategoris', 'jenisList', 'varietasList'));
     }
 
     public function store(StoreProdukRequest $request)
@@ -35,6 +38,8 @@ class ProdukController extends Controller
         $data['deskripsi'] = Purifier::clean($data['deskripsi'] ?? '');
 
         $produk = Produk::create($data);
+
+        $this->simpanVarians($produk, $request->input('variants'));
 
         if ($request->hasFile('foto')) {
             $this->simpanFoto($produk, $request->file('foto'));
@@ -47,8 +52,10 @@ class ProdukController extends Controller
     public function edit(Produk $produk)
     {
         $kategoris = KategoriProduk::where('is_active', true)->orderBy('nama')->get();
-        $produk->load('gambar');
-        return view('admin.produk.form', compact('produk', 'kategoris'));
+        $jenisList = $this->nilaiDistinct('jenis');
+        $varietasList = $this->nilaiDistinct('varietas');
+        $produk->load('gambar', 'variants');
+        return view('admin.produk.form', compact('produk', 'kategoris', 'jenisList', 'varietasList'));
     }
 
     public function update(UpdateProdukRequest $request, Produk $produk)
@@ -69,6 +76,8 @@ class ProdukController extends Controller
         }
 
         $produk->update($data);
+
+        $this->simpanVarians($produk, $request->input('variants'));
 
         if ($request->hasFile('foto')) {
             $this->simpanFoto($produk, $request->file('foto'));
@@ -121,5 +130,57 @@ class ProdukController extends Controller
             return substr($url, strpos($url, $base) + strlen($base));
         }
         return $url ?? '';
+    }
+
+    private function nilaiDistinct(string $kolom): array
+    {
+        return Produk::query()
+            ->whereNotNull($kolom)
+            ->where($kolom, '!=', '')
+            ->distinct()
+            ->orderBy($kolom)
+            ->pluck($kolom)
+            ->values()
+            ->all();
+    }
+
+    private function simpanVarians(Produk $produk, ?array $rows): void
+    {
+        if (!is_array($rows)) {
+            return;
+        }
+
+        $nextUrutan = ($produk->variants()->max('urutan') ?? 0) + 1;
+
+        foreach ($rows as $row) {
+            $nama = trim((string) ($row['nama'] ?? ''));
+            if ($nama === '') {
+                continue;
+            }
+
+            $id = (int) ($row['id'] ?? 0);
+
+            if (!empty($row['hapus']) && $id) {
+                ProdukVariant::where('id', $id)->where('produk_id', $produk->id)->delete();
+                continue;
+            }
+
+            $data = [
+                'nama' => $nama,
+                'harga' => (float) ($row['harga'] ?? 0),
+                'berat' => $row['berat'] !== '' && $row['berat'] !== null ? (string) $row['berat'] : null,
+                'stok_status' => $row['stok_status'] ?? 'tersedia',
+                'urutan' => $row['urutan'] !== '' && $row['urutan'] !== null ? (int) $row['urutan'] : $nextUrutan,
+            ];
+
+            if ($id) {
+                ProdukVariant::where('id', $id)->where('produk_id', $produk->id)->update($data);
+            } else {
+                $data['produk_id'] = $produk->id;
+                ProdukVariant::create($data);
+            }
+
+            $nextUrutan++;
+        }
     }
 }

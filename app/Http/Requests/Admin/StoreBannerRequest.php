@@ -7,7 +7,9 @@ class StoreBannerRequest extends FormRequest {
         return [
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string|max:1000',
-            'url' => 'nullable|string|max:255',
+            'media_type' => 'nullable|in:image,video',
+            'foto' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:8192',
+            'video' => 'nullable|file|mimes:mp4|max:25600',
             'link_url' => 'nullable|string|max:500',
             'link_text' => 'nullable|string|max:100',
             'link_url_2' => 'nullable|string|max:500',

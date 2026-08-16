@@ -1,5 +1,13 @@
 <?php
 
+// Lokasi media publik: pada hosting, folder public_html dipisah dari inti aplikasi,
+// sehingga disk "public" diarahkan ke public_html/storage bila folder tersebut ada.
+$publicDiskRoot = public_path('storage');
+$publicDiskRootCandidate = dirname(__DIR__, 2).'/public_html/storage';
+if (is_dir($publicDiskRootCandidate)) {
+    $publicDiskRoot = $publicDiskRootCandidate;
+}
+
 return [
 
     /*
@@ -40,7 +48,7 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            'root' => $publicDiskRoot,
             'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
             'visibility' => 'public',
             'throw' => false,
@@ -73,8 +81,5 @@ return [
     |
     */
 
-    'links' => [
-        public_path('storage') => storage_path('app/public'),
-    ],
-
+    'links' => [],
 ];

@@ -3,7 +3,7 @@
 @section('title', isset($banner) ? 'Edit Banner' : 'Tambah Banner')
 
 @section('content')
-    <form method="POST" action="{{ isset($banner) ? route('admin.banner.update', $banner) : route('admin.banner.store') }}">
+    <form method="POST" action="{{ isset($banner) ? route('admin.banner.update', $banner) : route('admin.banner.store') }}" enctype="multipart/form-data">
         @csrf
         @if (isset($banner)) @method('PUT') @endif
 
@@ -28,11 +28,43 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">URL Gambar</label>
-                            <input type="text" name="url" class="form-control @error('url') is-invalid @enderror"
-                                value="{{ old('url', $banner->url ?? '') }}" placeholder="/storage/...">
-                            <small class="form-hint">Path atau URL gambar banner. Ukuran ideal 1920×800 px (rasio 16:7). Area penting di tengah–kanan karena teks menutupi kiri.</small>
-                            @error('url') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            <label class="form-label">Media Banner</label>
+                            <div class="alert alert-info py-2" style="font-size:12px">
+                                Pilih salah satu: <strong>gambar</strong> atau <strong>video</strong>. Saat satu dipilih, yang lain otomatis dinonaktifkan.
+                            </div>
+
+                            @if (isset($banner) && $banner->url)
+                            <div class="mb-3">
+                                <label class="form-label">Media Saat Ini</label>
+                                @if ($banner->media_type === 'video')
+                                <video src="{{ $banner->url }}" muted controls style="max-width:100%;max-height:180px;border-radius:8px;display:block"></video>
+                                @else
+                                <img src="{{ $banner->url }}" alt="{{ $banner->judul }}" style="max-width:100%;max-height:160px;border-radius:8px;display:block">
+                                @endif
+                                <label class="form-check mt-2">
+                                    <input type="checkbox" name="hapus_media" value="1" class="form-check-input">
+                                    <span class="form-check-label">Hapus media ini</span>
+                                </label>
+                            </div>
+                            @endif
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Upload Gambar</label>
+                                    <input type="file" name="foto" id="bannerFoto" class="form-control @error('foto') is-invalid @enderror"
+                                        accept="image/webp,image/jpeg,image/png">
+                                    <small class="form-hint">JPG/PNG/WebP, maks 8MB. Otomatis jadi WebP & lebar maks 1920px (aspek dijaga).</small>
+                                    @error('foto') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Upload Video</label>
+                                    <input type="file" name="video" id="bannerVideo" class="form-control @error('video') is-invalid @enderror"
+                                        accept="video/mp4">
+                                    <small class="form-hint">MP4 (H.264) 1080p, tanpa audio, loop 10–15 dtk, maks 25MB. Untuk background hero, bisa juga mulai dari kualitas 720p agar file lebih ringan.</small>
+                                    @error('video') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                </div>
+                            </div>
+                            @error('media') <div class="text-danger" style="font-size:12.5px">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="mb-3">
@@ -102,3 +134,31 @@
         </div>
     </form>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var foto = document.getElementById('bannerFoto');
+  var video = document.getElementById('bannerVideo');
+  if (!foto || !video) return;
+
+  foto.addEventListener('change', function () {
+    if (this.files.length) {
+      video.value = '';
+      video.disabled = true;
+    } else {
+      video.disabled = false;
+    }
+  });
+
+  video.addEventListener('change', function () {
+    if (this.files.length) {
+      foto.value = '';
+      foto.disabled = true;
+    } else {
+      foto.disabled = false;
+    }
+  });
+});
+</script>
+@endpush

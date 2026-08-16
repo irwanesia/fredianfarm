@@ -6,8 +6,13 @@
 @php
     $settingValue = fn (string $key, $default = null) => ($settings->get($key)?->value) ?: $default;
 @endphp
-<title>@yield('title', $settingValue('META_TITLE', 'Fredian Farm — Bibit Kentang Unggul'))</title>
+<title>@yield('title', $settingValue('META_TITLE', 'Fredian Farm - Bibit Kentang Premium'))</title>
 <link rel="canonical" href="{{ url()->current() }}">
+<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+<link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+<meta name="theme-color" content="#2E7D32">
 @hasSection('meta_head')
     @yield('meta_head')
 @else
@@ -15,7 +20,7 @@
     <meta name="robots" content="index, follow">
     <meta property="og:site_name" content="{{ $settingValue('APP_NAME', 'Fredian Farm') }}">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="@yield('title', $settingValue('META_TITLE', 'Fredian Farm'))">
+    <meta property="og:title" content="@yield('title', $settingValue('META_TITLE', 'Fredian Farm - Bibit Kentang Premium'))">
     <meta property="og:description" content="{{ $settingValue('META_DESCRIPTION', 'Produsen dan distributor bibit kentang G-0, G-0 MZ, Granola L, dan G-0 Plus dari Dieng, Jawa Tengah.') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     @if(!empty($settingValue('OG_IMAGE')))
@@ -198,9 +203,9 @@ section{padding:88px 0;}
 }
 @media(max-width:480px){
   .grid-products .prod-body{padding:13px 13px 15px;}
-  .grid-products .prod-body h4{font-size:14.5px;margin-bottom:2px;}
+  .grid-products .prod-body h4{font-size:13px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .grid-products .desc-clamp{font-size:12px;margin:0 0 4px;}
-  .grid-products .prod-harga{font-size:16px;margin:2px 0 6px;}
+  .grid-products .prod-harga{font-size:12.5px;margin:2px 0 6px;white-space:nowrap;}
   .grid-products .prod-foot .btn{font-size:12px;padding:7px 14px;}
   .grid-products .gal-item .gal-label{font-size:11.5px;padding:9px 10px;}
   .grid-articles .article-body{padding:14px;}
@@ -273,6 +278,7 @@ section{padding:88px 0;}
 .hero-slider .hero-inner{width:100%;height:100%;align-items:flex-start;padding-top:90px;}
 .hero-slide-content{position:relative;z-index:2;max-width:560px;}
 .hero-slide-bg.fallback{position:absolute;inset:0;background:var(--green-deep);overflow:hidden;z-index:0;}
+.hero-slide-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
 .hero-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;width:44px;height:44px;border-radius:50%;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;padding:0;}
 .hero-nav:hover{background:rgba(255,255,255,.28);}
 .hero-nav.prev{left:18px;}
@@ -410,6 +416,7 @@ footer a:hover{color:var(--yellow-potato);}
 /* price display */
 .prod-harga{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--green-primary);margin:4px 0 8px;}
 .detail-harga{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--green-primary);margin:6px 0 14px;}
+.detail-subtotal{font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:var(--green-deep);margin-left:auto;}
 
 /* variant list */
 .variant-list{display:flex;flex-direction:column;gap:8px;}
@@ -457,6 +464,7 @@ footer a:hover{color:var(--yellow-potato);}
 .cart-item-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .cart-item-variant{font-size:12px;color:var(--text-soft);margin-bottom:4px;}
 .cart-item-price{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--green-primary);margin-bottom:6px;}
+.cart-item-subtotal{font-size:12.5px;color:var(--text-soft);margin-bottom:6px;}
 .cart-item-controls{display:flex;align-items:center;gap:8px;}
 .qty-ctrl{width:28px;height:28px;border-radius:7px;border:1.5px solid var(--line);background:var(--cream);cursor:pointer;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;color:var(--text);transition:.15s;}
 .qty-ctrl:hover{background:var(--green-soft);border-color:var(--green-primary);color:var(--green-primary);}
@@ -544,114 +552,121 @@ footer a:hover{color:var(--yellow-potato);}
 </head>
 <body>
 <script>
-function toggleInfoMenu(e) {
-  if (e) e.preventDefault();
-  var dd = document.querySelector('.nav-dropdown');
-  if (dd) dd.classList.toggle('open');
-}
-function toggleSearch(e) {
-  if (e) e.preventDefault();
-  var box = document.getElementById('navSearch');
-  if (box) {
-    box.classList.toggle('open');
-    if (box.classList.contains('open')) {
-      var inp = box.querySelector('input');
-      if (inp) inp.focus();
+  function toggleInfoMenu(e) {
+    if (e) e.preventDefault();
+    var dd = document.querySelector('.nav-dropdown');
+    if (dd) dd.classList.toggle('open');
+  }
+  function toggleSearch(e) {
+    if (e) e.preventDefault();
+    var box = document.getElementById('navSearch');
+    if (box) {
+      box.classList.toggle('open');
+      if (box.classList.contains('open')) {
+        var inp = box.querySelector('input');
+        if (inp) inp.focus();
+      }
     }
   }
-}
-document.addEventListener('DOMContentLoaded', function() {
-    var burger = document.querySelector('.burger');
-    var navLinks = document.querySelector('.nav-links');
-    var navDropdown = document.querySelector('.nav-dropdown');
+  document.addEventListener('DOMContentLoaded', function() {
+      var burger = document.querySelector('.burger');
+      var navLinks = document.querySelector('.nav-links');
+      var navDropdown = document.querySelector('.nav-dropdown');
 
-    if (burger) {
-      burger.addEventListener('click', function() {
-        navLinks?.classList.toggle('open');
-        navDropdown?.classList.remove('open');
-      });
-    }
-
-    navLinks?.querySelectorAll('a:not(.nav-dropdown-toggle)').forEach(function(a) {
-      a.addEventListener('click', function() {
-        navLinks.classList.remove('open');
-      });
-    });
-
-    var ddMenu = document.querySelector('.nav-dropdown-menu');
-    if (ddMenu) {
-      ddMenu.querySelectorAll('a').forEach(function(a) {
-        a.addEventListener('click', function() {
+      if (burger) {
+        burger.addEventListener('click', function() {
+          navLinks?.classList.toggle('open');
           navDropdown?.classList.remove('open');
-          navLinks?.classList.remove('open');
+        });
+      }
+
+      navLinks?.querySelectorAll('a:not(.nav-dropdown-toggle)').forEach(function(a) {
+        a.addEventListener('click', function() {
+          navLinks.classList.remove('open');
         });
       });
-    }
 
-    document.addEventListener('click', function(e) {
-      if (navDropdown && !navDropdown.contains(e.target)) {
-        navDropdown.classList.remove('open');
+      var ddMenu = document.querySelector('.nav-dropdown-menu');
+      if (ddMenu) {
+        ddMenu.querySelectorAll('a').forEach(function(a) {
+          a.addEventListener('click', function() {
+            navDropdown?.classList.remove('open');
+            navLinks?.classList.remove('open');
+          });
+        });
       }
-    });
 
-    document.querySelectorAll('.faq-q').forEach(function(el) {
-        el.addEventListener('click', function() {
-            var answer = this.nextElementSibling;
-            var plus = this.querySelector('.plus');
-            if (answer.style.maxHeight && answer.style.maxHeight !== '0px') {
-                answer.style.maxHeight = '0';
-                if (plus) plus.textContent = '+';
-            } else {
-                document.querySelectorAll('.faq-a').forEach(function(a) { a.style.maxHeight = '0'; });
-                document.querySelectorAll('.faq-q .plus').forEach(function(p) { p.textContent = '+'; });
-                answer.style.maxHeight = answer.scrollHeight + 'px';
-                if (plus) plus.textContent = '–';
-            }
-        });
-    });
-
-    var heroSlider = document.getElementById('heroSlider');
-    if (heroSlider) {
-        var slides = heroSlider.querySelectorAll('.hero-slide');
-        var dots = heroSlider.querySelectorAll('.hero-dots span');
-        var current = 0;
-        var timer = null;
-
-        function goTo(index) {
-            if (!slides.length) return;
-            current = (index + slides.length) % slides.length;
-            slides.forEach(function(s, i) { s.classList.toggle('active', i === current); });
-            dots.forEach(function(d, i) { d.classList.toggle('active', i === current); });
+      document.addEventListener('click', function(e) {
+        if (navDropdown && !navDropdown.contains(e.target)) {
+          navDropdown.classList.remove('open');
         }
+      });
 
-        function next() { goTo(current + 1); }
-        function prev() { goTo(current - 1); }
-        function startAuto() {
-            timer = setInterval(next, 5000);
-        }
-        function stopAuto() {
-            if (timer) { clearInterval(timer); timer = null; }
-        }
-        function restartAuto() {
-            stopAuto();
-            startAuto();
-        }
+      document.querySelectorAll('.faq-q').forEach(function(el) {
+          el.addEventListener('click', function() {
+              var answer = this.nextElementSibling;
+              var plus = this.querySelector('.plus');
+              if (answer.style.maxHeight && answer.style.maxHeight !== '0px') {
+                  answer.style.maxHeight = '0';
+                  if (plus) plus.textContent = '+';
+              } else {
+                  document.querySelectorAll('.faq-a').forEach(function(a) { a.style.maxHeight = '0'; });
+                  document.querySelectorAll('.faq-q .plus').forEach(function(p) { p.textContent = '+'; });
+                  answer.style.maxHeight = answer.scrollHeight + 'px';
+                  if (plus) plus.textContent = '–';
+              }
+          });
+      });
 
-        heroSlider.addEventListener('mouseenter', stopAuto);
-        heroSlider.addEventListener('mouseleave', restartAuto);
+      var heroSlider = document.getElementById('heroSlider');
+      if (heroSlider) {
+          var slides = heroSlider.querySelectorAll('.hero-slide');
+          var dots = heroSlider.querySelectorAll('.hero-dots span');
+          var current = 0;
+          var timer = null;
 
-        var btnPrev = document.getElementById('heroPrev');
-        var btnNext = document.getElementById('heroNext');
-        if (btnPrev) btnPrev.addEventListener('click', function() { prev(); restartAuto(); });
-        if (btnNext) btnNext.addEventListener('click', function() { next(); restartAuto(); });
+          function goTo(index) {
+              if (!slides.length) return;
+              current = (index + slides.length) % slides.length;
+              slides.forEach(function(s, i) {
+                  s.classList.toggle('active', i === current);
+                  var v = s.querySelector('video');
+                  if (v) {
+                      if (i === current) { v.play().catch(function(){}); }
+                      else { v.pause(); }
+                  }
+              });
+              dots.forEach(function(d, i) { d.classList.toggle('active', i === current); });
+          }
 
-        dots.forEach(function(d, i) {
-            d.addEventListener('click', function() { goTo(i); restartAuto(); });
-        });
+          function next() { goTo(current + 1); }
+          function prev() { goTo(current - 1); }
+          function startAuto() {
+              timer = setInterval(next, 5000);
+          }
+          function stopAuto() {
+              if (timer) { clearInterval(timer); timer = null; }
+          }
+          function restartAuto() {
+              stopAuto();
+              startAuto();
+          }
 
-        if (slides.length > 1) startAuto();
-    }
-});
+          heroSlider.addEventListener('mouseenter', stopAuto);
+          heroSlider.addEventListener('mouseleave', restartAuto);
+
+          var btnPrev = document.getElementById('heroPrev');
+          var btnNext = document.getElementById('heroNext');
+          if (btnPrev) btnPrev.addEventListener('click', function() { prev(); restartAuto(); });
+          if (btnNext) btnNext.addEventListener('click', function() { next(); restartAuto(); });
+
+          dots.forEach(function(d, i) {
+              d.addEventListener('click', function() { goTo(i); restartAuto(); });
+          });
+
+          if (slides.length > 1) startAuto();
+      }
+  });
 </script>
 
 @yield('content')
@@ -662,7 +677,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="logo" style="margin-bottom:14px">
         <img src="{{ $settingValue('LOGO_URL', asset('images/logo.png')) }}" alt="{{ $settingValue('APP_NAME', 'Fredian Farm') }}" class="logo-img" style="height:44px">
       </div>
-      <p style="font-size:14px;max-width:260px">{{ $settingValue('FOOTER_TAGLINE', 'Produsen dan distributor bibit kentang bersertifikat sejak 2012 — Dieng, Jawa Tengah.') }}</p>
+      <p style="font-size:14px;max-width:260px">{{ $settingValue('FOOTER_TAGLINE', 'Produsen dan distributor bibit kentang premium, Sumberejo Batur Jawa Tengah.') }}</p>
       <div class="social-row" style="margin-top:14px">
         @forelse ($mediaSosials as $ms)
           <a href="{{ $ms->url }}" target="_blank" rel="noopener" aria-label="{{ $ms->platform }}">@include('partials.social-icon', ['platform' => $ms->platform, 'size' => 15])</a>
@@ -874,6 +889,7 @@ function renderCart() {
         <div class="cart-item-name">${item.nama}</div>
         ${item.variant_nama ? '<div class="cart-item-variant">' + item.variant_nama + '</div>' : ''}
         <div class="cart-item-price">Rp ${fmt(item.harga)}</div>
+        <div class="cart-item-subtotal">Subtotal: Rp ${fmt(item.harga * item.qty)}</div>
         <div class="cart-item-controls">
           <button class="qty-ctrl" onclick="chQty('${item.key}',-1)">−</button>
           <span class="qty-val">${item.qty}</span>

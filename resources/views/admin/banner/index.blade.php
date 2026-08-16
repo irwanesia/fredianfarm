@@ -35,8 +35,12 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $banner->judul }}</td>
                                 <td>
-                                    @if ($banner->url)
-                                        <img src="{{ $banner->url }}" alt="{{ $banner->judul }}" class="img-thumbnail" style="max-height: 50px;">
+                                    @if ($banner->media_type === 'video' && $banner->url)
+                                        <span class="badge bg-purple-lt me-1">Video</span>
+                                        <video src="{{ $banner->url }}" muted controls style="max-height:50px;border-radius:6px;display:block;margin-top:4px"></video>
+                                    @elseif ($banner->url)
+                                        <span class="badge bg-green-lt me-1">Gambar</span>
+                                        <img src="{{ $banner->url }}" alt="{{ $banner->judul }}" class="img-thumbnail" style="max-height:50px;margin-top:4px">
                                     @else
                                         <span class="text-secondary">-</span>
                                     @endif

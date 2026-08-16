@@ -31,6 +31,8 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
 
 RUN a2enmod rewrite
 
+COPY docker/php/99-uploads.ini /usr/local/etc/php/conf.d/99-uploads.ini
+
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
 RUN sed -ri 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \

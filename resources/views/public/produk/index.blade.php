@@ -21,6 +21,22 @@
         </select>
       </div>
       <div class="filter-group">
+        <select name="jenis" onchange="this.form.submit()">
+          <option value="">Jenis Bibit</option>
+          @foreach ($jenisList as $j)
+          <option value="{{ $j }}" {{ request('jenis') == $j ? 'selected' : '' }}>{{ $j }}</option>
+          @endforeach
+        </select>
+      </div>
+      <div class="filter-group">
+        <select name="varietas" onchange="this.form.submit()">
+          <option value="">Varietas</option>
+          @foreach ($varietasList as $v)
+          <option value="{{ $v }}" {{ request('varietas') == $v ? 'selected' : '' }}>{{ $v }}</option>
+          @endforeach
+        </select>
+      </div>
+      <div class="filter-group">
         <select name="stok" onchange="this.form.submit()">
           <option value="">Ketersediaan</option>
           <option value="tersedia" {{ request('stok') == 'tersedia' ? 'selected' : '' }}>Tersedia</option>
@@ -57,7 +73,7 @@
           <div class="prod-body">
             <h4>{{ $p->nama }}</h4>
             <p class="desc-clamp">{{ $p->deskripsi ? strip_tags($p->deskripsi) : 'Bibit unggul berkualitas.' }}</p>
-            <div class="prod-harga">Rp {{ number_format($cartHarga, 0, ',', '.') }}</div>
+            <div class="prod-harga">{{ $p->hargaRangeLabel }}</div>
           </div>
         </div>
         <div class="prod-foot" style="padding:0 20px 18px;display:flex;gap:8px;flex-wrap:wrap">

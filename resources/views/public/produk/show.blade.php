@@ -31,7 +31,7 @@
             '@type' => 'Offer',
             'url' => url()->current(),
             'priceCurrency' => 'IDR',
-            'price' => (float) ($produk->variants->first()->harga ?? $produk->harga ?? 0),
+            'price' => (float) ($produk->hargaMin ?? 0),
             'availability' => $availMap[$produk->stok_status] ?? 'https://schema.org/InStock',
         ],
     ];
@@ -77,8 +77,13 @@
         <div class="eyebrow">{{ $produk->kategori->nama ?? '-' }}</div>
         <h1 style="font-size:32px">{{ $produk->nama }}</h1>
 
+        <div class="detail-harga" style="margin-top:12px" id="detailHarga">{{ $produk->hargaRangeLabel }}</div>
+        @if ($produk->variants->count() > 1)
+        <div style="font-size:12.5px;color:var(--text-soft);margin-top:4px">Harga mengikuti ukuran yang dipilih.</div>
+        @endif
+
         @if ($produk->variants->count())
-        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-soft);margin-bottom:4px">Pilih Kemasan</div>
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-soft);margin-top:20px;margin-bottom:4px">Pilih Ukuran</div>
         <div class="variant-list" id="variantList">
           @foreach ($produk->variants as $v)
           <div class="variant-item variant-selectable" data-variant-id="{{ $v->id }}" data-harga="{{ $v->harga }}" data-berat="{{ $v->berat }}" data-nama="{{ $v->nama }}" data-stok="{{ $v->stok_status }}" onclick="selectVariant(this, {{ $v->id }})" style="cursor:pointer">
@@ -104,17 +109,16 @@
             <span class="qty-val" id="detailQty">1</span>
             <button class="qty-ctrl" onclick="detailQty(1)">+</button>
           </div>
+          <div id="detailSubtotal" class="detail-subtotal">Rp {{ number_format($produk->hargaMin ?? 0, 0, ',', '.') }}</div>
         </div>
-
-        <div class="detail-harga" style="margin-top:16px" id="detailHarga">Rp {{ number_format($produk->harga, 0, ',', '.') }}</div>
 
         @if ($produk->jenis_wadah || $produk->umur_simpan)
         <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
           @if ($produk->jenis_wadah)
-          <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;background:var(--green-soft);color:var(--green-deep);padding:6px 14px;border-radius:20px">📦 {{ $produk->jenis_wadah }}</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;background:var(--green-soft);color:var(--green-deep);padding:6px 14px;border-radius:20px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> {{ $produk->jenis_wadah }}</span>
           @endif
           @if ($produk->umur_simpan)
-          <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;background:var(--green-soft);color:var(--green-deep);padding:6px 14px;border-radius:20px">⏳ Umur simpan: {{ $produk->umur_simpan }}</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;background:var(--green-soft);color:var(--green-deep);padding:6px 14px;border-radius:20px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Umur simpan: {{ $produk->umur_simpan }}</span>
           @endif
         </div>
         @endif
@@ -124,15 +128,15 @@
         @endif
 
         <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
-          <button class="btn btn-primary" onclick="beliLangsung({{ $produk->id }})">🛒 Beli Langsung</button>
-          <button class="btn btn-accent" onclick="keranjangDulu({{ $produk->id }})">+ Keranjang</button>
+          <button class="btn btn-primary" onclick="beliLangsung({{ $produk->id }})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-2px"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/></svg>Beli Langsung</button>
+          <button class="btn btn-accent" onclick="keranjangDulu({{ $produk->id }})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-2px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Keranjang</button>
           @if ($produk->link_tiktok)
-          <a href="{{ $produk->link_tiktok }}" target="_blank" rel="noopener" class="btn btn-tiktok">🛍️ Pesan via TikTok</a>
+          <a href="{{ $produk->link_tiktok }}" target="_blank" rel="noopener" class="btn btn-tiktok">Pesan via TikTok</a>
           @endif
           @if ($produk->link_shopee)
-          <a href="{{ $produk->link_shopee }}" target="_blank" rel="noopener" class="btn btn-shopee">🛍️ Pesan via Shopee</a>
+          <a href="{{ $produk->link_shopee }}" target="_blank" rel="noopener" class="btn btn-shopee">Pesan via Shopee</a>
           @endif
-          <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', \App\Models\Setting::getValue('NOMOR_WA', '6281234567890')) }}" target="_blank" class="btn btn-ghost">💬 Tanya via WA</a>
+          <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', \App\Models\Setting::getValue('NOMOR_WA', '6281234567890')) }}" target="_blank" class="btn btn-ghost"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-2px"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Tanya via WA</a>
         </div>
         <a href="{{ route('kontak') }}" class="btn btn-ghost" style="margin-top:8px">Ajukan RFQ Partai Besar</a>
       </div>
@@ -158,16 +162,22 @@ function selectVariant(el, id) {
   detailStok = el.dataset.stok || 'tersedia';
   detailNama = el.dataset.nama || '';
   document.getElementById('detailHarga').textContent = 'Rp ' + fmt(detailHarga);
+  updateDetailSubtotal();
 }
 
 function getSelectedQty() {
   return parseInt(document.getElementById('detailQty').textContent) || 1;
 }
 
+function updateDetailSubtotal() {
+  document.getElementById('detailSubtotal').textContent = 'Subtotal: Rp ' + fmt(detailHarga * getSelectedQty());
+}
+
 function detailQty(d) {
   let qty = getSelectedQty() + d;
   if (qty < 1) qty = 1;
   document.getElementById('detailQty').textContent = qty;
+  updateDetailSubtotal();
 }
 
 function beliLangsung(id) {

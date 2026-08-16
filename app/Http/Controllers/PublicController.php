@@ -65,6 +65,12 @@ class PublicController extends Controller
         if ($request->filled('kategori')) {
             $query->whereHas('kategori', fn($q) => $q->where('slug', $request->kategori));
         }
+        if ($request->filled('jenis')) {
+            $query->where('jenis', $request->jenis);
+        }
+        if ($request->filled('varietas')) {
+            $query->where('varietas', $request->varietas);
+        }
         if ($request->filled('stok')) {
             $query->where('stok_status', $request->stok);
         }
@@ -77,7 +83,16 @@ class PublicController extends Controller
         }
         $produks = $query->with('variants', 'gambar')->get();
         $kategoris = KategoriProduk::where('is_active', true)->orderBy('urutan')->get();
-        return view('public.produk.index', compact('produks', 'kategoris'));
+        $jenisList = Produk::where('is_active', true)
+            ->whereNotNull('jenis')->where('jenis', '!=', '')
+            ->distinct()->orderBy('jenis')->pluck('jenis')->values()->all();
+        $varietasQuery = Produk::where('is_active', true)
+            ->whereNotNull('varietas')->where('varietas', '!=', '');
+        if ($request->filled('jenis')) {
+            $varietasQuery->where('jenis', $request->jenis);
+        }
+        $varietasList = $varietasQuery->distinct()->orderBy('varietas')->pluck('varietas')->values()->all();
+        return view('public.produk.index', compact('produks', 'kategoris', 'jenisList', 'varietasList'));
     }
 
     public function produkShow($slug)

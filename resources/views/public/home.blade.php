@@ -41,18 +41,13 @@
 @if ($banners->count())
 <section class="hero hero-slider" id="heroSlider">
   @foreach ($banners as $i => $b)
-  <div class="hero-slide {{ $i === 0 ? 'active' : '' }}" @if ($b->url) style="background-image:url('{{ $b->url }}')" @endif>
-    @if (!$b->url)
-    <div class="hero-slide-bg fallback">
-      <svg viewBox="0 0 400 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;right:4%;bottom:0;width:min(420px,42vw);height:auto">
-        <ellipse cx="200" cy="340" rx="170" ry="24" fill="#173318"/>
-        <g><ellipse cx="150" cy="230" rx="70" ry="56" fill="#F9A825"/><ellipse cx="120" cy="210" rx="10" ry="7" fill="#1F3D22" opacity=".25"/><ellipse cx="175" cy="250" rx="8" ry="6" fill="#1F3D22" opacity=".25"/><ellipse cx="255" cy="255" rx="55" ry="46" fill="#e6960f"/><ellipse cx="240" cy="240" rx="7" ry="5" fill="#1F3D22" opacity=".25"/></g>
-        <path d="M170 174c-10-30-45-42-70-30 20 8 28 30 32 46" stroke="#3F9A45" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <path d="M180 174c8-32 44-46 70-34-21 8-30 32-33 48" stroke="#5CB962" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <path d="M176 90 C176 140 176 160 176 174" stroke="#3F9A45" stroke-width="6" stroke-linecap="round"/>
-        <ellipse cx="176" cy="80" rx="14" ry="9" fill="#5CB962"/>
-      </svg>
-    </div>
+  <div class="hero-slide {{ $i === 0 ? 'active' : '' }}" @if ($b->media_type !== 'video' && $b->url) style="background-image:url('{{ $b->url }}')" @endif>
+    @if ($b->media_type === 'video' && $b->url)
+    <video class="hero-slide-video" autoplay muted loop playsinline preload="metadata">
+      <source src="{{ $b->url }}" type="video/mp4">
+    </video>
+    @elseif (!$b->url)
+    <div class="hero-slide-bg fallback"></div>
     @endif
     <div class="container hero-inner">
       <div class="hero-slide-content">
@@ -178,7 +173,7 @@
           <div class="prod-body">
             <h4>{{ $p->nama }}</h4>
             <p class="desc-clamp">{{ $p->deskripsi ? strip_tags($p->deskripsi) : 'Bibit unggul berkualitas.' }}</p>
-            <div class="prod-harga">Rp {{ number_format($cartHarga, 0, ',', '.') }}</div>
+            <div class="prod-harga">{{ $p->hargaRangeLabel }}</div>
           </div>
         </div>
         <div class="prod-foot" style="padding:0 20px 18px;display:flex;gap:8px;flex-wrap:wrap">
@@ -328,7 +323,7 @@
   <div class="container lokasi-grid" style="align-items:center">
     <div>
       <div class="eyebrow" style="color:#B9D9AF">Kunjungi Kebun Kami</div>
-      <h2>Kebun & gudang sortir di Dieng, Jawa Tengah</h2>
+      <h2>Kebun & gudang sortir di Sumberejo, Kec. Batur, Kab. Banjarnegara, Jawa Tengah</h2>
       <p>Terbuka untuk kunjungan kelompok tani dan dinas pertanian. Hubungi kami dulu untuk menjadwalkan kunjungan.</p>
       <a href="{{ route('kontak') }}" class="btn btn-accent">Lihat Kontak Lengkap</a>
     </div>

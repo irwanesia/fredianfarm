@@ -22,6 +22,8 @@
                         <tr>
                             <th class="w-1">No</th>
                             <th>Nama</th>
+                            <th>Jenis</th>
+                            <th>Varietas</th>
                             <th>Kategori</th>
                             <th>Harga</th>
                             <th>Stok</th>
@@ -38,6 +40,20 @@
                                     <div class="text-secondary text-truncate" style="max-width: 250px;">
                                         <code>{{ $produk->slug }}</code>
                                     </div>
+                                </td>
+                                <td>
+                                    @if ($produk->jenis)
+                                        <span class="badge bg-azure-lt">{{ $produk->jenis }}</span>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($produk->varietas)
+                                        <span class="badge bg-indigo-lt">{{ $produk->varietas }}</span>
+                                    @else
+                                        -
+                                    @endif
                                 </td>
                                 <td>{{ $produk->kategori->nama ?? '-' }}</td>
                                 <td>{{ $produk->harga ? 'Rp ' . number_format($produk->harga, 0, ',', '.') : '-' }}</td>
@@ -72,7 +88,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center text-secondary py-4">Belum ada produk.</td>
+                                <td colspan="9" class="text-center text-secondary py-4">Belum ada produk.</td>
                             </tr>
                         @endforelse
                     </tbody>

@@ -47,7 +47,7 @@
             <div class="prod-body">
               <h4>{{ $p->nama }}</h4>
               <p class="desc-clamp">{{ $p->deskripsi ? strip_tags($p->deskripsi) : 'Bibit unggul berkualitas.' }}</p>
-              <div class="prod-harga">Rp {{ number_format($cartHarga, 0, ',', '.') }}</div>
+              <div class="prod-harga">{{ $p->hargaRangeLabel }}</div>
             </div>
           </div>
           <div class="prod-foot" style="padding:0 20px 18px;display:flex;gap:8px;flex-wrap:wrap">
